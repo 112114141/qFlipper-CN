@@ -3,6 +3,10 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #include "logger.h"
 #include "preferences.h"
 
@@ -16,6 +20,11 @@ Cli::Cli(int argc, char *argv[]):
     m_pendingOperation(NoOperation),
     m_repeatCount(1)
 {
+#ifdef Q_OS_WIN
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+
     initConnections();
     initLogger();
     initParser();
@@ -23,7 +32,7 @@ Cli::Cli(int argc, char *argv[]):
     processOptions();
     processArguments();
 
-    qCInfo(LOG_CLI) << "Waiting for devices...";
+    qCInfo(LOG_CLI) << "正在等待设备...";
 }
 
 Cli::~Cli()
@@ -33,11 +42,11 @@ void Cli::onBackendStateChanged()
 {
     const auto state = m_backend.backendState();
     if(state == ApplicationBackend::BackendState::ErrorOccured) {
-        qCCritical(LOG_CLI).nospace() << "An error has occurred: " << m_backend.errorType() << ". Exiting.";
+        qCCritical(LOG_CLI).nospace() << "发生错误: " << m_backend.errorType() << "。正在退出。";
         return exit(-1);
 
     } else if(state == ApplicationBackend::BackendState::WaitingForDevices) {
-        qCCritical(LOG_CLI) << "All devices disconnected. Exiting.";
+        qCCritical(LOG_CLI) << "所有设备已断开连接。正在退出。";
         return exit(0);
 
     } else if(state == ApplicationBackend::BackendState::Ready) {
@@ -47,7 +56,7 @@ void Cli::onBackendStateChanged()
             return;
 
         } else if(m_backend.firmwareUpdateState() == ApplicationBackend::FirmwareUpdateState::ErrorOccured) {
-            qCCritical(LOG_CLI) << "Failed to get firmware updates. Exiting.";
+            qCCritical(LOG_CLI) << "获取固件更新失败。正在退出。";
             return exit(-1);
         }
 
@@ -68,7 +77,7 @@ void Cli::onBackendStateChanged()
 void Cli::onUpdateStateChanged()
 {
     if(m_backend.firmwareUpdateState() == ApplicationBackend::FirmwareUpdateState::ErrorOccured) {
-        qCCritical(LOG_CLI) << "Failed to get firmware updates. Exiting.";
+        qCCritical(LOG_CLI) << "获取固件更新失败。正在退出。";
         return exit(-1);
     }
 
@@ -93,19 +102,19 @@ void Cli::initLogger()
 
 void Cli::initParser()
 {
-    m_parser.addPositionalArgument(QStringLiteral("backup"), QStringLiteral("Backup Internal Memory contents"), QStringLiteral("{backup <backup_file>,"));
-    m_parser.addPositionalArgument(QStringLiteral("restore"), QStringLiteral("Restore Internal Memory contents"), QStringLiteral("restore <backup_file>,"));
-    m_parser.addPositionalArgument(QStringLiteral("erase"), QStringLiteral("Erase Internal Memory contents"), QStringLiteral("erase,"));
-    m_parser.addPositionalArgument(QStringLiteral("wipe"), QStringLiteral("Wipe entire MCU Flash Memory"), QStringLiteral("wipe,"));
-    m_parser.addPositionalArgument(QStringLiteral("firmware"), QStringLiteral("Flash Core1 Firmware"), QStringLiteral("firmware <firmware_file.dfu>,"));
-    m_parser.addPositionalArgument(QStringLiteral("core2radio"), QStringLiteral("Flash Core2 Radio stack"), QStringLiteral("core2radio <firmware_file.bin>,"));
-    m_parser.addPositionalArgument(QStringLiteral("core2fus"), QStringLiteral("Flash Core2 Firmware Update Service"), QStringLiteral("core2fus <firmware_file.bin> <target_address>}"));
+    m_parser.addPositionalArgument(QStringLiteral("backup"), QStringLiteral("备份内部存储内容"), QStringLiteral("{backup <backup_file>,"));
+    m_parser.addPositionalArgument(QStringLiteral("restore"), QStringLiteral("恢复内部存储内容"), QStringLiteral("restore <backup_file>,"));
+    m_parser.addPositionalArgument(QStringLiteral("erase"), QStringLiteral("擦除内部存储内容"), QStringLiteral("erase,"));
+    m_parser.addPositionalArgument(QStringLiteral("wipe"), QStringLiteral("擦除整个 MCU 闪存"), QStringLiteral("wipe,"));
+    m_parser.addPositionalArgument(QStringLiteral("firmware"), QStringLiteral("刷写 Core1 固件"), QStringLiteral("firmware <firmware_file.dfu>,"));
+    m_parser.addPositionalArgument(QStringLiteral("core2radio"), QStringLiteral("刷写 Core2 无线协议栈"), QStringLiteral("core2radio <firmware_file.bin>,"));
+    m_parser.addPositionalArgument(QStringLiteral("core2fus"), QStringLiteral("刷写 Core2 固件升级服务"), QStringLiteral("core2fus <firmware_file.bin> <target_address>}"));
 
-    m_options.append(QCommandLineOption({QStringLiteral("d"), QStringLiteral("debug-level")}, QStringLiteral("0 - Errors Only, 1 - Terse, 2 - Full"), QStringLiteral("1")));
-    m_options.append(QCommandLineOption({QStringLiteral("n"), QStringLiteral("repeat-number")}, QStringLiteral("Number of times to repeat the operation, 0 - indefinitely"), QStringLiteral("1")));
-    m_options.append(QCommandLineOption({QStringLiteral("c"), QStringLiteral("update-channel")}, QStringLiteral("Update channel for Firmware Update/Repair"), globalPrefs->firmwareUpdateChannel()));
+    m_options.append(QCommandLineOption({QStringLiteral("d"), QStringLiteral("debug-level")}, QStringLiteral("0 - 仅错误, 1 - 简洁, 2 - 完整"), QStringLiteral("1")));
+    m_options.append(QCommandLineOption({QStringLiteral("n"), QStringLiteral("repeat-number")}, QStringLiteral("重复操作的次数, 0 - 无限循环"), QStringLiteral("1")));
+    m_options.append(QCommandLineOption({QStringLiteral("c"), QStringLiteral("update-channel")}, QStringLiteral("固件更新/修复的更新通道"), globalPrefs->firmwareUpdateChannel()));
 
-    m_parser.setApplicationDescription(QStringLiteral("A text mode non-interactive qFlipper counterpart. Run without arguments to quickly perform Firmware Update/Repair."));
+    m_parser.setApplicationDescription(QStringLiteral("qFlipper 的文本模式非交互式版本。不带参数运行可快速执行固件更新/修复。"));
 
     m_parser.addOptions(m_options);
     m_parser.addVersionOption();
@@ -158,7 +167,7 @@ void Cli::processDebugLevelOption()
     const auto num = m_parser.value(debugLevelOption).toInt(&canConvert);
 
     if(!canConvert || (num < 0 || num > 2)) {
-        qCCritical(LOG_CLI) << "Debug level must be one of the following values: 0, 1, 2.";
+        qCCritical(LOG_CLI) << "调试级别必须是以下值之一: 0, 1, 2。";
         std::exit(-1);
     }
 
@@ -177,11 +186,11 @@ void Cli::processRepeatNumberOption()
     const auto num = m_parser.value(repeatNumberOption).toInt(&canConvert);
 
     if(!canConvert || (num < 0)) {
-        qCCritical(LOG_CLI) << "Repeat number must be a whole non-negative number.";
+        qCCritical(LOG_CLI) << "重复次数必须是非负整数。";
         std::exit(-1);
     }
 
-    qCInfo(LOG_CLI).noquote() << "Will repeat the operation" << (num ? QStringLiteral("%1 times.").arg(num) : QStringLiteral("indefinitely."));
+    qCInfo(LOG_CLI).noquote() << "将重复执行操作" << (num ? QStringLiteral("%1 次。").arg(num) : QStringLiteral("无限循环。"));
 
     m_repeatCount = num ? num : -1;
 }
@@ -203,7 +212,7 @@ void Cli::processUpdateChannelOption()
     const auto channelName = m_parser.value(updateChannelOption);
 
     if(!allowedChannelNames.contains(channelName)) {
-        qCCritical(LOG_CLI) << "Unknown update channel. Possible channels are:" << allowedChannelNames;
+        qCCritical(LOG_CLI) << "未知的更新通道。可用的通道为:" << allowedChannelNames;
         std::exit(-1);
     }
 
@@ -212,7 +221,7 @@ void Cli::processUpdateChannelOption()
 
 void Cli::beginDefaultAction()
 {
-    qCInfo(LOG_CLI) << "Performing full firmware update...";
+    qCInfo(LOG_CLI) << "正在执行完整固件更新...";
     m_pendingOperation = DefaultAction;
 }
 
@@ -221,7 +230,7 @@ void Cli::beginBackup()
     verifyArgumentCount(2);
     m_fileParameter = QUrl::fromLocalFile(m_parser.positionalArguments().at(1));
 
-    qCInfo(LOG_CLI).noquote().nospace() << "Performing internal storage backup to " << m_fileParameter.toLocalFile() << "...";
+    qCInfo(LOG_CLI).noquote().nospace() << "正在备份内部存储到 " << m_fileParameter.toLocalFile() << "...";
     m_pendingOperation = Backup;
 }
 
@@ -230,20 +239,20 @@ void Cli::beginRestore()
     verifyArgumentCount(2);
     m_fileParameter = QUrl::fromLocalFile(m_parser.positionalArguments().at(1));
 
-    qCInfo(LOG_CLI).noquote().nospace() << "Performing internal restore from " << m_fileParameter.toLocalFile() << "...";
+    qCInfo(LOG_CLI).noquote().nospace() << "正在从备份恢复内部存储 " << m_fileParameter.toLocalFile() << "...";
     m_pendingOperation = Restore;
 }
 
 void Cli::beginErase()
 {
     verifyArgumentCount(1);
-    qCInfo(LOG_CLI) << "Performing device factory reset...";
+    qCInfo(LOG_CLI) << "正在执行设备恢复出厂设置...";
     m_pendingOperation = Erase;
 }
 
 void Cli::beginWipe()
 {
-    qCCritical(LOG_CLI) << "Wipe is not implemented yet. Sorry!";
+    qCCritical(LOG_CLI) << "擦除功能尚未实现。抱歉！";
     std::exit(-1);
 }
 
@@ -253,13 +262,13 @@ void Cli::beginFirmware()
     const auto arg = m_parser.positionalArguments().at(1);
 
     if(!arg.endsWith(QStringLiteral(".dfu"), Qt::CaseInsensitive)) {
-        qCCritical(LOG_CLI) << "Please provide a firmware file in DFUse format.";
+        qCCritical(LOG_CLI) << "请提供 DFUse 格式的固件文件。";
         std::exit(-1);
     }
 
     m_fileParameter = QUrl::fromLocalFile(arg);
 
-    qCInfo(LOG_CLI).noquote().nospace() << "Performing Firmware installation from " << m_fileParameter.toLocalFile() << "...";
+    qCInfo(LOG_CLI).noquote().nospace() << "正在从以下位置安装固件 " << m_fileParameter.toLocalFile() << "...";
     m_pendingOperation = Firmware;
 }
 
@@ -269,13 +278,13 @@ void Cli::beginCore2Radio()
     const auto arg = m_parser.positionalArguments().at(1);
 
     if(!arg.endsWith(QStringLiteral(".bin"), Qt::CaseInsensitive)) {
-        qCCritical(LOG_CLI) << "Please provide a firmware file in .bin format.";
+        qCCritical(LOG_CLI) << "请提供 .bin 格式的固件文件。";
         std::exit(-1);
     }
 
     m_fileParameter = QUrl::fromLocalFile(arg);
 
-    qCInfo(LOG_CLI).noquote().nospace() << "Performing Radio Firmware installation from " << m_fileParameter.toLocalFile() << "...";
+    qCInfo(LOG_CLI).noquote().nospace() << "正在从以下位置安装无线固件 " << m_fileParameter.toLocalFile() << "...";
     m_pendingOperation = Core2Radio;
 }
 
@@ -288,7 +297,7 @@ void Cli::beginCore2FUS()
     const auto &arg2 = args[2];
 
     if(!arg1.endsWith(QStringLiteral(".bin"), Qt::CaseInsensitive)) {
-        qCCritical(LOG_CLI) << "Please provide a firmware file in .bin format.";
+        qCCritical(LOG_CLI) << "请提供 .bin 格式的固件文件。";
         std::exit(-1);
     }
 
@@ -298,7 +307,7 @@ void Cli::beginCore2FUS()
     m_core2Address = arg2.toULong(&canConvert, 16);
 
     if(!canConvert) {
-        qCCritical(LOG_CLI) << "Please provide a valid hexadecimal address.";
+        qCCritical(LOG_CLI) << "请提供有效的十六进制地址。";
         std::exit(-1);
     }
 
@@ -308,7 +317,7 @@ void Cli::beginCore2FUS()
 void Cli::startPendingOperation()
 {
     if(m_repeatCount == 0) {
-        qCInfo(LOG_CLI) << "All done! Thank you.";
+        qCInfo(LOG_CLI) << "全部完成！谢谢。";
         return exit(0);
 
     } else if(m_repeatCount > 0) {
@@ -332,7 +341,7 @@ void Cli::startPendingOperation()
     } else if(m_pendingOperation == Core2FUS) {
         m_backend.installFUS(m_fileParameter, m_core2Address);
     } else {
-        qCCritical(LOG_CLI) << "Unhandled operation. Probably a bug!";
+        qCCritical(LOG_CLI) << "未处理的操作。可能是个 Bug！";
         exit(-1);
     }
 }
@@ -342,7 +351,7 @@ void Cli::verifyArgumentCount(int num)
     const auto argCount = m_parser.positionalArguments().size();
 
     if(argCount != num) {
-        qCCritical(LOG_CLI).nospace() << "Expected " << num << " arguments, got " << argCount << ". Exiting.";
+        qCCritical(LOG_CLI).nospace() << "期望 " << num << " 个参数，实际得到 " << argCount << " 个。正在退出。";
         std::exit(-1);
     }
 }

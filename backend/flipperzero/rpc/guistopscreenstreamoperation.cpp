@@ -11,7 +11,7 @@ GuiStopScreenStreamOperation::GuiStopScreenStreamOperation(uint32_t id, QObject 
 
 const QString GuiStopScreenStreamOperation::description() const
 {
-    return QStringLiteral("Gui Stop ScreenStream");
+    return QStringLiteral("界面停止屏幕串流");
 }
 
 const QByteArray GuiStopScreenStreamOperation::encodeRequest(ProtobufPluginInterface *encoder)

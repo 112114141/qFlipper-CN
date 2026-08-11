@@ -11,7 +11,7 @@ StorageMkdirOperation::StorageMkdirOperation(uint32_t id, const QByteArray &path
 
 const QString StorageMkdirOperation::description() const
 {
-    return QStringLiteral("Storage MkDir @%1").arg(QString(path()));
+    return QStringLiteral("存储创建目录 @%1").arg(QString(path()));
 }
 
 const QByteArray StorageMkdirOperation::encodeRequest(ProtobufPluginInterface *encoder)

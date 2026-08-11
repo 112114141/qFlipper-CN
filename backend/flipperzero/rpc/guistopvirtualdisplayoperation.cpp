@@ -11,7 +11,7 @@ GuiStopVirtualDisplayOperation::GuiStopVirtualDisplayOperation(uint32_t id, QObj
 
 const QString GuiStopVirtualDisplayOperation::description() const
 {
-    return QStringLiteral("Gui Stop VirtualDisplay");
+    return QStringLiteral("界面停止虚拟显示");
 }
 
 const QByteArray GuiStopVirtualDisplayOperation::encodeRequest(ProtobufPluginInterface *encoder)

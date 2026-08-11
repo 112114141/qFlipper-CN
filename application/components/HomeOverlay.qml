@@ -25,7 +25,7 @@ AbstractOverlay {
         visible: App.isDeveloperMode
 
         ToolTip {
-            text: qsTr("Developer mode. Use with caution!")
+            text: qsTr("开发者模式。请谨慎使用！")
             visible: parent.hovered
         }
     }
@@ -47,8 +47,8 @@ AbstractOverlay {
         parent: backgroundRect
         radius: backgroundRect.radius
 
-        title: qsTr("Please wait")
-        text: qsTr("File operation in progress...")
+        title: qsTr("请稍候")
+        text: qsTr("文件操作进行中...")
 
         value: deviceState ? deviceState.progress : -1
         indeterminate: deviceState ? deviceState.progress < 0 : true
@@ -108,7 +108,7 @@ AbstractOverlay {
             icon.height: 25
 
             ToolTip {
-                text: qsTr("Device information")
+                text: qsTr("设备信息")
                 visible: parent.hovered
             }
         }
@@ -119,7 +119,7 @@ AbstractOverlay {
             icon.height: 27
 
             ToolTip {
-                text: qsTr("Advanced controls")
+                text: qsTr("高级控制")
                 visible: parent.hovered
             }
         }
@@ -135,7 +135,7 @@ AbstractOverlay {
             onCheckedChanged: if(checked) Backend.fileManager.refresh()
 
             ToolTip {
-                text: qsTr("File manager")
+                text: qsTr("文件管理器")
                 visible: parent.hovered
             }
         }
@@ -169,8 +169,8 @@ AbstractOverlay {
 
             color: (!deviceState || !deviceState.isOnline) ? Theme.color.lightred1 : deviceState.isRecoveryMode ?
                                            Theme.color.lightblue : Theme.color.lightgreen
-            text: (!deviceState || !deviceState.isOnline) ? qsTr("Disconnected") : deviceState.isRecoveryMode ?
-                                           qsTr("Recovery mode") : qsTr("Connected")
+            text: (!deviceState || !deviceState.isOnline) ? qsTr("未连接") : deviceState.isRecoveryMode ?
+                                           qsTr("恢复模式") : qsTr("已连接")
         }
 
         TransparentLabel {
@@ -222,13 +222,13 @@ AbstractOverlay {
             text: {
                 switch(Backend.firmwareUpdateState) {
                 case ApplicationBackend.CanRepair:
-                    return qsTr("Repair a broken firmware installation. May erase your progress and settings.");
+                    return qsTr("修复损坏的固件安装。可能会清除您的进度和设置。");
                 case ApplicationBackend.CanUpdate:
-                    return qsTr("Update Flipper to the latest version");
+                    return qsTr("将 Flipper 更新到最新版本");
                 case ApplicationBackend.CanInstall:
-                    return qsTr("Install firmware from currently selected update channel");
+                    return qsTr("从当前选定的更新通道安装固件");
                 case ApplicationBackend.ErrorOccured:
-                    return qsTr("Press to check internet connection and try to update Flipper again");
+                    return qsTr("点击此处检查网络连接并重试更新 Flipper");
                 default:
                     return "";
                 }
@@ -242,6 +242,8 @@ AbstractOverlay {
     LinkButton {
         id: releaseButton
         action: changelogAction
+        font.family: "Microsoft YaHei UI"
+        font.pixelSize: 16
         x: centerX - width - 6
 
         anchors.top: updateButton.bottom
@@ -272,6 +274,8 @@ AbstractOverlay {
         anchors.topMargin: 5
 
         action: installFromFileAction
+        font.family: "Microsoft YaHei UI"
+        font.pixelSize: 16
     }
 
     Action {
@@ -285,19 +289,19 @@ AbstractOverlay {
         text: {
             switch(Backend.firmwareUpdateState) {
             case Backend.Unknown:
-                return qsTr("No data");
+                return qsTr("暂无数据");
             case Backend.Checking:
-                return qsTr("Checking...");
+                return qsTr("检查中...");
             case Backend.CanRepair:
-                return qsTr("Repair");
+                return qsTr("修复");
             case Backend.CanUpdate:
-                return qsTr("Update");
+                return qsTr("更新");
             case Backend.CanInstall:
-                return qsTr("Install");
+                return qsTr("安装");
             case Backend.NoUpdates:
-                return qsTr("No updates");
+                return qsTr("暂无更新");
             case Backend.ErrorOccured:
-                return qsTr("Try again");
+                return qsTr("重试");
             }
         }
 
@@ -315,15 +319,15 @@ AbstractOverlay {
             let str;
 
             if(!enabled) {
-                return qsTr("No data");
+                return qsTr("暂无数据");
             } else if(Preferences.updateChannel === "development") {
-                str = "Dev";
+                str = QStringLiteral("Dev");
             } else if(Preferences.updateChannel === "release-candidate") {
-                str = "RC";
+                str = QStringLiteral("RC");
             } else if(Preferences.updateChannel === "release") {
-                str = "Release";
+                str = QStringLiteral("Release");
             } else {
-                str = "Unknown";
+                str = qsTr("未知");
             }
 
             return "%1 %2".arg(str).arg(Backend.latestFirmwareVersion.number.split("-")[0]);
@@ -334,22 +338,22 @@ AbstractOverlay {
 
     Action {
        id: installFromFileAction
-       text: qsTr("Install from file")
+       text: qsTr("从文件安装")
        onTriggered: installFromFile()
     }
 
     function updateButtonFunc() {
         const channelName = Preferences.updateChannel;
         const messageObj = deviceState.isRecoveryMode ? {
-                title : qsTr("Repair Device?"),
-                customText: qsTr("Repair"),
-                message : qsTr("Firmware <font color=\"%1\">%2</font><br/>will be installed")
+                title : qsTr("修复设备？"),
+                customText: qsTr("修复"),
+                message : qsTr("固件 <font color=\"%1\">%2</font><br/>将被安装")
                           .arg(releaseButton.linkColor)
                           .arg(releaseButton.text)
             } : {
-                title : qsTr("Update firmware?"),
-                customText: qsTr("Update"),
-                message: qsTr("New firmware <font color=\"%1\">%2</font><br/>will be installed")
+                title : qsTr("更新固件？"),
+                customText: qsTr("更新"),
+                message: qsTr("新固件 <font color=\"%1\">%2</font><br/>将被安装")
                          .arg(releaseButton.linkColor)
                          .arg(releaseButton.text),
             };
@@ -367,9 +371,9 @@ AbstractOverlay {
     function installFromFile() {
         SystemFileDialog.accepted.connect(function() {
             const messageObj = {
-                title : qsTr("Install from file?"),
-                customText: qsTr("Install"),
-                message: qsTr("Firmware from file %1<br/>will be installed").arg(baseName(SystemFileDialog.fileUrl))
+                title : qsTr("从文件安装？"),
+                customText: qsTr("安装"),
+                message: qsTr("将从文件 %1<br/>安装固件").arg(baseName(SystemFileDialog.fileUrl))
             };
 
             const actionFunc = function() {
@@ -386,9 +390,9 @@ AbstractOverlay {
     function backupDevice() {
         SystemFileDialog.accepted.connect(function() {
             const messageObj = {
-                title : qsTr("Backup device?"),
-                customText: qsTr("Backup"),
-                message: qsTr("Device settings will be backed up")
+                title : qsTr("备份设备？"),
+                customText: qsTr("备份"),
+                message: qsTr("即将备份设备设置")
             };
 
             const actionFunc = function() {
@@ -405,9 +409,9 @@ AbstractOverlay {
     function restoreDevice() {
         SystemFileDialog.accepted.connect(function() {
             const messageObj = {
-                title : qsTr("Restore backup?"),
-                customText: qsTr("Restore"),
-                message: qsTr("Device settings will be restored<br/>from selected backup")
+                title : qsTr("恢复备份？"),
+                customText: qsTr("恢复"),
+                message: qsTr("将从所选备份<br/>恢复设备设置")
             };
 
             const actionFunc = function() {
@@ -422,10 +426,10 @@ AbstractOverlay {
 
     function eraseDevice() {
         const messageObj = {
-            title : qsTr("Erase device?"),
-            message: qsTr("Device settings will be fully erased"),
+            title : qsTr("格式化设备？"),
+            message: qsTr("即将完全格式化设备"),
             suggestedRole: ConfirmationDialog.RejectRole,
-            customText: qsTr("Erase")
+            customText: qsTr("格式化")
         };
 
         confirmationDialog.openWithMessage(Backend.factoryReset, messageObj);
@@ -433,9 +437,9 @@ AbstractOverlay {
 
     function reinstallFirmware() {
         const messageObj = {
-            title : qsTr("Reinstall firmware?"),
-            customText: qsTr("Reinstall"),
-            message: qsTr("Current firmware version will be reinstalled")
+            title : qsTr("重新安装固件？"),
+            customText: qsTr("重新安装"),
+            message: qsTr("即将重新安装当前固件版本")
         };
 
         const canReinstall = deviceInfo.storage.isExternalPresent ||
@@ -451,10 +455,10 @@ AbstractOverlay {
     function installWirelessStack() {
         SystemFileDialog.accepted.connect(function() {
             const messageObj = {
-                title : qsTr("Install wireless stack?"),
-                customText: qsTr("Install"),
+                title : qsTr("安装无线协议栈？"),
+                customText: qsTr("安装"),
                 suggestedRole: ConfirmationDialog.RejectRole,
-                message: qsTr("WARNING! This operaton can break your Flipper!")
+                message: qsTr("警告！此操作可能会损坏您的 Flipper！")
             };
 
             const actionFunc = function() {
@@ -470,10 +474,10 @@ AbstractOverlay {
     function installFUSDangerDanger() {
         SystemFileDialog.accepted.connect(function() {
             const messageObj = {
-                title : qsTr("Install FUS?"),
-                customText: qsTr("Install"),
+                title : qsTr("安装 FUS？"),
+                customText: qsTr("安装"),
                 suggestedRole: ConfirmationDialog.RejectRole,
-                message: qsTr("LAST WARNING! This will invalidate your encryption keys! Please reconsider.")
+                message: qsTr("最后警告！这会使您的加密密钥失效！请三思。")
             };
 
             const actionFunc = function() {

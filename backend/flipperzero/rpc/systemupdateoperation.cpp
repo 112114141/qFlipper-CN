@@ -15,7 +15,7 @@ SystemUpdateOperation::SystemUpdateOperation(uint32_t id, const QByteArray &mani
 
 const QString SystemUpdateOperation::description() const
 {
-    return QStringLiteral("System Update @%1").arg(QString(m_manifestPath));
+    return QStringLiteral("系统更新 @%1").arg(QString(m_manifestPath));
 }
 
 const QString &SystemUpdateOperation::resultString() const

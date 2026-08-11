@@ -14,7 +14,7 @@ StorageMd5SumOperation::StorageMd5SumOperation(uint32_t id, const QByteArray &pa
 
 const QString StorageMd5SumOperation::description() const
 {
-    return QStringLiteral("Storage Md5Sum @%1").arg(QString(path()));
+    return QStringLiteral("存储 MD5 校验 @%1").arg(QString(path()));
 }
 
 const QByteArray StorageMd5SumOperation::encodeRequest(ProtobufPluginInterface *encoder)

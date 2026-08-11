@@ -24,7 +24,7 @@ DirectoryDownloadOperation::DirectoryDownloadOperation(ProtobufSession *rpc, Dev
 
 const QString DirectoryDownloadOperation::description() const
 {
-    return QStringLiteral("Download Directory %1").arg(QString(m_remotePath));
+    return QStringLiteral("下载目录 %1").arg(QString(m_remotePath));
 }
 
 void DirectoryDownloadOperation::nextStateLogic()
@@ -53,13 +53,13 @@ void DirectoryDownloadOperation::createLocalDirectory()
     if(m_targetDir.exists(subdir)) {
         const auto success = m_targetDir.cd(subdir) && m_targetDir.removeRecursively() && m_targetDir.cdUp();
         if(!success) {
-            finishWithError(BackendError::DiskError, QStringLiteral("Target directory exists, but cannot be removed"));
+            finishWithError(BackendError::DiskError, QStringLiteral("目标目录已存在，但无法删除"));
             return;
         }
     }
 
     if(!(m_targetDir.mkdir(subdir) && m_targetDir.cd(subdir))) {
-        finishWithError(BackendError::DiskError, QStringLiteral("Failed to create directory"));
+        finishWithError(BackendError::DiskError, QStringLiteral("无法创建目录"));
     } else {
         advanceOperationState();
     }
@@ -100,7 +100,7 @@ void DirectoryDownloadOperation::readFiles()
 
         if(fileInfo.type == FileType::Directory) {
             if(!m_targetDir.mkdir(filePath)) {
-                finishWithError(BackendError::DiskError, QStringLiteral("Failed to create directory: %1").arg(QString(filePath)));
+                finishWithError(BackendError::DiskError, QStringLiteral("无法创建目录：%1").arg(QString(filePath)));
                 return;
             }
 

@@ -28,13 +28,13 @@ UserBackupOperation::UserBackupOperation(ProtobufSession *rpc, DeviceState *devi
 
 const QString UserBackupOperation::description() const
 {
-    return QStringLiteral("Backup %1 @%2").arg(m_deviceDirName, deviceState()->name());
+    return QStringLiteral("备份 %1 @%2").arg(m_deviceDirName, deviceState()->name());
 }
 
 void UserBackupOperation::nextStateLogic()
 {
     if(operationState() == Ready) {
-        deviceState()->setStatusString(QStringLiteral("Backing up internal storage..."));
+        deviceState()->setStatusString(QStringLiteral("正在备份内部存储..."));
         setOperationState(CreatingDirectory);
         createDirectory();
 
@@ -58,9 +58,9 @@ void UserBackupOperation::nextStateLogic()
 void UserBackupOperation::createDirectory()
 {
     if(!m_deviceDirName.startsWith('/')) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Expecting absolute path for device directory"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("期望设备目录使用绝对路径"));
     } else if(!m_workDir.mkpath(m_deviceDirName.mid(1))) {
-        finishWithError(BackendError::DiskError, QStringLiteral("Failed to create backup directory"));
+        finishWithError(BackendError::DiskError, QStringLiteral("创建备份目录失败"));
     } else {
         advanceOperationState();
     }
@@ -95,7 +95,7 @@ void UserBackupOperation::readFiles()
 
         if(fileInfo.type == FileType::Directory) {
             if(!m_workDir.mkdir(filePath)) {
-                finishWithError(BackendError::DiskError, QStringLiteral("Failed to create directory: %1").arg(QString(filePath)));
+                finishWithError(BackendError::DiskError, QStringLiteral("创建目录失败: %1").arg(QString(filePath)));
                 return;
             }
 

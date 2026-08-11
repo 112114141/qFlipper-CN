@@ -21,19 +21,19 @@ TarZipArchive::TarZipArchive(QFile *inputFile, QObject *parent):
     auto *uncompressor = new GZipUncompressor(inputFile, m_tarFile, this);
 
     if(uncompressor->isError()) {
-        setError(uncompressor->error(), QStringLiteral("Failed to uncompress *tar.gz file: %1").arg(uncompressor->errorString()));
+        setError(uncompressor->error(), QStringLiteral("无法解压 *tar.gz 文件：%1").arg(uncompressor->errorString()));
         return;
     }
 
     connect(uncompressor, &GZipUncompressor::finished, this, [=]() {
         if(uncompressor->isError()) {
-            setError(uncompressor->error(), QStringLiteral("Failed to uncompress *tar.gz file: %1").arg(uncompressor->errorString()));
+            setError(uncompressor->error(), QStringLiteral("无法解压 *tar.gz 文件：%1").arg(uncompressor->errorString()));
 
         } else {
             m_tarArchive = new TarArchive(m_tarFile, this);
 
             if(m_tarArchive->isError()) {
-                setError(m_tarArchive->error(), QStringLiteral("Failed to build archive index: %1").arg(m_tarArchive->errorString()));
+                setError(m_tarArchive->error(), QStringLiteral("无法构建归档索引：%1").arg(m_tarArchive->errorString()));
             }
         }
 
@@ -55,14 +55,14 @@ TarZipArchive::TarZipArchive(const QDir &inputDir, QFile *outputFile, QObject *p
         auto *compressor = new GZipCompressor(m_tarFile, outputFile, this);
 
         if(compressor->isError()) {
-            setError(compressor->error(), QStringLiteral("Failed to compress *tar.gz file: %1").arg(compressor->errorString()));
+            setError(compressor->error(), QStringLiteral("无法压缩 *tar.gz 文件：%1").arg(compressor->errorString()));
             emit ready();
             return;
         }
 
         connect(compressor, &GZipCompressor::finished, this, [=]() {
             if(compressor->isError()) {
-                setError(compressor->error(), QStringLiteral("Failed to compress *tar.gz file: %1").arg(compressor->errorString()));
+                setError(compressor->error(), QStringLiteral("无法压缩 *tar.gz 文件：%1").arg(compressor->errorString()));
             }
 
             emit ready();

@@ -13,7 +13,7 @@ RestartOperation::RestartOperation(ProtobufSession *rpc, DeviceState *deviceStat
 
 const QString RestartOperation::description() const
 {
-    return QStringLiteral("Restart device @%1").arg(deviceState()->name());
+    return QStringLiteral("重启设备 @%1").arg(deviceState()->name());
 }
 
 void RestartOperation::nextStateLogic()
@@ -31,7 +31,7 @@ void RestartOperation::nextStateLogic()
 
 void RestartOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::UnknownError, QStringLiteral("Failed to restart: timeout exceeded"));
+    finishWithError(BackendError::UnknownError, QStringLiteral("重启失败: 超时"));
 }
 
 void RestartOperation::onDeviceOnlineChanged()
@@ -46,7 +46,7 @@ void RestartOperation::onDeviceOnlineChanged()
 void RestartOperation::rebootDevice()
 {
     deviceState()->setProgress(-1);
-    deviceState()->setStatusString(QStringLiteral("Restarting device..."));
+    deviceState()->setStatusString(QStringLiteral("正在重启设备..."));
 
     connect(deviceState(), &DeviceState::isOnlineChanged, this, &RestartOperation::onDeviceOnlineChanged);
 

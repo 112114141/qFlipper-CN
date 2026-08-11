@@ -18,12 +18,12 @@ StartUpdaterOperation::StartUpdaterOperation(ProtobufSession *rpc, DeviceState *
 
 const QString StartUpdaterOperation::description() const
 {
-    return QStringLiteral("Start Update @%1").arg(deviceState()->deviceInfo().name);
+    return QStringLiteral("启动更新 @%1").arg(deviceState()->deviceInfo().name);
 }
 
 void StartUpdaterOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::UnknownError, QStringLiteral("Failed to update: timeout exceeded"));
+    finishWithError(BackendError::UnknownError, QStringLiteral("更新失败: 超时"));
 }
 
 void StartUpdaterOperation::onDeviceOnlineChanged()
@@ -57,7 +57,7 @@ void StartUpdaterOperation::nextStateLogic()
 void StartUpdaterOperation::startUpdate()
 {
     deviceState()->setProgress(-1.0);
-    deviceState()->setStatusString(QStringLiteral("Initiating update procedure ..."));
+    deviceState()->setStatusString(QStringLiteral("正在启动更新程序..."));
 
     auto *operation = rpc()->systemUpdate(m_manifestPath);
 
@@ -74,7 +74,7 @@ void StartUpdaterOperation::startUpdate()
 
 void StartUpdaterOperation::rebootToUpdater()
 {
-    deviceState()->setStatusString(QStringLiteral("Rebooting to updater ..."));
+    deviceState()->setStatusString(QStringLiteral("正在重启至更新程序..."));
 
     auto *operation = rpc()->rebootToUpdater();
 
@@ -89,7 +89,7 @@ void StartUpdaterOperation::rebootToUpdater()
 
 void StartUpdaterOperation::waitForUpdate()
 {
-    deviceState()->setStatusString(QStringLiteral("Updating, follow the progress on your Flipper Zero"));
+    deviceState()->setStatusString(QStringLiteral("正在更新，请在 Flipper Zero 上查看进度"));
 
     connect(deviceState(), &DeviceState::isOnlineChanged, this, &StartUpdaterOperation::onDeviceOnlineChanged);
     startTimeout();

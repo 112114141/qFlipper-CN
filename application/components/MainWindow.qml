@@ -48,14 +48,14 @@ Item {
 
     Pf.Menu {
         Pf.MenuItem {
-            text: qsTr("Check for updates")
+            text: qsTr("检查更新")
             role: Pf.MenuItem.ApplicationSpecificRole
             shortcut: "Ctrl+U"
             onTriggered: App.checkForUpdates()
         }
 
         Pf.MenuItem {
-            text: qsTr("Refresh firmware")
+            text: qsTr("刷新固件")
             role: Pf.MenuItem.ApplicationSpecificRole
             shortcut: "Ctrl+R"
             onTriggered: Backend.checkFirmwareUpdates()
@@ -167,7 +167,7 @@ Item {
             font.family: "ProggySquareTT"
             font.pixelSize: 16
 
-            text: App.version
+            text: App.version + "CN"
 
             // TODO: Implement copy version to clipboard
         }
@@ -232,7 +232,7 @@ Item {
 
         Button {
             id: logButton
-            text: qsTr("LOGS")
+            text: qsTr("日志")
 
             Layout.preferredWidth: 110
             Layout.fillHeight: true
@@ -301,17 +301,17 @@ Item {
             width: 170
 
             MenuItem {
-                text: "Select all"
+                text: qsTr("全选")
                 onTriggered: logView.content.selectAll()
             }
 
             MenuItem {
-                text: "Copy to clipboard"
+                text: qsTr("复制到剪贴板")
                 onTriggered: logView.content.copy()
             }
 
             MenuItem {
-                text: "Browse all logs..."
+                text: qsTr("浏览所有日志...")
                 onTriggered: Qt.openUrlExternally(Logger.logsPath)
             }
         }
@@ -350,7 +350,7 @@ Item {
         visible: opacity
         opacity: resizer.visible
 
-        text: "<a href=\"#\">%1</a>".arg(qsTr("Open Full Log"))
+        text: "<a href=\"#\">%1</a>".arg(qsTr("打开完整日志"))
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom

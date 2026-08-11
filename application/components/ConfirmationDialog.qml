@@ -87,7 +87,7 @@ CustomDialog {
 
                 SmallButton {
                     radius: 7
-                    text: customText.length ? customText : qsTr("Ok")
+                    text: customText.length ? customText : qsTr("确定")
                     highlighted: control.suggestedRole === ConfirmationDialog.AcceptRole
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -96,7 +96,7 @@ CustomDialog {
 
                 SmallButton {
                     radius: 7
-                    text: qsTr("Cancel")
+                    text: qsTr("取消")
                     highlighted: control.suggestedRole === ConfirmationDialog.RejectRole
                     Layout.fillWidth: true
                     Layout.fillHeight: true

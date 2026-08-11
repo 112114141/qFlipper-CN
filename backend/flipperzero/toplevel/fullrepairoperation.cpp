@@ -33,7 +33,7 @@ FullRepairOperation::FullRepairOperation(RecoveryInterface *recovery, UtilityInt
 
 const QString FullRepairOperation::description() const
 {
-    return QStringLiteral("Full Repair @%1").arg(deviceState()->name());
+    return QStringLiteral("完整修复 @%1").arg(deviceState()->name());
 }
 
 void FullRepairOperation::nextStateLogic()
@@ -81,7 +81,7 @@ void FullRepairOperation::fetchFirmware()
 
     connect(m_helper, &AbstractOperationHelper::finished, this, [=]() {
         if(m_helper->isError()) {
-            finishWithError(m_helper->error(), QStringLiteral("Failed to fetch the files: %1").arg(m_helper->errorString()));
+            finishWithError(m_helper->error(), QStringLiteral("获取文件失败: %1").arg(m_helper->errorString()));
         } else {
             advanceOperationState();
         }
@@ -135,7 +135,7 @@ void FullRepairOperation::restartDevice()
 void FullRepairOperation::onSubOperationError(AbstractOperation *operation)
 {
     if(operationState() == DownloadingRadioFirmware) {
-        qCInfo(CATEGORY_DEFAULT) << operation->description() << "failed with reason:" << operation->errorString() << "Attempting to install the firmware anyway...";
+        qCInfo(CATEGORY_DEFAULT) << operation->description() << "失败，原因:" << operation->errorString() << "正在尝试仍然安装固件...";
         advanceOperationState();
 
     } else {

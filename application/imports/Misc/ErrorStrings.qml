@@ -8,134 +8,134 @@ QtObject {
 "<style type='text/css'>p { margin-top: 0px; margin-bottom: 5px; } a { color: #fe8a2c; } </style>"
 
     readonly property string errorInvalidDevice:
-"<p>Device cannot be recognized.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Disconnect all other similar devices from this computer.</p>
-<p>2. Reconnect your Flipper.</p>
-<p>3. If the problem persists, reboot Flipper into RECOVERY MODE and click REPAIR to perform a clean installation.</p>
+"<p>无法识别设备。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 断开本电脑上所有其他类似设备的连接。</p>
+<p>2. 重新连接您的 Flipper。</p>
+<p>3. 如果问题仍然存在，请将 Flipper 重启至恢复模式，点击修复执行全新安装。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorInvalidDeviceLinux:
-"<p>Device cannot be recognized.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Disconnect all other similar devices from this computer.</p>
-<p>2. Grant user permissions to access Serial devices.</p>
-<p>Run \"./qFlipper-x86_64-%1.AppImage rules install\" to do so automatically.</p>
-<p>3. If the problem persists, reboot Flipper into RECOVERY MODE and click REPAIR to perform a clean installation.</p>
+"<p>无法识别设备。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 断开本电脑上所有其他类似设备的连接。</p>
+<p>2. 授予用户访问串口设备的权限。</p>
+<p>运行 \"./qFlipper-x86_64-%1.AppImage rules install\" 可自动完成此操作。</p>
+<p>3. 如果问题仍然存在，请将 Flipper 重启至恢复模式，点击修复执行全新安装。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>".arg(App.version)
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>".arg(App.version)
 
     readonly property string errorSerial:
-"<p>Cannot connect to Flipper. Device is busy.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Ensure that Flipper is not connected via Bluetooth or Terminal session.</p>
-<p>2. Reconnect your Flipper.</p>
+"<p>无法连接到 Flipper。设备正忙。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 确保 Flipper 未通过蓝牙或终端会话连接。</p>
+<p>2. 重新连接您的 Flipper。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorSerialLinux:
-"<p>Cannot connect to Flipper. Device is busy.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Ensure that Flipper is not connected via Bluetooth or Terminal session.</p>
-<p>2. Grant user permissions to access Serial devices.</p>
-<p>Run \"./qFlipper-x86_64-%1.AppImage rules install\" to do so automatically.</p>
-<p>3. Reconnect your Flipper.</p>
+"<p>无法连接到 Flipper。设备正忙。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 确保 Flipper 未通过蓝牙或终端会话连接。</p>
+<p>2. 授予用户访问串口设备的权限。</p>
+<p>运行 \"./qFlipper-x86_64-%1.AppImage rules install\" 可自动完成此操作。</p>
+<p>3. 重新连接您的 Flipper。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>".arg(App.version)
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>".arg(App.version)
 
     readonly property string errorRecovery:
-"<p>Cannot connect to Flipper in Update & Recovery mode. Device not found.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Check that Flipper is in Update & Recovery mode.</p>
-<p>2. Reconnect your Flipper.</p>
-<p>3. Reboot Flipper to Flipper OS and try again.</p>
+"<p>无法在更新和恢复模式下连接 Flipper。未找到设备。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 检查 Flipper 是否处于更新和恢复模式。</p>
+<p>2. 重新连接您的 Flipper。</p>
+<p>3. 将 Flipper 重启至 Flipper OS 后重试。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorRecoveryWindows:
-"<p>Cannot connect to Flipper in Update & Recovery mode. Device not found.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Check that Flipper is in Update & Recovery mode.</p>
-<p>2. Reconnect your Flipper.</p>
-<p>3. Reinstall qFlipper to update DFU device driver.</p>
-<p>4. Reboot Flipper to Flipper OS and try again.</p>
+"<p>无法在更新和恢复模式下连接 Flipper。未找到设备。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 检查 Flipper 是否处于更新和恢复模式。</p>
+<p>2. 重新连接您的 Flipper。</p>
+<p>3. 重新安装 qFlipper 以更新 DFU 设备驱动。</p>
+<p>4. 将 Flipper 重启至 Flipper OS 后重试。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorRecoveryLinux:
-"<p>Cannot connect to Flipper in Update & Recovery mode. Device not found.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Check that Flipper is in Update & Recovery mode.</p>
-<p>2. Reconnect your Flipper.</p>
-<p>3. Grant user permissions to access DFU devices.</p>
-<p>Run \"./qFlipper-x86_64-%1.AppImage rules install\" to do so automatically.</p>
-<p>4. Reboot Flipper to Flipper OS and try again.</p>
+"<p>无法在更新和恢复模式下连接 Flipper。未找到设备。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 检查 Flipper 是否处于更新和恢复模式。</p>
+<p>2. 重新连接您的 Flipper。</p>
+<p>3. 授予用户访问 DFU 设备的权限。</p>
+<p>运行 \"./qFlipper-x86_64-%1.AppImage rules install\" 可自动完成此操作。</p>
+<p>4. 将 Flipper 重启至 Flipper OS 后重试。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>".arg(App.version)
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>".arg(App.version)
 
     readonly property string errorInternet:
-"<p>Cannot connect to update server.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Check your internet connection.</p>
-<p>2. Ensure that the update server is not down.</p>
-<p>3. Try updating again.</p>
+"<p>无法连接到更新服务器。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 检查您的网络连接。</p>
+<p>2. 确保更新服务器未宕机。</p>
+<p>3. 请重试更新。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorDisk:
-"<p>Can’t save or read files to/from the local filesystem.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Make sure that you have free space on your local drive.</p>
-<p>2. Check that qFlipper has permissions to write on disk.</p>
-<p>3. When applicable, make sure to point qFlipper to the right files/directores.</p>
+"<p>无法在本地文件系统上保存或读取文件。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 确保本地驱动器有可用空间。</p>
+<p>2. 检查 qFlipper 是否有磁盘写入权限。</p>
+<p>3. 如适用，请确保将 qFlipper 指向正确的文件/目录。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorBackup:
-"<p>Can’t get data from Flipper. This may be caused by an internal error.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Close all other applications that may use Flipper.</p>
-<p>2. Reboot your Flipper and reconnect via USB.</p>
-<p>3. Run the operation again.</p>
+"<p>无法从 Flipper 获取数据，可能由内部错误引起。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 关闭所有可能使用 Flipper 的其他应用程序。</p>
+<p>2. 重启 Flipper 并通过 USB 重新连接。</p>
+<p>3. 请重试该操作。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorData:
-"<p>Necessary data seems to be damaged.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. If applicable, make sure to point qFlipper to the right input file(s).</p>
-<p>2. Reboot your Flipper and reconnect via USB.</p>
-<p>3. Run the operation again.</p>
+"<p>必要的数据似乎已损坏。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 如适用，请确保将 qFlipper 指向正确的输入文件。</p>
+<p>2. 重启 Flipper 并通过 USB 重新连接。</p>
+<p>3. 请重试该操作。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorOperation:
-"<p>Current operation was interrupted. Connection to device is lost.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. Check USB connection.</p>
-<p>2. Ensure that Flipper is not locked with PIN code.</p>
-<p>3. Connect your Flipper in Update & Recovery mode and start repair.</p>
+"<p>当前操作被中断。与设备的连接已断开。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 检查 USB 连接。</p>
+<p>2. 确保 Flipper 未被 PIN 码锁定。</p>
+<p>3. 将 Flipper 置于更新和恢复模式并开始修复。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorUpdater:
-"<p>Firmware update could not be started.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. See details in the logs below.</p>
-<p>2. Resolve the problem if possible.</p>
-<p>3. Try again.</p>
-<p>4. If the error persists, file a bug report.</p>
+"<p>无法启动固件更新。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 查看下方日志中的详细信息。</p>
+<p>2. 请尝试解决问题。</p>
+<p>3. 重试。</p>
+<p>4. 如果错误仍然存在，请提交错误报告。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 
     readonly property string errorUnknown:
-"<p>An unknown error has occurred.</p>
-<p>=========== HOW TO FIX ============</p>
-<p>1. See details in the logs below.</p>
-<p>2. Resolve the problem if possible.</p>
-<p>3. Try again.</p>
-<p>4. If the error persists, file a bug report.</p>
+"<p>发生未知错误。</p>
+<p>=========== 如何修复 ============</p>
+<p>1. 查看下方日志中的详细信息。</p>
+<p>2. 请尝试解决问题。</p>
+<p>3. 重试。</p>
+<p>4. 如果错误仍然存在，请提交错误报告。</p>
 <p>-----------------------------------</p>
-<center><a href='https://docs.flipper.net/'>READ MORE</a></center>"
+<center><a href='https://docs.flipper.net/'>了解更多</a></center>"
 }

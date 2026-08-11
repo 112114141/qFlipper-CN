@@ -16,7 +16,7 @@ StorageListOperation::StorageListOperation(uint32_t id, const QByteArray &path, 
 
 const QString StorageListOperation::description() const
 {
-    return QStringLiteral("Storage List @%1").arg(QString(m_path));
+    return QStringLiteral("存储列表 @%1").arg(QString(m_path));
 }
 
 const FileInfoList &StorageListOperation::files() const

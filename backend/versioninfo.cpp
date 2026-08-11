@@ -21,7 +21,7 @@ VersionInfo::VersionInfo(const QString &versionString):
     const auto versionTokens = tokens[0].split('.');
 
     if(versionTokens.size() != 3) {
-        qCDebug(CATEGORY_DEBUG) << "Malformed version string";
+        qCDebug(CATEGORY_DEBUG) << "版本字符串格式错误";
         return;
     }
 
@@ -34,7 +34,7 @@ VersionInfo::VersionInfo(const QString &versionString):
             const auto idx = std::distance(versionTokens.cbegin(), it);
             m_version[idx] = num;
         } else {
-            qCDebug(CATEGORY_DEBUG) << "Illegal characters in version";
+            qCDebug(CATEGORY_DEBUG) << "版本中存在非法字符";
             return;
         }
     }
@@ -55,12 +55,12 @@ VersionInfo::VersionInfo(const QString &versionString):
             if(canConvert) {
                 m_rc = rc;
             } else {
-                qCDebug(CATEGORY_DEBUG) << "Illegal characters in release candidate suffix";
+                qCDebug(CATEGORY_DEBUG) << "发布候选后缀中存在非法字符";
             }
         }
 
     } else {
-        qCDebug(CATEGORY_DEBUG) << "Malformed release candidate suffix";
+        qCDebug(CATEGORY_DEBUG) << "发布候选后缀格式错误";
     }
 }
 

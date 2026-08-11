@@ -34,13 +34,13 @@ void ScriptsHelper::uncompressArchive()
     m_archive = new TarZipArchive(m_compressedFile, this);
 
     if(m_archive->isError()) {
-        finishWithError(m_archive->error(), QStringLiteral("Failed to uncompress archive file: %1").arg(m_archive->errorString()));
+        finishWithError(m_archive->error(), QStringLiteral("无法解压归档文件：%1").arg(m_archive->errorString()));
         return;
     }
 
     connect(m_archive, &TarZipArchive::ready, this, [=]() {
         if(m_archive->isError()) {
-            finishWithError(m_archive->error(), QStringLiteral("Failed to uncompress archive file: %1").arg(m_archive->errorString()));
+            finishWithError(m_archive->error(), QStringLiteral("无法解压归档文件：%1").arg(m_archive->errorString()));
         } else {
             advanceState();
         }

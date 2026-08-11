@@ -57,9 +57,9 @@ void AbstractProtobufOperation::feedResponse(QObject *response)
     auto *mainResponse = qobject_cast<MainResponseInterface*>(response);
 
     if(mainResponse->isError()) {
-        finishWithError(BackendError::ProtocolError, QStringLiteral("Device replied with error: %1").arg(mainResponse->errorString()));
+        finishWithError(BackendError::ProtocolError, QStringLiteral("设备回复错误：%1").arg(mainResponse->errorString()));
     } else if(!processResponse(response)) {
-        finishWithError(BackendError::ProtocolError, QStringLiteral("Operation finished with error: %1").arg(mainResponse->errorString()));
+        finishWithError(BackendError::ProtocolError, QStringLiteral("操作完成但有错误：%1").arg(mainResponse->errorString()));
     } else if(!mainResponse->hasNext()) {
         finish();
     } else {

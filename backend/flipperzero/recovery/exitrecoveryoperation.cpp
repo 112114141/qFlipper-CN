@@ -12,7 +12,7 @@ ExitRecoveryOperation::ExitRecoveryOperation(Recovery *recovery, QObject *parent
 
 const QString ExitRecoveryOperation::description() const
 {
-    return QStringLiteral("Exit Recovery Mode @%1").arg(deviceState()->name());
+    return QStringLiteral("退出恢复模式 @%1").arg(deviceState()->name());
 }
 
 void ExitRecoveryOperation::nextStateLogic()
@@ -28,7 +28,7 @@ void ExitRecoveryOperation::nextStateLogic()
 
 void ExitRecoveryOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to exit recovery: Operation timeout"));
+    finishWithError(BackendError::RecoveryError, QStringLiteral("无法退出恢复模式：操作超时"));
 }
 
 void ExitRecoveryOperation::exitRecovery()

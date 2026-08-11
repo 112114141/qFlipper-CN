@@ -105,22 +105,22 @@ FileNode *TarArchive::file(const QString &fullName)
 QByteArray TarArchive::fileData(const QString &fullName)
 {
     if(!m_tarFile) {
-        setError(BackendError::UnknownError, QStringLiteral("Archive file not set"));
+        setError(BackendError::UnknownError, QStringLiteral("未设置归档文件"));
         return QByteArray();
 
     } else if(!m_tarFile->isOpen()) {
-        setError(BackendError::UnknownError, QStringLiteral("Archive file is not open"));
+        setError(BackendError::UnknownError, QStringLiteral("归档文件未打开"));
         return QByteArray();
     }
 
     auto *node = file(fullName);
     if(!node) {
-        setError(BackendError::UnknownError, QStringLiteral("File not found"));
+        setError(BackendError::UnknownError, QStringLiteral("未找到文件"));
         return QByteArray();
     }
 
     if(!node->userData().canConvert<FileInfo>()) {
-        setError(BackendError::DataError, QStringLiteral("No valid FileData found in the node."));
+        setError(BackendError::DataError, QStringLiteral("节点中未找到有效的 FileData。"));
         return QByteArray();
     }
 
@@ -145,7 +145,7 @@ void TarArchive::readTarFile()
         const auto n = m_tarFile->read((char*)&header, sizeof(TarHeader));
 
         if(n != sizeof(TarHeader)) {
-            setError(BackendError::DataError, QStringLiteral("Archive file is truncated"));
+            setError(BackendError::DataError, QStringLiteral("归档文件已截断"));
             return;
 
         } else if(isMemZeros((char*)&header, sizeof(TarHeader))) {
@@ -171,7 +171,7 @@ void TarArchive::readTarFile()
             m_root->addDirectory(fileName.chopped(1));
 
         } else {
-            setError(BackendError::DataError, QStringLiteral("Only regular files and directories are supported"));
+            setError(BackendError::DataError, QStringLiteral("仅支持常规文件和目录"));
             return;
         }
 
@@ -228,12 +228,12 @@ void TarArchive::assembleTarFile(const QDir &inputDir)
             while(file.bytesAvailable() > 0) {
                 const auto chunk = file.read(CHUNK_SIZE);
                 if(chunk.isEmpty()) {
-                    setError(BackendError::DiskError, QStringLiteral("Failed to read from file: %1").arg(file.errorString()));
+                    setError(BackendError::DiskError, QStringLiteral("无法从文件读取：%1").arg(file.errorString()));
                     break;
                 }
 
                 if(m_tarFile->write(chunk) != chunk.size()) {
-                    setError(BackendError::DiskError, QStringLiteral("Failed to write to file: %1").arg(m_tarFile->errorString()));
+                    setError(BackendError::DiskError, QStringLiteral("无法写入文件：%1").arg(m_tarFile->errorString()));
                     break;
                 }
 

@@ -11,7 +11,7 @@ SystemRebootOperation::SystemRebootOperation(uint32_t id, RebootMode rebootType,
 
 const QString SystemRebootOperation::description() const
 {
-    return QStringLiteral("System Reboot");
+    return QStringLiteral("系统重启");
 }
 
 const QByteArray SystemRebootOperation::encodeRequest(ProtobufPluginInterface *encoder)

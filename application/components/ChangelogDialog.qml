@@ -13,13 +13,13 @@ CustomDialog {
     title: !(Backend.firmwareUpdateState === Backend.Unknown ||
              Backend.firmwareUpdateState === Backend.Checking ||
              Backend.firmwareUpdateState === Backend.ErrorOccured) ?
-           qsTr("Version %1 changelog").arg(Backend.latestFirmwareVersion.number) : qsTr("No data")
+           qsTr("版本 %1 更新日志").arg(Backend.latestFirmwareVersion.number) : qsTr("暂无数据")
 
     contentWidget: TextView {
         text: !(Backend.firmwareUpdateState === Backend.Unknown ||
                 Backend.firmwareUpdateState === Backend.Checking ||
                 Backend.firmwareUpdateState === Backend.ErrorOccured) ?
-              Backend.latestFirmwareVersion.changelog : qsTr("No data")
+               Backend.latestFirmwareVersion.changelog : qsTr("暂无数据")
 
         textFormat: Text.MarkdownText
 

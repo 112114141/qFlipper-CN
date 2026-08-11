@@ -19,7 +19,7 @@ CorrectOptionBytesOperation::CorrectOptionBytesOperation(Recovery *recovery, QIO
 
 const QString CorrectOptionBytesOperation::description() const
 {
-    return QStringLiteral("Correct Option Bytes @%1").arg(deviceState()->name());
+    return QStringLiteral("修正选项字节 @%1").arg(deviceState()->name());
 }
 
 void CorrectOptionBytesOperation::nextStateLogic()
@@ -36,9 +36,9 @@ void CorrectOptionBytesOperation::nextStateLogic()
 void CorrectOptionBytesOperation::onOperationTimeout()
 {
     if(!deviceState()->isOnline()) {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to write corrected option bytes: Operation timeout"));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("写入修正后的选项字节失败: 操作超时"));
     } else {
-        qCDebug(LOG_RECOVERY) << "Timeout while device is online, assuming it is still functional";
+        qCDebug(LOG_RECOVERY) << "设备在线时超时，假设其仍然可用";
         advanceOperationState();
     }
 }

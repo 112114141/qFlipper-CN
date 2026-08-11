@@ -15,7 +15,7 @@ GetFileTreeOperation::GetFileTreeOperation(ProtobufSession *rpc, DeviceState *de
 
 const QString GetFileTreeOperation::description() const
 {
-    return QStringLiteral("Get File Tree @%1").arg(deviceState()->name());
+    return QStringLiteral("获取文件树 @%1").arg(deviceState()->name());
 }
 
 const FileInfoList &GetFileTreeOperation::files() const

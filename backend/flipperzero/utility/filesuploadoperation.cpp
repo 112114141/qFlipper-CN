@@ -22,7 +22,7 @@ FilesUploadOperation::FilesUploadOperation(ProtobufSession *rpc, DeviceState *de
 const QString FilesUploadOperation::description() const
 {
     const auto numFiles = m_urlList.size();
-    return QStringLiteral("Upload %1 %2 @%3").arg(QString::number(numFiles), (numFiles == 1) ? "entry" : "entries", deviceState()->deviceInfo().name);
+    return QStringLiteral("上传 %1 个%2 @%3").arg(QString::number(numFiles), "项", deviceState()->deviceInfo().name);
 }
 
 void FilesUploadOperation::nextStateLogic()

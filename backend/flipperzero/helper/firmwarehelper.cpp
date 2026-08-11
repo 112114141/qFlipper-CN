@@ -73,21 +73,21 @@ void FirmwareHelper::nextStateLogic()
 
 void FirmwareHelper::fetchFirmware()
 {
-    m_deviceState->setStatusString(QStringLiteral("Fetching application firmware..."));
+    m_deviceState->setStatusString(QStringLiteral("正在获取应用程序固件..."));
     const auto &fileInfo = m_versionInfo.fileInfo(QStringLiteral("full_dfu"), m_deviceState->deviceInfo().hardware.target);
     fetchFile(FileIndex::Firmware, fileInfo);
 }
 
 void FirmwareHelper::fetchCore2Firmware()
 {
-    m_deviceState->setStatusString(QStringLiteral("Fetching radio firmware..."));
+    m_deviceState->setStatusString(QStringLiteral("正在获取无线电固件..."));
     const auto &fileInfo = m_versionInfo.fileInfo(QStringLiteral("core2_firmware_tgz"), QStringLiteral("any"));
     fetchFile(FileIndex::Core2Tgz, fileInfo);
 }
 
 void FirmwareHelper::prepareRadioFirmware()
 {
-    m_deviceState->setStatusString(QStringLiteral("Preparing radio firmware..."));
+    m_deviceState->setStatusString(QStringLiteral("正在准备无线电固件..."));
     auto *helper = new RadioManifestHelper(m_files[FileIndex::Core2Tgz], this);
 
     connect(helper, &AbstractOperationHelper::finished, this, [=]() {
@@ -110,10 +110,10 @@ void FirmwareHelper::prepareRadioFirmware()
         m_files.insert(FileIndex::RadioFirmware, file);
 
         if(!file->open(QIODevice::WriteOnly)) {
-            finishWithError(BackendError::DiskError, QStringLiteral("Failed to open temporary file: %1").arg(file->errorString()));
+            finishWithError(BackendError::DiskError, QStringLiteral("无法打开临时文件：%1").arg(file->errorString()));
             return;
         } else if(file->write(helper->radioFirmwareData()) <= 0) {
-            finishWithError(BackendError::DiskError, QStringLiteral("Failed to write to temporary file: %1").arg(file->errorString()));
+            finishWithError(BackendError::DiskError, QStringLiteral("无法写入临时文件：%1").arg(file->errorString()));
             return;
         } else {
             file->close();
@@ -125,14 +125,14 @@ void FirmwareHelper::prepareRadioFirmware()
 
 void FirmwareHelper::fetchScripts()
 {
-    m_deviceState->setStatusString(QStringLiteral("Fetching scripts..."));
+    m_deviceState->setStatusString(QStringLiteral("正在获取脚本..."));
     const auto &fileInfo = m_versionInfo.fileInfo(QStringLiteral("scripts_tgz"), QStringLiteral("any"));
     fetchFile(FileIndex::ScriptsTgz, fileInfo);
 }
 
 void FirmwareHelper::prepareOptionBytes()
 {
-    m_deviceState->setStatusString(QStringLiteral("Preparing scripts..."));
+    m_deviceState->setStatusString(QStringLiteral("正在准备脚本..."));
     auto *helper = new ScriptsHelper(m_files[FileIndex::ScriptsTgz], this);
 
     connect(helper, &AbstractOperationHelper::finished, this, [=]() {
@@ -147,9 +147,9 @@ void FirmwareHelper::prepareOptionBytes()
         m_files.insert(FileIndex::OptionBytes, file);
 
         if(!file->open(QIODevice::WriteOnly)) {
-            finishWithError(BackendError::DiskError, QStringLiteral("Failed to open temporary file: %1").arg(file->errorString()));
+            finishWithError(BackendError::DiskError, QStringLiteral("无法打开临时文件：%1").arg(file->errorString()));
         } else if(file->write(helper->optionBytesData()) <= 0) {
-            finishWithError(BackendError::DiskError, QStringLiteral("Failed to write to temporary file: %1").arg(file->errorString()));
+            finishWithError(BackendError::DiskError, QStringLiteral("无法写入临时文件：%1").arg(file->errorString()));
         } else {
             file->close();
             advanceState();
@@ -159,7 +159,7 @@ void FirmwareHelper::prepareOptionBytes()
 
 void FirmwareHelper::fetchAssets()
 {
-    m_deviceState->setStatusString(QStringLiteral("Fetching databases..."));
+    m_deviceState->setStatusString(QStringLiteral("正在获取数据库..."));
 
     const auto type = QStringLiteral("resources_tgz");
     auto fileInfo = m_versionInfo.fileInfo(type, m_deviceState->deviceInfo().hardware.target);
@@ -174,7 +174,7 @@ void FirmwareHelper::fetchAssets()
 void FirmwareHelper::fetchFile(FileIndex index, const Updates::FileInfo &fileInfo)
 {
     if(!fileInfo.isValid()) {
-        finishWithError(BackendError::DataError, QStringLiteral("File info invalid (missing target?)"));
+        finishWithError(BackendError::DataError, QStringLiteral("文件信息无效（缺少目标？）"));
         return;
     }
 
@@ -184,7 +184,7 @@ void FirmwareHelper::fetchFile(FileIndex index, const Updates::FileInfo &fileInf
     auto *fetcher = new RemoteFileFetcher(fileInfo, file, this);
 
     if(fetcher->isError()) {
-        finishWithError(fetcher->error(), QStringLiteral("Failed to fetch file: %1").arg(fetcher->errorString()));
+        finishWithError(fetcher->error(), QStringLiteral("无法获取文件：%1").arg(fetcher->errorString()));
         return;
     }
 
@@ -192,7 +192,7 @@ void FirmwareHelper::fetchFile(FileIndex index, const Updates::FileInfo &fileInf
         m_files.insert(index, file);
 
         if(fetcher->isError()) {
-            finishWithError(fetcher->error(), QStringLiteral("Failed to fetch file: %1").arg(fetcher->errorString()));
+            finishWithError(fetcher->error(), QStringLiteral("无法获取文件：%1").arg(fetcher->errorString()));
         } else {
             advanceState();
         }

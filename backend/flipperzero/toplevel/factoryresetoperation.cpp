@@ -18,7 +18,7 @@ FactoryResetOperation::FactoryResetOperation(UtilityInterface *utility, DeviceSt
 
 const QString FactoryResetOperation::description() const
 {
-    return QStringLiteral("Factory reset (Toplevel) @%1").arg(deviceState()->name());
+    return QStringLiteral("恢复出厂设置（顶层）@%1").arg(deviceState()->name());
 }
 
 void FactoryResetOperation::nextStateLogic()

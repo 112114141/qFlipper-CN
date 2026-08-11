@@ -69,19 +69,19 @@ void DeviceRegistry::insertDevice(const USBDeviceInfo &info)
 {
     if(!info.isComplete()) {
         qCDebug(LOG_DEVREG).noquote().nospace()
-            << "Incomplete device info: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x"
+            << "不完整的设备信息: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x"
             << QString::number(info.productID(), 16);
 
         setError(BackendError::InvalidDevice);
 
     } else if(info.vendorID() != FLIPPER_ZERO_VID) {
-        qCDebug(LOG_DEVREG) << "Unexpected device VID and PID";
+        qCDebug(LOG_DEVREG) << "意外的设备 VID 和 PID";
         setError(BackendError::InvalidDevice);
 
     } else {
         setQueryInProgress(true);
         qCDebug(LOG_DEVREG).noquote().nospace()
-            << "Detected new device: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
+            << "检测到新设备: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
 
         auto *fetcher = Zero::AbstractDeviceInfoHelper::create(info, this);
         connect(fetcher, &Zero::AbstractDeviceInfoHelper::finished, this, &DeviceRegistry::processDevice);
@@ -102,7 +102,7 @@ void DeviceRegistry::removeDevice(const USBDeviceInfo &info)
 
         if(!device->deviceState()->isPersistent()) {
             qCDebug(LOG_DEVREG).noquote().nospace()
-                << "Device disconnected: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
+                << "设备已断开连接: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
 
             m_devices.takeAt(idx)->deleteLater();
             emit deviceCountChanged();
@@ -110,7 +110,7 @@ void DeviceRegistry::removeDevice(const USBDeviceInfo &info)
 
         } else {
             qCDebug(LOG_DEVREG).noquote().nospace()
-                << "Device went offline: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
+                << "设备已离线: VID_0x" << QString::number(info.vendorID(), 16) << ":PID_0x" << QString::number(info.productID(), 16);
 
             device->deviceState()->setOnline(false);
         }
@@ -124,7 +124,7 @@ void DeviceRegistry::removeOfflineDevices()
     });
 
     for(const auto end = m_devices.end(); it != end; ++it) {
-        qCDebug(LOG_DEVREG).noquote() << "Removed offline device:" << (*it)->deviceState()->name();
+        qCDebug(LOG_DEVREG).noquote() << "已移除离线设备:" << (*it)->deviceState()->name();
 
         m_devices.erase(it);
         emit deviceCountChanged();
@@ -141,7 +141,7 @@ void DeviceRegistry::processDevice()
     const auto &info = fetcher->result();
 
     if(fetcher->isError()) {
-        qCDebug(LOG_DEVREG).noquote() << "Device initialization failed:" << fetcher->errorString();
+        qCDebug(LOG_DEVREG).noquote() << "设备初始化失败:" << fetcher->errorString();
         setError(fetcher->error());
         return;
     }
@@ -152,11 +152,11 @@ void DeviceRegistry::processDevice()
 
     if(it != m_devices.end()) {
         // Preserving the old instance
-        qCDebug(LOG_DEVREG) << "Device went back online";
+        qCDebug(LOG_DEVREG) << "设备已重新上线";
         (*it)->deviceState()->setDeviceInfo(info);
 
     } else {
-        qCDebug(LOG_DEVREG) << "Registering the device";
+        qCDebug(LOG_DEVREG) << "正在注册设备";
 
         auto *device = new FlipperZero(info, this);
         m_devices.append(device);

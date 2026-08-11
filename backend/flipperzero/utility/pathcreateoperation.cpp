@@ -16,7 +16,7 @@ PathCreateOperation::PathCreateOperation(ProtobufSession *rpc, DeviceState *devi
 
 const QString PathCreateOperation::description() const
 {
-    return QStringLiteral("Create Path @%1").arg(QString(m_remotePath));
+    return QStringLiteral("创建路径 @%1").arg(QString(m_remotePath));
 }
 
 bool PathCreateOperation::pathExists() const
@@ -42,28 +42,28 @@ void PathCreateOperation::nextStateLogic()
         finish();
 
     } else {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Unexpected state"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("意外的状态"));
     }
 }
 
 void PathCreateOperation::checkRootElement()
 {
     if(!m_remotePath.startsWith('/')) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Path must start with the slash ('/') symbol"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("路径必须以斜杠（'/'）符号开头"));
         return;
     }
 
     m_remotePathElements = m_remotePath.right(m_remotePath.size() - 1).split('/');
 
     if(m_remotePathElements.isEmpty()) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Path is empty"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("路径为空"));
         return;
     }
 
     const auto &rootElement = m_remotePathElements.first();
 
     if((rootElement != QByteArrayLiteral("ext")) && (rootElement != ("int"))) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Invalid remote path: must start with \"int\" or \"ext\""));
+        finishWithError(BackendError::UnknownError, QStringLiteral("无效的远程路径：必须以 \"int\" 或 \"ext\" 开头"));
     } else if(m_remotePathElements.size() == 1) {
         finish();
     } else {
@@ -84,7 +84,7 @@ void PathCreateOperation::checkRemotePath()
             return;
 
         } else if(operation->type() == StorageStatOperation::RegularFile) {
-            finishWithError(BackendError::UnknownError, QStringLiteral("Remote path %1 is a regular file").arg(QString(currentPath)));
+            finishWithError(BackendError::UnknownError, QStringLiteral("远程路径 %1 是常规文件").arg(QString(currentPath)));
             return;
 
         } else if(operation->type() == StorageStatOperation::Directory) {

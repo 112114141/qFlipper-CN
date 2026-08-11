@@ -17,7 +17,7 @@ StorageStatOperation::StorageStatOperation(uint32_t id, const QByteArray &fileNa
 
 const QString StorageStatOperation::description() const
 {
-    return QStringLiteral("Storage Stat @%1").arg(QString(m_fileName));
+    return QStringLiteral("存储统计 @%1").arg(QString(m_fileName));
 }
 
 const QByteArray &StorageStatOperation::fileName() const

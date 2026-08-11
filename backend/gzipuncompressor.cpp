@@ -30,7 +30,7 @@ GZipUncompressor::GZipUncompressor(QIODevice *in, QIODevice *out, QObject *paren
     auto *watcher = new QFutureWatcher<void>(this);
 
     connect(watcher, &QFutureWatcherBase::finished, this, [=]() {
-        qCDebug(LOG_UNZIP).noquote() << "Uncompression finished :" << errorString();
+        qCDebug(LOG_UNZIP).noquote() << "解压完成 :" << errorString();
         watcher->deleteLater();
         emit finished();
     });
@@ -62,12 +62,12 @@ void GZipUncompressor::setProgress(double progress)
 void GZipUncompressor::doUncompress()
 {
     if(m_in->bytesAvailable() <= 4) {
-        setError(BackendError::DataError, QStringLiteral("The input file is empty"));
+        setError(BackendError::DataError, QStringLiteral("输入文件为空"));
         return;
     }
 
     const auto totalSize = m_in->bytesAvailable();
-    qCDebug(LOG_UNZIP) << "Uncompressing file with size of" << totalSize << "bytes...";
+    qCDebug(LOG_UNZIP) << "正在解压文件，大小为" << totalSize << "字节...";
 
     z_stream stream;
     stream.zalloc = Z_NULL;
@@ -78,7 +78,7 @@ void GZipUncompressor::doUncompress()
 
     const auto err = inflateInit2(&stream, 15 + 16);
     if(err != Z_OK) {
-        setError(BackendError::UnknownError, QStringLiteral("Failed to initialise deflate method"));
+        setError(BackendError::UnknownError, QStringLiteral("初始化 deflate 方法失败"));
         return;
     }
 
@@ -99,7 +99,7 @@ void GZipUncompressor::doUncompress()
 
             if(errorOccured) {
                 inflateEnd(&stream);
-                setError(BackendError::DataError, QStringLiteral("Error during uncompression"));
+                setError(BackendError::DataError, QStringLiteral("解压过程中出错"));
                 return;
             }
 

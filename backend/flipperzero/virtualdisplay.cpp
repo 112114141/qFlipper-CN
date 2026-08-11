@@ -51,7 +51,7 @@ void VirtualDisplay::start(const QByteArray &firstFrame)
     auto *operation = m_device->rpc()->guiStartVirtualDisplay(firstFrame);
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCDebug(LOG_VIRTDISPLAY).noquote() << "Failed to start virtual display:" << operation->errorString();
+            qCDebug(LOG_VIRTDISPLAY).noquote() << "启动虚拟显示失败:" << operation->errorString();
             setDisplayState(DisplayState::Stopped);
         } else {
             setDisplayState(DisplayState::Running);
@@ -65,7 +65,7 @@ void VirtualDisplay::sendFrame(const QByteArray &screenFrame)
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCDebug(LOG_VIRTDISPLAY).noquote() << "Failed to send screen frame:" << operation->errorString();
+            qCDebug(LOG_VIRTDISPLAY).noquote() << "发送屏幕帧失败:" << operation->errorString();
         }
     });
 }
@@ -82,7 +82,7 @@ void VirtualDisplay::stop()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCDebug(LOG_VIRTDISPLAY).noquote() << "Failed to stop virtual display:" << operation->errorString();
+            qCDebug(LOG_VIRTDISPLAY).noquote() << "停止虚拟显示失败:" << operation->errorString();
         }
 
         setDisplayState(DisplayState::Stopped);

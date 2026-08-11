@@ -93,27 +93,27 @@ void ApplicationUpdater::installUpdate(const Flipper::Updates::VersionInfo &vers
 
     connect(fetcher, &RemoteFileFetcher::finished, this, [=]() {
         if(fetcher->isError()) {
-            qCWarning(CATEGORY_SELFUPDATES).noquote() << "Failed to download application update package:" << fetcher->errorString();
+            qCWarning(CATEGORY_SELFUPDATES).noquote() << "下载应用程序更新包失败:" << fetcher->errorString();
             setState(ErrorOccured);
 
             cleanup();
             return;
         }
 
-        qCInfo(CATEGORY_SELFUPDATES) << "Application update package has been downloaded.";
+        qCInfo(CATEGORY_SELFUPDATES) << "应用程序更新包已下载完成。";
         setState(Updating);
 
         // IMPORTANT -- The file is closed automatically before renaming (https://doc.qt.io/qt-5/qfile.html#rename)
         QFile oldFile(filePath);
         if(oldFile.exists() && !oldFile.remove()) {
-            qCDebug(CATEGORY_SELFUPDATES).noquote() << "Failed to remove old update package:" << oldFile.fileName();
+            qCDebug(CATEGORY_SELFUPDATES).noquote() << "删除旧更新包失败:" << oldFile.fileName();
             setState(ErrorOccured);
 
             cleanup();
             return;
 
         } else if(!file->rename(filePath)) {
-            qCDebug(CATEGORY_SELFUPDATES).noquote() << "Failed to rename .part file:" << file->fileName();
+            qCDebug(CATEGORY_SELFUPDATES).noquote() << "重命名 .part 文件失败:" << file->fileName();
             setState(ErrorOccured);
 
             file->remove();
@@ -133,7 +133,7 @@ void ApplicationUpdater::installUpdate(const Flipper::Updates::VersionInfo &vers
         cleanup();
 
         if(!performUpdate(filePath)) {
-            qCWarning(CATEGORY_SELFUPDATES) << "Failed to start the application update process.";
+            qCWarning(CATEGORY_SELFUPDATES) << "启动应用程序更新进程失败。";
             setState(ErrorOccured);
         }
     });
@@ -141,14 +141,14 @@ void ApplicationUpdater::installUpdate(const Flipper::Updates::VersionInfo &vers
     connect(fetcher, &RemoteFileFetcher::progressChanged, this, &ApplicationUpdater::setProgress);
 
     if(!fetcher->fetch(fileInfo, file)) {
-        qCWarning(CATEGORY_SELFUPDATES) << "Failed to start downloading the update package.";
+        qCWarning(CATEGORY_SELFUPDATES) << "开始下载更新包失败。";
         setState(ErrorOccured);
 
         file->remove();
         cleanup();
 
     } else {
-        qCWarning(CATEGORY_SELFUPDATES) << "Downloading the application update package...";
+        qCWarning(CATEGORY_SELFUPDATES) << "正在下载应用程序更新包...";
         setState(Downloading);
     }
 }
@@ -176,7 +176,7 @@ void ApplicationUpdater::setProgress(double progress)
 bool ApplicationUpdater::performUpdate(const QString &path)
 {
     const auto exitApplication = []() {
-        qCInfo(CATEGORY_SELFUPDATES) << "Update started, exiting the application...";
+        qCInfo(CATEGORY_SELFUPDATES) << "更新已启动，正在退出应用程序...";
         QCoreApplication::exit(0);
     };
 
@@ -198,7 +198,7 @@ bool ApplicationUpdater::performUpdate(const QString &path)
         if(!exitCode && exitStatus == QProcess::NormalExit) {
             exitApplication();
         } else {
-            qCWarning(CATEGORY_SELFUPDATES) << "Failed to open the disk image.";
+            qCWarning(CATEGORY_SELFUPDATES) << "打开磁盘镜像失败。";
         }
     });
 

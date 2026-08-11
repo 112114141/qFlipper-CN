@@ -13,7 +13,7 @@ SystemGetDateTimeOperation::SystemGetDateTimeOperation(uint32_t id, QObject *par
 
 const QString SystemGetDateTimeOperation::description() const
 {
-    return QStringLiteral("System Get DateTime");
+    return QStringLiteral("系统获取日期时间");
 }
 
 const QDateTime &SystemGetDateTimeOperation::dateTime() const

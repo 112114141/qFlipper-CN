@@ -227,18 +227,18 @@ PropertyGetOperation *ProtobufSession::propertyGet(const QByteArray &key)
 void ProtobufSession::startSession()
 {
     if(m_sessionState != Stopped) {
-        qCWarning(LOG_SESSION) << "RPC session is already running";
+        qCWarning(LOG_SESSION) << "RPC 会话已在运行";
         return;
     }
 
     clearError();
     m_receivedData.clear();
 
-    qCInfo(LOG_SESSION) << "Starting RPC session...";
+    qCInfo(LOG_SESSION) << "正在启动 RPC 会话...";
     setSessionState(Starting);
 
     if(!loadProtobufPlugin()) {
-        stopEarly(BackendError::UnknownError, QStringLiteral("Suitable protocol plugin is not available"));
+        stopEarly(BackendError::UnknownError, QStringLiteral("没有合适的协议插件可用"));
         return;
     }
 
@@ -247,7 +247,7 @@ void ProtobufSession::startSession()
         helper->deleteLater();
 
         if(helper->isError()) {
-            qCCritical(LOG_SESSION).noquote() << "Failed to start RPC session:" << helper->errorString();
+            qCCritical(LOG_SESSION).noquote() << "启动 RPC 会话失败:" << helper->errorString();
             stopEarly(helper->error(), helper->errorString());
             return;
         }
@@ -258,7 +258,7 @@ void ProtobufSession::startSession()
         connect(m_serialPort, &QSerialPort::bytesWritten, this, &ProtobufSession::onSerialPortBytesWriten);
         connect(m_serialPort, &QSerialPort::errorOccurred, this, &ProtobufSession::onSerialPortErrorOccured);
 
-        qCInfo(LOG_SESSION) << "RPC session started successfully.";
+        qCInfo(LOG_SESSION) << "RPC 会话启动成功。";
 
         if(!m_queue.isEmpty()) {
             setSessionState(Running);
@@ -325,7 +325,7 @@ void ProtobufSession::onSerialPortBytesWriten(qint64 nbytes)
 
 void ProtobufSession::onSerialPortErrorOccured()
 {
-    qCInfo(LOG_SESSION) << "Serial connection was lost.";
+    qCInfo(LOG_SESSION) << "串口连接已断开。";
 
     disconnect(m_serialPort, &QSerialPort::readyRead, this, &ProtobufSession::onSerialPortReadyRead);
     disconnect(m_serialPort, &QSerialPort::bytesWritten, this, &ProtobufSession::onSerialPortBytesWriten);
@@ -342,7 +342,7 @@ void ProtobufSession::processQueue()
     }
 
     m_currentOperation = m_queue.dequeue();
-    qCInfo(LOG_SESSION).noquote() << prettyOperationDescription() << "START";
+    qCInfo(LOG_SESSION).noquote() << prettyOperationDescription() << "开始";
 
     connect(m_currentOperation, &AbstractOperation::finished, this, &ProtobufSession::onCurrentOperationFinished);
     m_currentOperation->start();
@@ -376,7 +376,7 @@ void ProtobufSession::writeToPort()
             break;
         } else if(bytesWritten != buf.size()) {
             // TODO: Check for full system serial buffer
-            qCCritical(LOG_SESSION) << "Serial buffer overflow";
+            qCCritical(LOG_SESSION) << "串口缓冲区溢出";
             break;
         }
 
@@ -393,10 +393,10 @@ void ProtobufSession::writeToPort()
 
 void ProtobufSession::doStopSession()
 {
-    qCInfo(LOG_SESSION) << "Stopping RPC session...";
+    qCInfo(LOG_SESSION) << "正在停止 RPC 会话...";
 
     if(m_currentOperation) {
-        m_currentOperation->abort(QStringLiteral("RPC session was stopped with operations still running"));
+        m_currentOperation->abort(QStringLiteral("RPC 会话停止时仍有操作在运行"));
     }
 
     if(m_serialPort) {
@@ -406,7 +406,7 @@ void ProtobufSession::doStopSession()
 
     unloadProtobufPlugin();
 
-    qCInfo(LOG_SESSION) << "RPC session stopped successfully.";
+    qCInfo(LOG_SESSION) << "RPC 会话已成功停止。";
 
     setSessionState(Stopped);
 }
@@ -414,12 +414,12 @@ void ProtobufSession::doStopSession()
 void ProtobufSession::onCurrentOperationFinished()
 {
     if(m_currentOperation->isError()) {
-        qCCritical(LOG_SESSION).noquote() << prettyOperationDescription() << "ERROR:" << m_currentOperation->errorString();
+        qCCritical(LOG_SESSION).noquote() << prettyOperationDescription() << "错误:" << m_currentOperation->errorString();
 
         clearOperationQueue();
 
     } else {
-        qCInfo(LOG_SESSION).noquote() << prettyOperationDescription() << "SUCCESS";
+        qCInfo(LOG_SESSION).noquote() << prettyOperationDescription() << "成功";
     }
 
     m_currentOperation->deleteLater();
@@ -493,11 +493,11 @@ bool ProtobufSession::loadProtobufPlugin()
     const auto supportedVersions = supportedProtobufVersions();
 
     if(supportedVersions.isEmpty()) {
-        qCCritical(LOG_SESSION) << "Cannot find protobuf support plugins";
+        qCCritical(LOG_SESSION) << "无法找到 protobuf 支持插件";
         return false;
     } else if(!supportedVersions.contains(m_versionMajor)) {
-        qCCritical(LOG_SESSION).noquote() << "Protocol version" << m_versionMajor
-                                          << "is not supported yet. Please update the application.";
+        qCCritical(LOG_SESSION).noquote() << "协议版本" << m_versionMajor
+                                          << "尚不支持。请更新应用程序。";
         return false;
     }
 
@@ -517,7 +517,7 @@ bool ProtobufSession::loadProtobufPlugin()
     m_plugin = qobject_cast<ProtobufPluginInterface*>(m_loader->instance());
 
     if(!m_plugin) {
-        qCCritical(LOG_SESSION) << "Failed to load protobuf plugin:" << m_loader->errorString();
+        qCCritical(LOG_SESSION) << "加载 protobuf 插件失败:" << m_loader->errorString();
         return false;
     }
 #endif
@@ -535,12 +535,12 @@ void ProtobufSession::unloadProtobufPlugin()
         return;
     }
 
-    qCDebug(LOG_SESSION) << "Attempting to unload protobuf plugin...";
+    qCDebug(LOG_SESSION) << "正在尝试卸载 protobuf 插件...";
 
     if(!m_loader->unload()) {
-        qCDebug(LOG_SESSION) << "Cannot unload protobuf plugin. This is probably OK.";
+        qCDebug(LOG_SESSION) << "无法卸载 protobuf 插件。这可能无影响。";
     } else {
-        qCDebug(LOG_SESSION) << "Unloaded protobuf plugin.";
+        qCDebug(LOG_SESSION) << "已卸载 protobuf 插件。";
     }
 #endif
 }
@@ -586,13 +586,13 @@ void ProtobufSession::processBroadcastResponse(QObject *response)
 void ProtobufSession::processUnmatchedResponse(QObject *response)
 {
     auto *mainResponse = qobject_cast<MainResponseInterface*>(response);
-    qCWarning(LOG_SESSION) << "Cannot match message with id" << mainResponse->id();
+    qCWarning(LOG_SESSION) << "无法匹配 ID 为" << mainResponse->id() << "的消息";
 }
 
 void ProtobufSession::processErrorResponse(QObject *response)
 {
     auto *mainResponse = qobject_cast<MainResponseInterface*>(response);
-    qCCritical(LOG_SESSION) << "Device replied with error:" << mainResponse->errorString();
+    qCCritical(LOG_SESSION) << "设备回复错误:" << mainResponse->errorString();
 }
 
 template<class T>

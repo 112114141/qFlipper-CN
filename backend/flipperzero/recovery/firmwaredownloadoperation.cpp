@@ -16,7 +16,7 @@ FirmwareDownloadOperation::FirmwareDownloadOperation(Recovery *recovery, QIODevi
 
 const QString FirmwareDownloadOperation::description() const
 {
-    return QStringLiteral("Firmware Download @%1").arg(deviceState()->name());
+    return QStringLiteral("固件下载 @%1").arg(deviceState()->name());
 }
 
 void FirmwareDownloadOperation::nextStateLogic()
@@ -27,7 +27,7 @@ void FirmwareDownloadOperation::nextStateLogic()
     } else if(operationState() == State::DownloadingFirmware) {
         finish();
     } else {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Unexpected state."));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("意外的状态。"));
     }
 }
 

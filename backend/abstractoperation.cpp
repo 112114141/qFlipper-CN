@@ -39,7 +39,7 @@ double AbstractOperation::progress() const
 
 void AbstractOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::TimeoutError, QStringLiteral("Operation timeout (generic)"));
+    finishWithError(BackendError::TimeoutError, QStringLiteral("操作超时（通用）"));
 }
 
 void AbstractOperation::setOperationState(int state)

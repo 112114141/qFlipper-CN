@@ -18,7 +18,7 @@ StorageInfoRefreshOperation::StorageInfoRefreshOperation(ProtobufSession *rpc, D
 
 const QString StorageInfoRefreshOperation::description() const
 {
-    return QStringLiteral("Refresh Storage Info @%1").arg(deviceState()->name());
+    return QStringLiteral("刷新存储信息 @%1").arg(deviceState()->name());
 }
 
 void StorageInfoRefreshOperation::nextStateLogic()
@@ -41,7 +41,7 @@ void StorageInfoRefreshOperation::checkSDCard()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to check SD card: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法检查 SD 卡：%1").arg(operation->errorString()));
             return;
 
         }
@@ -66,7 +66,7 @@ void StorageInfoRefreshOperation::checkManifest()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to check resource manifest: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法检查资源清单：%1").arg(operation->errorString()));
             return;
         }
 

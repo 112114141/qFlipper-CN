@@ -26,7 +26,7 @@ StorageWriteOperation::StorageWriteOperation(uint32_t id, const QByteArray &path
 
 const QString StorageWriteOperation::description() const
 {
-    return QStringLiteral("Storage Write @%1").arg(QString(path()));
+    return QStringLiteral("存储写入 @%1").arg(QString(path()));
 }
 
 bool StorageWriteOperation::hasMoreData() const
@@ -40,9 +40,9 @@ void StorageWriteOperation::feedResponse(QObject *response)
     auto *mainResponse = qobject_cast<MainResponseInterface*>(response);
 
     if(mainResponse->isError()) {
-        finishWithError(BackendError::ProtocolError, QStringLiteral("Device replied with error: %1").arg(mainResponse->errorString()));
+        finishWithError(BackendError::ProtocolError, QStringLiteral("设备回复错误：%1").arg(mainResponse->errorString()));
     } else if(!processResponse(response)) {
-        finishWithError(BackendError::ProtocolError, QStringLiteral("Operation finished with error: %1").arg(mainResponse->errorString()));
+        finishWithError(BackendError::ProtocolError, QStringLiteral("操作完成但有错误：%1").arg(mainResponse->errorString()));
     } else if(!qobject_cast<StatusPingResponseInterface*>(response)) {
         finish();
     } else {
@@ -75,7 +75,7 @@ const QByteArray StorageWriteOperation::encodeRequest(ProtobufPluginInterface *e
 bool StorageWriteOperation::begin()
 {
     if(!m_file->open(QIODevice::ReadOnly)) {
-        setError(BackendError::DiskError, QStringLiteral("Failed to open file for reading: %1").arg(m_file->errorString()));
+        setError(BackendError::DiskError, QStringLiteral("无法打开文件进行读取：%1").arg(m_file->errorString()));
         return false;
     }
 

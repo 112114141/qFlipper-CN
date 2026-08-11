@@ -10,7 +10,7 @@ SystemFactoryResetOperation::SystemFactoryResetOperation(uint32_t id, QObject *p
 
 const QString SystemFactoryResetOperation::description() const
 {
-    return QStringLiteral("Factory Reset");
+    return QStringLiteral("恢复出厂设置");
 }
 
 const QByteArray SystemFactoryResetOperation::encodeRequest(ProtobufPluginInterface *encoder)

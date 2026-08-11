@@ -28,7 +28,7 @@ UserRestoreOperation::UserRestoreOperation(ProtobufSession *rpc, DeviceState *de
 
 const QString UserRestoreOperation::description() const
 {
-    return QStringLiteral("Restore %1 @%2").arg(m_remoteDirName, deviceState()->name());
+    return QStringLiteral("恢复 %1 @%2").arg(m_remoteDirName, deviceState()->name());
 }
 
 void UserRestoreOperation::nextStateLogic()
@@ -76,7 +76,7 @@ void UserRestoreOperation::uncompressArchive()
 void UserRestoreOperation::readBackupDir()
 {
     if(!m_workDir.exists(m_remoteDirName.mid(1))) {
-        finishWithError(BackendError::DiskError, QStringLiteral("No matching backup directory"));
+        finishWithError(BackendError::DiskError, QStringLiteral("没有匹配的备份目录"));
         return;
     }
 
@@ -87,7 +87,7 @@ void UserRestoreOperation::readBackupDir()
     }
 
     if(m_files.isEmpty()) {
-        finishWithError(BackendError::DiskError, QStringLiteral("Backup directory is empty"));
+        finishWithError(BackendError::DiskError, QStringLiteral("备份目录为空"));
     } else {
         advanceOperationState();
     }
@@ -95,7 +95,7 @@ void UserRestoreOperation::readBackupDir()
 
 void UserRestoreOperation::deleteFiles()
 {
-    deviceState()->setStatusString(tr("Cleaning up..."));
+    deviceState()->setStatusString(tr("正在清理..."));
 
     auto numFiles = m_files.size();
     for(const auto &fileInfo : qAsConst(m_files)) {
@@ -115,7 +115,7 @@ void UserRestoreOperation::deleteFiles()
 
 void UserRestoreOperation::writeFiles()
 {
-    deviceState()->setStatusString(tr("Restoring backup..."));
+    deviceState()->setStatusString(tr("正在恢复备份..."));
 
     auto numFiles = m_files.size();
 
@@ -136,7 +136,7 @@ void UserRestoreOperation::writeFiles()
         } else if(fileInfo.isDir()) {
             op = rpc()->storageMkdir(filePath);
         } else {
-            finishWithError(BackendError::UnknownError, QStringLiteral("Expected a file or a directory"));
+            finishWithError(BackendError::UnknownError, QStringLiteral("期望文件或目录"));
             return;
         }
 

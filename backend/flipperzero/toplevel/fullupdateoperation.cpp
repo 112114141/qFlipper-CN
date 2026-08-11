@@ -51,7 +51,7 @@ FullUpdateOperation::~FullUpdateOperation()
 
 const QString FullUpdateOperation::description() const
 {
-    return QStringLiteral("Full Update @%1").arg(deviceState()->name());
+    return QStringLiteral("完整更新 @%1").arg(deviceState()->name());
 }
 
 void FullUpdateOperation::nextStateLogic()
@@ -108,7 +108,7 @@ void FullUpdateOperation::provisionRegionData()
     auto *operation = m_utility->provisionRegionData();
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCInfo(CATEGORY_DEBUG) << "Warning: failed to perform region data provisioning:" << operation->errorString();
+            qCInfo(CATEGORY_DEBUG) << "警告: 执行区域数据配置失败:" << operation->errorString();
         }
 
         advanceOperationState();
@@ -117,14 +117,14 @@ void FullUpdateOperation::provisionRegionData()
 
 void FullUpdateOperation::checkStorage()
 {
-    deviceState()->setStatusString(QStringLiteral("Checking storage..."));
+    deviceState()->setStatusString(QStringLiteral("正在检查存储..."));
 
     auto *operation = m_utility->refreshStorageInfo();
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::OperationError, QStringLiteral("Failed to check device storage"));
+            finishWithError(BackendError::OperationError, QStringLiteral("检查设备存储失败"));
         } else if(!deviceState()->deviceInfo().storage.isExternalPresent) {
-            finishWithError(BackendError::UnknownError, "SD Card is not installed or malfunctioning");
+            finishWithError(BackendError::UnknownError, "SD 卡未安装或发生故障");
         } else {
             advanceOperationState();
         }
@@ -133,13 +133,13 @@ void FullUpdateOperation::checkStorage()
 
 void FullUpdateOperation::fetchUpdateFile()
 {
-    deviceState()->setStatusString(QStringLiteral("Fetching firmware update..."));
+    deviceState()->setStatusString(QStringLiteral("正在获取固件更新..."));
 
     const auto target = deviceState()->deviceInfo().hardware.target;
     const auto fileInfo = m_versionInfo.fileInfo(QStringLiteral("update_tgz"), target);
 
     if(fileInfo.target() != target) {
-        finishWithError(BackendError::DataError, QStringLiteral("Required file type or target not found"));
+        finishWithError(BackendError::DataError, QStringLiteral("未找到所需的文件类型或目标"));
         return;
     }
 
@@ -169,14 +169,14 @@ void FullUpdateOperation::fetchUpdateFile()
 
 void FullUpdateOperation::prepareLocalUpdate()
 {
-    deviceState()->setStatusString(QStringLiteral("Preparing local firmware update..."));
+    deviceState()->setStatusString(QStringLiteral("正在准备本地固件更新..."));
     m_updateDirectory = globalTempDirs->subdir(getBaseName(m_updateFile->fileName()));
     advanceOperationState();
 }
 
 void FullUpdateOperation::extractUpdate()
 {
-    deviceState()->setStatusString(QStringLiteral("Extracting firmware update ..."));
+    deviceState()->setStatusString(QStringLiteral("正在解压固件更新..."));
     deviceState()->setProgress(-1.0);
 
     auto *uncompressor = new TarZipUncompressor(m_updateFile, m_updateDirectory, this);
@@ -194,16 +194,16 @@ void FullUpdateOperation::extractUpdate()
 
 void FullUpdateOperation::readUpdateFiles()
 {
-    deviceState()->setStatusString(QStringLiteral("Reading firmware update ..."));
+    deviceState()->setStatusString(QStringLiteral("正在读取固件更新..."));
     deviceState()->setProgress(-1.0);
 
     const auto subdirNames = m_updateDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     if(subdirNames.isEmpty()) {
-        finishWithError(BackendError::DataError, QStringLiteral("Cannot find update directory"));
+        finishWithError(BackendError::DataError, QStringLiteral("无法找到更新目录"));
         return;
 
     } else if(!m_updateDirectory.cd(subdirNames.first())) {
-        finishWithError(BackendError::DataError, QStringLiteral("Cannot enter update directory"));
+        finishWithError(BackendError::DataError, QStringLiteral("无法进入更新目录"));
         return;
     }
 
@@ -217,7 +217,7 @@ void FullUpdateOperation::readUpdateFiles()
 
 void FullUpdateOperation::createUpdatePath()
 {
-    deviceState()->setStatusString(QStringLiteral("Creating update path ..."));
+    deviceState()->setStatusString(QStringLiteral("正在创建更新路径..."));
     deviceState()->setProgress(-1.0);
 
     const auto remotePath = QStringLiteral("%1/%2").arg(REMOTE_DIR, m_updateDirectory.dirName()).toLocal8Bit();
@@ -238,7 +238,7 @@ void FullUpdateOperation::createUpdatePath()
 
 void FullUpdateOperation::verifyExistingFiles()
 {
-    deviceState()->setStatusString(QStringLiteral("Verifying existing files ..."));
+    deviceState()->setStatusString(QStringLiteral("正在验证现有文件..."));
     deviceState()->setProgress(-1.0);
 
     const auto remotePath = QStringLiteral("%1/%2").arg(REMOTE_DIR, m_updateDirectory.dirName()).toLocal8Bit();
@@ -257,7 +257,7 @@ void FullUpdateOperation::verifyExistingFiles()
         m_fileUrls = operation->changedUrls();
 
         if(m_fileUrls.isEmpty()) {
-            qCDebug(CATEGORY_DEBUG) << "Update package has been already uploaded, skipping to update...";
+            qCDebug(CATEGORY_DEBUG) << "更新包已上传，跳转到更新...";
             setOperationState(FullUpdateOperation::UploadingUpdateFiles);
         }
 
@@ -267,7 +267,7 @@ void FullUpdateOperation::verifyExistingFiles()
 
 void FullUpdateOperation::uploadUpdateFiles()
 {
-    deviceState()->setStatusString(QStringLiteral("Uploading firmware update ..."));
+    deviceState()->setStatusString(QStringLiteral("正在上传固件更新..."));
 
     const auto remotePath = QStringLiteral("%1/%2").arg(QStringLiteral(REMOTE_DIR), m_updateDirectory.dirName()).toLocal8Bit();
     auto *operation = m_utility->uploadFiles(m_fileUrls, remotePath);

@@ -12,7 +12,7 @@ SystemDeviceInfoOperation::SystemDeviceInfoOperation(uint32_t id, QObject *paren
 
 const QString SystemDeviceInfoOperation::description() const
 {
-    return QStringLiteral("System Device Info");
+    return QStringLiteral("系统设备信息");
 }
 
 const QByteArray SystemDeviceInfoOperation::value(const QByteArray &key) const

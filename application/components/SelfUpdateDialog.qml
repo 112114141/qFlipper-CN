@@ -11,7 +11,7 @@ CustomDialog {
     closable: App.updater.state === ApplicationUpdater.ErrorOccured
     closePolicy: Popup.NoAutoClose
 
-    title: App.updater.state === ApplicationUpdater.Idle ? qsTr("Update qFlipper?") : qsTr("Updating qFlipper")
+    title: App.updater.state === ApplicationUpdater.Idle ? qsTr("更新 qFlipper？") : qsTr("正在更新 qFlipper")
 
     contentWidget: Item {
         implicitWidth: 430
@@ -26,7 +26,7 @@ CustomDialog {
                 visible: App.updater.state === ApplicationUpdater.Idle
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: qsTr("Newer version of qFlipper<br/>will be installed")
+                text: qsTr("将安装更新版本的 qFlipper<br/>")
 
                 lineHeight: 1.4
                 wrapMode: Text.Wrap
@@ -49,7 +49,7 @@ CustomDialog {
 
                 SmallButton {
                     radius: 7
-                    text: qsTr("Update")
+                    text: qsTr("更新")
                     highlighted: true
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -58,7 +58,7 @@ CustomDialog {
 
                 SmallButton {
                     radius: 7
-                    text: qsTr("Cancel")
+                    text: qsTr("取消")
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onClicked: control.rejected()
@@ -93,13 +93,13 @@ CustomDialog {
                 text: {
                     switch(App.updater.state) {
                     case ApplicationUpdater.Downloading:
-                        return qsTr("Downloading latest version...");
+                        return qsTr("正在下载最新版本...");
                     case ApplicationUpdater.Updating:
-                        return qsTr("Starting update process...");
+                        return qsTr("正在启动更新进程...");
                     case ApplicationUpdater.ErrorOccured:
-                        return qsTr("Update failed (See log).");
+                        return qsTr("更新失败（请查看日志）。");
                     default:
-                        return qsTr("Preparing...");
+                        return qsTr("准备中...");
                     }
                 }
 

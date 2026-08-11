@@ -52,7 +52,7 @@ AssetsDownloadOperation::~AssetsDownloadOperation()
 
 const QString AssetsDownloadOperation::description() const
 {
-    return QStringLiteral("Assets Download @%1").arg(deviceState()->name());
+    return QStringLiteral("下载资源 @%1").arg(deviceState()->name());
 }
 
 void AssetsDownloadOperation::nextStateLogic()
@@ -101,12 +101,12 @@ void AssetsDownloadOperation::checkForExtStorage()
 
     connect(op, &AbstractOperation::finished, this, [=]() {
         if(op->isError()) {
-            finishWithError(op->error(), QStringLiteral("Failed to perform stat operation: %1").arg(op->errorString()));
+            finishWithError(op->error(), QStringLiteral("执行 stat 操作失败: %1").arg(op->errorString()));
         } else if(!op->isPresent()) {
-            qCDebug(CATEGORY_ASSETS) << "No external storage found, finishing early.";
+            qCDebug(CATEGORY_ASSETS) << "未找到外部存储，提前结束。";
             finish();
         } else {
-            qCDebug(CATEGORY_ASSETS) << "External storage is present," << op->sizeFree() << "bytes free.";
+            qCDebug(CATEGORY_ASSETS) << "外部存储存在，" << op->sizeFree() << "字节可用空间。";
             advanceOperationState();
         }
     });
@@ -196,10 +196,10 @@ void AssetsDownloadOperation::buildFileLists()
     manifestInfo.absolutePath = manifestInfo.name;
     manifestInfo.type = FileNode::Type::RegularFile;
 
-    printFileList("<<<<< Local manifest:", m_localManifest.tree()->toPreOrderList());
+    printFileList("<<<<< 本地清单:", m_localManifest.tree()->toPreOrderList());
 
     if(!m_isDeviceManifestPresent || m_deviceManifest.isError()) {
-        qCDebug(CATEGORY_ASSETS) << "Device manifest not present or corrupt, assumimg fresh install...";
+        qCDebug(CATEGORY_ASSETS) << "设备清单不存在或已损坏，假设为全新安装...";
 
         changed.append(manifestInfo);
         added.append(m_localManifest.tree()->toPreOrderList().mid(1));
@@ -209,7 +209,7 @@ void AssetsDownloadOperation::buildFileLists()
         });
 
     } else {
-        printFileList(">>>>> Device manifest:", m_deviceManifest.tree()->toPreOrderList());
+        printFileList(">>>>> 设备清单:", m_deviceManifest.tree()->toPreOrderList());
 
         deleted.append(m_localManifest.tree()->difference(m_deviceManifest.tree()));
         added.append(m_deviceManifest.tree()->difference(m_localManifest.tree()));
@@ -225,15 +225,15 @@ void AssetsDownloadOperation::buildFileLists()
     }
 
     if(!deleted.isEmpty()) {
-        printFileList("----- Files deleted:", deleted);
+        printFileList("----- 已删除的文件:", deleted);
     }
 
     if(!added.isEmpty()) {
-        printFileList("+++++ Files added:", added);
+        printFileList("+++++ 已添加的文件:", added);
     }
 
     if(!changed.isEmpty()) {
-        printFileList("***** Files changed:", changed);
+        printFileList("***** 已更改的文件:", changed);
     }
 
     m_deleteList.append(deleted);
@@ -251,11 +251,11 @@ void AssetsDownloadOperation::buildFileLists()
 void AssetsDownloadOperation::deleteFiles()
 {
     if(m_deleteList.isEmpty()) {
-        qCDebug(CATEGORY_ASSETS) << "No files to delete, skipping to write";
+        qCDebug(CATEGORY_ASSETS) << "没有要删除的文件，跳转到写入";
         advanceOperationState();
     }
 
-    deviceState()->setStatusString(tr("Deleting unneeded files..."));
+    deviceState()->setStatusString(tr("正在删除不需要的文件..."));
 
     auto filesRemaining = m_deleteList.size();
     const auto increment = 100.0 / filesRemaining;
@@ -281,11 +281,11 @@ void AssetsDownloadOperation::deleteFiles()
 void AssetsDownloadOperation::writeFiles()
 {
     if(m_writeList.isEmpty()) {
-        qCDebug(CATEGORY_ASSETS) << "No files to write, skipping to the end";
+        qCDebug(CATEGORY_ASSETS) << "没有要写入的文件，跳转到结束";
         advanceOperationState();
     }
 
-    deviceState()->setStatusString(tr("Installing databases..."));
+    deviceState()->setStatusString(tr("正在安装数据库..."));
 
     auto filesRemaining = m_writeList.size();
     const auto increment = 100.0 / filesRemaining;
@@ -318,7 +318,7 @@ void AssetsDownloadOperation::writeFiles()
             op = rpc()->storageWrite(filePath, buf);
 
         } else {
-            return finishWithError(BackendError::UnknownError, QStringLiteral("Unexpected file type"));
+            return finishWithError(BackendError::UnknownError, QStringLiteral("意外的文件类型"));
         }
 
         connect(op, &AbstractOperation::finished, this, [=]() {

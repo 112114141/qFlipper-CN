@@ -21,7 +21,7 @@ SettingsRestoreOperation::SettingsRestoreOperation(UtilityInterface *utility, De
 
 const QString SettingsRestoreOperation::description() const
 {
-    return QStringLiteral("Restore Internal storage @%1").arg(deviceState()->name());
+    return QStringLiteral("恢复内部存储 @%1").arg(deviceState()->name());
 }
 
 void SettingsRestoreOperation::nextStateLogic()

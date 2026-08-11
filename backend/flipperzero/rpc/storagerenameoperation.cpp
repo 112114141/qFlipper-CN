@@ -13,7 +13,7 @@ StorageRenameOperation::StorageRenameOperation(uint32_t id, const QByteArray &ol
 
 const QString StorageRenameOperation::description() const
 {
-    return QStringLiteral("Storage Rename @%1 -> %2").arg(QString(m_oldPath), QString(m_newPath));
+    return QStringLiteral("存储重命名 @%1 -> %2").arg(QString(m_oldPath), QString(m_newPath));
 }
 
 const QByteArray StorageRenameOperation::encodeRequest(ProtobufPluginInterface *encoder)

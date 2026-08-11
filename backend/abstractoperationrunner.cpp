@@ -27,13 +27,13 @@ void AbstractOperationRunner::enqueueOperation(AbstractOperation *operation)
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCCritical(loggingCategory()).noquote() << operation->description() << "ERROR:" << operation->errorString();
+            qCCritical(loggingCategory()).noquote() << operation->description() << "错误:" << operation->errorString();
 
             clearQueue();
             processQueue();
 
         } else {
-            qCInfo(loggingCategory()).noquote() << operation->description() << "SUCCESS";
+            qCInfo(loggingCategory()).noquote() << operation->description() << "成功";
             QTimer::singleShot(0, this, &AbstractOperationRunner::processQueue);
         }
 
@@ -51,7 +51,7 @@ void AbstractOperationRunner::processQueue()
     }
 
     auto *operation = m_queue.dequeue();
-    qCInfo(loggingCategory()).noquote() << operation->description() << "START";
+    qCInfo(loggingCategory()).noquote() << operation->description() << "开始";
     operation->start();
 }
 

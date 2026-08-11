@@ -17,7 +17,7 @@ SetBootModeOperation::SetBootModeOperation(Recovery *recovery, QObject *parent):
 
 const QString SetBootModeOperation::description() const
 {
-    return QStringLiteral("Set %1 boot mode @%2").arg(typeString(), deviceState()->name());
+    return QStringLiteral("设置 %1 启动模式 @%2").arg(typeString(), deviceState()->name());
 }
 
 void SetBootModeOperation::nextStateLogic()
@@ -34,9 +34,9 @@ void SetBootModeOperation::nextStateLogic()
 void SetBootModeOperation::onOperationTimeout()
 {
     if(!deviceState()->isOnline()) {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to set %1 mode: operation timeout").arg(typeString()));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("设置 %1 模式失败: 操作超时").arg(typeString()));
     } else {
-        qCDebug(LOG_RECOVERY) << "Timeout with an online device, assuming it is still functional";
+        qCDebug(LOG_RECOVERY) << "设备在线时超时，假设其仍然可用";
         advanceOperationState();
     }
 }
@@ -61,7 +61,7 @@ int SetRecoveryBootOperation::bootMode() const
 
 const QString SetRecoveryBootOperation::typeString() const
 {
-    return QStringLiteral("Recovery");
+    return QStringLiteral("恢复");
 }
 
 SetOSBootOperation::SetOSBootOperation(Recovery *recovery, QObject *parent):

@@ -7,7 +7,7 @@ import Theme 1.0
 CustomDialog {
     id: control
 
-    title: qsTr("SD Card Not Found")
+    title: qsTr("未找到 SD 卡")
 
     property bool isAltPressed: false
 
@@ -25,7 +25,7 @@ CustomDialog {
             Layout.margins: 20
 
             TextLabel {
-                text: qsTr("Please install an <font color=\"%1\">SD Card</font><br>before updating the firmware")
+                text: qsTr("更新固件前，请安装 <font color=\"%1\">SD 卡</font><br>")
                     .arg(Theme.color.lightred4)
                 lineHeight: 1.35
                 horizontalAlignment: Text.AlignRight
@@ -33,7 +33,7 @@ CustomDialog {
 
             Button {
                 id: okButton
-                text: control.isAltPressed ? qsTr("Force install") : "OK"
+                text: control.isAltPressed ? qsTr("强制安装") : qsTr("确定")
 
                 Keys.onPressed: control.isAltPressed = event.modifiers & Qt.AltModifier;
                 Keys.onReleased: control.isAltPressed = false;

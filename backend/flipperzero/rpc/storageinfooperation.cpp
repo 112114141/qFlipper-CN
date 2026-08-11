@@ -17,7 +17,7 @@ StorageInfoOperation::StorageInfoOperation(uint32_t id, const QByteArray &path, 
 
 const QString StorageInfoOperation::description() const
 {
-    return QStringLiteral("Storage Info @%1").arg(QString(m_path));
+    return QStringLiteral("存储信息 @%1").arg(QString(m_path));
 }
 
 bool StorageInfoOperation::isPresent() const

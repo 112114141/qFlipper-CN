@@ -11,7 +11,7 @@ StartRPCOperation::StartRPCOperation(QSerialPort *serialPort, QObject *parent):
 
 const QString StartRPCOperation::description() const
 {
-    return QStringLiteral("Start RPC session @%1").arg(QString(serialPort()->portName()));
+    return QStringLiteral("启动 RPC 会话 @%1").arg(QString(serialPort()->portName()));
 }
 
 void StartRPCOperation::onSerialPortReadyRead()
@@ -29,9 +29,9 @@ void StartRPCOperation::onSerialPortReadyRead()
 void StartRPCOperation::onOperationTimeout()
 {
     if(operationState() == State::LeavingCli) {
-        finishWithError(BackendError::SerialError, QStringLiteral("Failed to start RPC session"));
+        finishWithError(BackendError::SerialError, QStringLiteral("无法启动 RPC 会话"));
     } else if(operationState() == State::WaitingForPing) {
-        finishWithError(BackendError::ProtocolError, QStringLiteral("No ping response from device"));
+        finishWithError(BackendError::ProtocolError, QStringLiteral("设备未响应 ping"));
     }
 }
 

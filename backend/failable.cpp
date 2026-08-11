@@ -40,5 +40,5 @@ void Failable::setErrorString(const QString &errorMessage)
 void Failable::clearError()
 {
     m_error = BackendError::NoError;
-    m_errorString = QStringLiteral("No Error");
+    m_errorString = QStringLiteral("无错误");
 }

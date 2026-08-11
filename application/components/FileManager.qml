@@ -101,9 +101,9 @@ Item {
                             const path = Backend.fileManager.currentPath
 
                             if(path.startsWith("/ext")) {
-                                return path.replace("/ext", "SD Card") + "/";
+                                return path.replace("/ext", "SD卡") + "/";
                             } else if(path.startsWith("/int")) {
-                                return path.replace("/int", "Internal Flash") + "/";
+                                return path.replace("/int", "内部存储") + "/";
                             } else {
                                 return path;
                             }
@@ -129,7 +129,7 @@ Item {
 
             Switch {
                 id: hiddenFileSwitch
-                text: qsTr("Hidden files")
+                text: qsTr("隐藏文件")
                 checked: Preferences.showHiddenFiles
                 onCheckedChanged: {
                     Preferences.showHiddenFiles = checked;
@@ -192,9 +192,9 @@ Item {
         onDropped: function(drop) {
             if(drop.source || !drop.hasUrls || drop.proposedAction !== Qt.CopyAction) {
                 const msgObj = {
-                    title: qsTr("Error"),
-                    message: qsTr("Operation is not supported"),
-                    customText: qsTr("Close")
+                    title: qsTr("错误"),
+                    message: qsTr("不支持此操作"),
+                    customText: qsTr("关闭")
                 };
 
                 messageDialog.openWithMessage(null, msgObj);
@@ -247,7 +247,7 @@ Item {
 
     Action {
         id: uploadHereAction
-        text: qsTr("Upload here...")
+        text: qsTr("上传到此处...")
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-upload.svg"
 
         onTriggered: beginUpload();
@@ -255,7 +255,7 @@ Item {
 
     Action {
         id: newDirAction
-        text: qsTr("New Folder")
+        text: qsTr("新建文件夹")
         onTriggered: Backend.fileManager.beginMkDir();
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-new.svg"
     }
@@ -274,10 +274,10 @@ Item {
         if(Backend.fileManager.isTooLarge(urls)) {
             const isMultiple = urls.length > 1;
             const msgObj = {
-                title: qsTr("Warning"),
-                message: qsTr("Selected %1 too large.\nUpload anyway?").arg(isMultiple ? qsTr("files are") : qsTr("file is")),
+                title: qsTr("警告"),
+                message: qsTr("所选%1过大。\n仍要上传吗？").arg(isMultiple ? qsTr("文件") : qsTr("文件")),
                 suggestedRole: ConfirmationDialog.RejectRole,
-                customText: qsTr("Upload")
+                customText: qsTr("上传")
             };
 
             confirmationDialog.openWithMessage(doUpload, msgObj);

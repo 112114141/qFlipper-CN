@@ -14,7 +14,7 @@ PropertyGetOperation::PropertyGetOperation(uint32_t id, const QByteArray &key, Q
 
 const QString PropertyGetOperation::description() const
 {
-    return QStringLiteral("Property Get");
+    return QStringLiteral("属性获取");
 }
 
 const QByteArray PropertyGetOperation::value(const QByteArray &key) const

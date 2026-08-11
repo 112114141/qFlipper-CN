@@ -1,4 +1,4 @@
-# Contributed packages
-This directory contains community-contributed files for various package management systems. None of them were tested by Flipper QA.
+# 贡献的软件包
+本目录包含社区为各种包管理系统贡献的文件。这些文件均未经 Flipper QA 测试。
 
-For each system, see the respective subdirectory.
+对于每个系统，请参阅相应的子目录。

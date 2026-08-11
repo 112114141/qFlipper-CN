@@ -28,49 +28,67 @@ Item {
             id: keys
 
             TextLabel {
-                text: qsTr("Firmware")
+                text: qsTr("固件")
                 visible: extraFields
                 horizontalAlignment: Text.AlignRight
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: qsTr("Build Date")
+                text: qsTr("构建日期")
                 visible: extraFields
                 color: Theme.color.mediumorange4
                 horizontalAlignment: Text.AlignRight
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: qsTr("SD Card")
+                text: qsTr("SD 卡")
                 visible: extraFields
                 horizontalAlignment: Text.AlignRight
                 color: Theme.color.mediumorange4
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: qsTr("Databases")
+                text: qsTr("数据库")
                 visible: extraFields
                 horizontalAlignment: Text.AlignRight
                 color: Theme.color.mediumorange4
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
                 color: extraFields ? Theme.color.mediumorange4 : Theme.color.lightorange2
-                text: qsTr("Hardware")
+                text: qsTr("硬件")
                 horizontalAlignment: Text.AlignRight
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: qsTr("Radio FW")
+                text: qsTr("无线电固件")
                 visible: extraFields
                 horizontalAlignment: Text.AlignRight
                 color: Theme.color.mediumorange4
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
         }
 
@@ -82,24 +100,36 @@ Item {
                        deviceInfo.firmware.commit : deviceInfo.firmware.version
 
                 visible: extraFields
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: deviceInfo ? deviceInfo.firmware.date.toLocaleDateString(Qt.locale("C"), Locale.ShortFormat) : text
+                text: deviceInfo ? Qt.formatDateTime(deviceInfo.firmware.date, "yyyy.MM.dd") : text
                 color: Theme.color.lightorange3
                 visible: extraFields
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: deviceInfo && deviceInfo.storage.isExternalPresent ? deviceInfo.storage.externalFree + qsTr("% Free") : qsTr("Not present")
+                text: deviceInfo && deviceInfo.storage.isExternalPresent ? deviceInfo.storage.externalFree + qsTr("% 可用") : qsTr("不存在")
                 color: deviceInfo && deviceInfo.storage.isExternalPresent ? Theme.color.lightorange3 : Theme.color.lightred3
                 visible: extraFields
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: deviceInfo && deviceInfo.storage.isAssetsInstalled ? qsTr("Installed") : qsTr("Missing")
+                text: deviceInfo && deviceInfo.storage.isAssetsInstalled ? qsTr("已安装") : qsTr("缺失")
                 color: deviceInfo && deviceInfo.storage.isAssetsInstalled ? Theme.color.lightorange3 : Theme.color.lightred3
                 visible: extraFields
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
@@ -117,21 +147,27 @@ Item {
                 }
 
                 Layout.fillWidth: true
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
 
             TextLabel {
-                text: deviceInfo && deviceInfo.radioVersion.length ? "%1 %2".arg(deviceInfo.radioVersion).arg(stackTypeString(deviceInfo.stackType)) : qsTr("Corrupted")
+                text: deviceInfo && deviceInfo.radioVersion.length ? "%1 %2".arg(deviceInfo.radioVersion).arg(stackTypeString(deviceInfo.stackType)) : qsTr("已损坏")
                 color: deviceInfo && deviceInfo.radioVersion.length ? Theme.color.lightorange3 : Theme.color.lightred3
                 visible: extraFields
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 16
+                font.capitalization: Font.MixedCase
             }
         }
     }
 
     function stackTypeString(num) {
         switch(num) {
-        case 1: return "Full";
+        case 1: return qsTr("完整版");
         case 2: return "HCI";
-        case 3: return "Lite";
+        case 3: return qsTr("精简版");
         default: return num;
         }
     }

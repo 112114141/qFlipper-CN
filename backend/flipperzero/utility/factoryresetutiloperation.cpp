@@ -13,7 +13,7 @@ FactoryResetUtilOperation::FactoryResetUtilOperation(ProtobufSession *rpc, Devic
 
 const QString FactoryResetUtilOperation::description() const
 {
-    return QStringLiteral("Factory reset (Utility) @%1").arg(deviceState()->name());
+    return QStringLiteral("恢复出厂设置(工具) @%1").arg(deviceState()->name());
 }
 
 void FactoryResetUtilOperation::nextStateLogic()
@@ -38,7 +38,7 @@ void FactoryResetUtilOperation::onDeviceOnlineChanged()
 
 void FactoryResetUtilOperation::resetDevice()
 {
-    deviceState()->setStatusString(QStringLiteral("Performing factory reset..."));
+    deviceState()->setStatusString(QStringLiteral("正在执行恢复出厂设置..."));
 
     connect(deviceState(), &DeviceState::isOnlineChanged, this, &FactoryResetUtilOperation::onDeviceOnlineChanged);
 

@@ -44,20 +44,20 @@ void UpdateRegistry::fillFromJson(const QByteArray &text)
     const auto doc = QJsonDocument::fromJson(text);
 
     if(doc.isNull()) {
-        qCCritical(CATEGORY_UPDATES) << "Failed to parse the document";
+        qCCritical(CATEGORY_UPDATES) << "解析文档失败";
         return;
     } else if(!doc.isObject()) {
-        qCCritical(CATEGORY_UPDATES) << "Json document is not an object";
+        qCCritical(CATEGORY_UPDATES) << "JSON 文档不是对象";
         return;
     }
 
     const auto &obj = doc.object();
 
     if(!obj.contains("channels")) {
-        qCCritical(CATEGORY_UPDATES) << "No channels data in json file";
+        qCCritical(CATEGORY_UPDATES) << "JSON 文件中没有通道数据";
         return;
     } else if(!obj["channels"].isArray()) {
-        qCCritical(CATEGORY_UPDATES) << "Expected to get an array of channels";
+        qCCritical(CATEGORY_UPDATES) << "期望获取通道数组";
         return;
     }
 
@@ -74,7 +74,7 @@ void UpdateRegistry::fillFromJson(const QByteArray &text)
         }
 
     } catch(std::runtime_error &e) {
-        qCCritical(CATEGORY_UPDATES) << "Failed to parse update information:" << e.what();
+        qCCritical(CATEGORY_UPDATES) << "解析更新信息失败:" << e.what();
     }
 }
 
@@ -116,7 +116,7 @@ QVariant UpdateRegistry::data(const QModelIndex &index, int role) const
     const auto row = index.row();
 
     if(row >= m_channels.size()) {
-        qCDebug(CATEGORY_UPDATES) << "Invalid row index:" << row;
+        qCDebug(CATEGORY_UPDATES) << "无效的行索引:" << row;
         return QVariant();
     }
 
@@ -158,11 +158,11 @@ void UpdateRegistry::check()
 
     fetcher->connect(fetcher, &RemoteFileFetcher::finished, this, [=]() {
         if(fetcher->isError()) {
-            qCCritical(CATEGORY_UPDATES).noquote() << "Failed to fetch update information:" << fetcher->errorString();
+            qCCritical(CATEGORY_UPDATES).noquote() << "获取更新信息失败:" << fetcher->errorString();
             setState(State::ErrorOccured);
 
         } else {
-            qCDebug(CATEGORY_UPDATES).noquote() << "Fetched update information from" << m_directoryUrl;
+            qCDebug(CATEGORY_UPDATES).noquote() << "已从" << m_directoryUrl << "获取更新信息";
             buf->open(QIODevice::ReadOnly);
 
             fillFromJson(buf->readAll());
@@ -174,7 +174,7 @@ void UpdateRegistry::check()
     });
 
     if(!fetcher->fetch(m_directoryUrl, buf)) {
-        qCCritical(CATEGORY_UPDATES).noquote() << "Failed to fetch update information:" << fetcher->errorString();
+        qCCritical(CATEGORY_UPDATES).noquote() << "获取更新信息失败:" << fetcher->errorString();
         setState(State::ErrorOccured);
         buf->deleteLater();
     }

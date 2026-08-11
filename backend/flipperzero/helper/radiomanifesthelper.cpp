@@ -56,13 +56,13 @@ void RadioManifestHelper::uncompressArchive()
     m_archive = new TarZipArchive(m_compressedFile, this);
 
     if(m_archive->isError()) {
-        finishWithError(m_archive->error(), QStringLiteral("Failed to uncompress archive file: %1").arg(m_archive->errorString()));
+        finishWithError(m_archive->error(), QStringLiteral("无法解压归档文件：%1").arg(m_archive->errorString()));
         return;
     }
 
     connect(m_archive, &TarZipArchive::ready, this, [=]() {
         if(m_archive->isError()) {
-            finishWithError(m_archive->error(), QStringLiteral("Failed to uncompress archive file: %1").arg(m_archive->errorString()));
+            finishWithError(m_archive->error(), QStringLiteral("无法解压归档文件：%1").arg(m_archive->errorString()));
         } else {
             advanceState();
         }
@@ -75,7 +75,7 @@ void RadioManifestHelper::readManifest()
     m_manifest = RadioManifest(manifext);
 
     if(m_manifest.isError()) {
-        finishWithError(m_manifest.error(), QStringLiteral("Failed to read radio manifest: %1").arg(m_manifest.errorString()));
+        finishWithError(m_manifest.error(), QStringLiteral("无法读取无线电清单：%1").arg(m_manifest.errorString()));
     } else {
         advanceState();
     }

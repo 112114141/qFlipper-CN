@@ -12,7 +12,7 @@ GuiStartVirtualDisplayOperation::GuiStartVirtualDisplayOperation(uint32_t id, co
 
 const QString GuiStartVirtualDisplayOperation::description() const
 {
-    return QStringLiteral("Gui Start VirtualDisplay");
+    return QStringLiteral("界面启动虚拟显示");
 }
 
 const QByteArray GuiStartVirtualDisplayOperation::encodeRequest(ProtobufPluginInterface *encoder)

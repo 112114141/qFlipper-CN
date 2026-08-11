@@ -22,7 +22,7 @@ AbstractOverlay {
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        text: qsTr("Success!")
+        text: qsTr("成功！")
     }
 
     RowLayout {
@@ -48,25 +48,25 @@ AbstractOverlay {
                 text: {
                     switch(Backend.errorType) {
                     case BackendError.InvalidDevice:
-                        return qsTr("Invalid device")
+                        return qsTr("无效设备")
                     case BackendError.InternetError:
-                        return qsTr("Internet Error")
+                        return qsTr("网络错误")
                     case BackendError.DiskError:
-                        return qsTr("Disk Access Error")
+                        return qsTr("磁盘访问错误")
                     case BackendError.SerialAccessError:
-                        return qsTr("Permission Denied")
+                        return qsTr("权限被拒绝")
                     case BackendError.RecoveryAccessError:
-                        return qsTr("Can't Find DFU Device")
+                        return qsTr("无法找到 DFU 设备")
                     case BackendError.BackupError:
-                        return qsTr("Backup Failed")
+                        return qsTr("备份失败")
                     case BackendError.FileError:
-                        return qsTr("Corrupted Data")
+                        return qsTr("数据已损坏")
                     case BackendError.OperationError:
-                        return qsTr("Operation Error")
+                        return qsTr("操作错误")
                     case BackendError.UpdaterError:
-                        return qsTr("Updater Error")
+                        return qsTr("更新器错误")
                     default:
-                        return qsTr("Unknown Error")
+                        return qsTr("未知错误")
                     }
                 }
             }
@@ -179,13 +179,13 @@ AbstractOverlay {
 
     Action {
         id: backAction
-        text: qsTr("Back")
+        text: qsTr("返回")
         onTriggered: Backend.finalizeOperation()
     }
 
     Action {
         id: continueAction
-        text: qsTr("Continue")
+        text: qsTr("继续")
         onTriggered: Backend.finalizeOperation()
     }
 }

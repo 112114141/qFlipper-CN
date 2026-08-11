@@ -107,14 +107,14 @@ AbstractOverlay {
 
     Action {
         id: backAction
-        text: qsTr("Back")
+        text: qsTr("返回")
         enabled: overlay.enabled
         onTriggered: Backend.stopFullScreenStreaming()
     }
 
     Action {
         id: saveAction
-        text: qsTr("Save Screenshot")
+        text: qsTr("保存截图")
         shortcut: "Ctrl+S"
         enabled: overlay.enabled
 
@@ -143,7 +143,7 @@ AbstractOverlay {
 
     Action {
         id: copyAction
-        text: qsTr("Copy to clipboard")
+        text: qsTr("复制到剪贴板")
         shortcut: StandardKey.Copy
         enabled: overlay.enabled
         onTriggered: canvas.copyToClipboard(4)

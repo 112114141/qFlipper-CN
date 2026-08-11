@@ -13,7 +13,7 @@ GuiSendInputOperation::GuiSendInputOperation(uint32_t id, int key, int type, QOb
 
 const QString GuiSendInputOperation::description() const
 {
-    return QStringLiteral("Gui Send Input");
+    return QStringLiteral("界面发送输入");
 }
 
 const QByteArray GuiSendInputOperation::encodeRequest(ProtobufPluginInterface *encoder)

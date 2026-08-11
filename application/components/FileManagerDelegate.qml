@@ -140,9 +140,9 @@ Item {
 
                 text: {
                     if(delegate.filePath === "/ext") {
-                        return "SD Card";
+                        return "SD卡";
                     } else if(delegate.filePath === "/int") {
-                        return "Internal Flash";
+                        return "内部存储";
                     } else {
                         delegate.fileName
                     }
@@ -219,7 +219,7 @@ Item {
 
     Action {
         id: uploadHereAction
-        text: qsTr("Upload here...")
+        text: qsTr("上传到此处...")
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-upload.svg"
 
         onTriggered: {
@@ -231,10 +231,10 @@ Item {
                 if(Backend.fileManager.isTooLarge(SystemFileDialog.fileUrls)) {
                     const isMultiple = SystemFileDialog.fileUrls.length > 1;
                     const msgObj = {
-                        title: qsTr("Warning"),
-                        message: qsTr("Selected %1 too large.\nUpload anyway?").arg(isMultiple ? qsTr("files are") : qsTr("file is")),
+                        title: qsTr("警告"),
+                        message: qsTr("所选%1过大。\n仍要上传吗？").arg(isMultiple ? qsTr("文件") : qsTr("文件")),
                         suggestedRole: ConfirmationDialog.RejectRole,
-                        customText: qsTr("Upload")
+                        customText: qsTr("上传")
                     };
 
                     confirmationDialog.openWithMessage(doUpload, msgObj);
@@ -250,7 +250,7 @@ Item {
 
     Action {
         id: downloadAction
-        text: qsTr("Download...")
+        text: qsTr("下载...")
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-download.svg"
 
         onTriggered: beginDownload();
@@ -258,14 +258,14 @@ Item {
 
     Action {
         id: renameAction
-        text: qsTr("Rename")
+        text: qsTr("重命名")
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-rename.svg"
         onTriggered: delegate.beginEdit();
     }
 
     Action {
         id: removeAction
-        text: qsTr("!Delete...")
+        text: qsTr("!删除...")
         icon.source: "qrc:/assets/gfx/symbolic/filemgr/action-remove.svg"
 
         onTriggered: beginDelete();
@@ -326,10 +326,10 @@ Item {
             };
 
             const msgObj = {
-                title: "%1 \"%2\"?".arg(qsTr("Delete")).arg(delegate.fileName),
-                message: qsTr("This action cannot be undone."),
+                title: "%1 \"%2\"?".arg(qsTr("删除")).arg(delegate.fileName),
+                message: qsTr("此操作无法撤销。"),
                 suggestedRole: ConfirmationDialog.RejectRole,
-                customText: qsTr("Delete")
+                customText: qsTr("删除")
             };
 
             confirmationDialog.openWithMessage(doRemove, msgObj);

@@ -12,7 +12,7 @@ SystemSetDateTimeOperation::SystemSetDateTimeOperation(uint32_t id, const QDateT
 
 const QString SystemSetDateTimeOperation::description() const
 {
-    return QStringLiteral("System Set DateTime");
+    return QStringLiteral("系统设置日期时间");
 }
 
 const QByteArray SystemSetDateTimeOperation::encodeRequest(ProtobufPluginInterface *encoder)

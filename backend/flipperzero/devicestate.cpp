@@ -31,7 +31,7 @@ const DeviceInfo &DeviceState::deviceInfo() const
 void DeviceState::setDeviceInfo(const DeviceInfo &newDeviceInfo)
 {
     if(m_isOnline) {
-        qCDebug(CATEGORY_DEBUG) << "Received a DeviceInfo too early, queueing it...";
+        qCDebug(CATEGORY_DEBUG) << "过早收到 DeviceInfo，正在排队...";
         m_queue.enqueue(newDeviceInfo);
         return;
     }
@@ -183,7 +183,7 @@ void DeviceState::onIsOnlineChanged()
 void DeviceState::processQueue()
 {
     if(!m_isOnline && !m_queue.isEmpty()) {
-        qCDebug(CATEGORY_DEBUG) << "Took the latest DeviceInfo from the queue";
+        qCDebug(CATEGORY_DEBUG) << "从队列中取出最新的 DeviceInfo";
         setDeviceInfo(m_queue.takeLast());
         m_queue.clear();
     }

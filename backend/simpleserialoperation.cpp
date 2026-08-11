@@ -31,7 +31,7 @@ void SimpleSerialOperation::onSerialPortReadyRead()
 
     if(m_receivedData.endsWith(endOfMessageToken())) {
         if(!parseReceivedData()) {
-            finishWithError(BackendError::SerialError, QStringLiteral("Failed to parse received data"));
+            finishWithError(BackendError::SerialError, QStringLiteral("无法解析接收到的数据"));
         } else {
             finish();
         }
@@ -40,7 +40,7 @@ void SimpleSerialOperation::onSerialPortReadyRead()
 
 void SimpleSerialOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::SerialError, QStringLiteral("Device is not responding"));
+    finishWithError(BackendError::SerialError, QStringLiteral("设备未响应"));
 }
 
 bool SimpleSerialOperation::begin()

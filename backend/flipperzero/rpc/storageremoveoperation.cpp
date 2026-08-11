@@ -13,7 +13,7 @@ StorageRemoveOperation::StorageRemoveOperation(uint32_t id, const QByteArray &pa
 
 const QString StorageRemoveOperation::description() const
 {
-    return QStringLiteral("Storage Remove @%1").arg(QString(m_path));
+    return QStringLiteral("存储删除 @%1").arg(QString(m_path));
 }
 
 const QByteArray StorageRemoveOperation::encodeRequest(ProtobufPluginInterface *encoder)

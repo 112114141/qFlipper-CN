@@ -38,7 +38,7 @@ void SerialFinder::findMatchingPort()
 
     const auto portInfos = QSerialPortInfo::availablePorts();
     const auto it = std::find_if(portInfos.cbegin(), portInfos.cend(), [&](const QSerialPortInfo &info) {
-        qCDebug(CATEGORY_DEBUG).noquote() << "Trying serial port" << info.serialNumber() << "at" << info.systemLocation();
+        qCDebug(CATEGORY_DEBUG).noquote() << "正在尝试串口" << info.serialNumber() << "位于" << info.systemLocation();
         return info.serialNumber() == m_serialNumber;
     });
 

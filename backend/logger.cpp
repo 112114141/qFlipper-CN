@@ -30,15 +30,15 @@ Logger::Logger(QObject *parent):
     m_logDir.mkdir(APP_NAME);
 
     if(!m_logDir.exists(APP_NAME)) {
-        fallbackMessageOutput(QStringLiteral("Failed to create logs directory"));
+        fallbackMessageOutput(QStringLiteral("创建日志目录失败"));
         return;
 
     } else if(!m_logDir.cd(APP_NAME)) {
-        fallbackMessageOutput(QStringLiteral("Failed to access logs directory"));
+        fallbackMessageOutput(QStringLiteral("访问日志目录失败"));
         return;
 
     } else if(!removeOldFiles()) {
-        fallbackMessageOutput(QStringLiteral("Failed to remove old files"));
+        fallbackMessageOutput(QStringLiteral("删除旧文件失败"));
         return;
     }
 
@@ -47,7 +47,7 @@ Logger::Logger(QObject *parent):
     m_logFile->setFileName(filePath);
 
     if(!m_logFile->open(QIODevice::WriteOnly)) {
-        fallbackMessageOutput(QStringLiteral("Failed to open log file: %1").arg(m_logFile->errorString()));
+        fallbackMessageOutput(QStringLiteral("打开日志文件失败: %1").arg(m_logFile->errorString()));
     }
 }
 
@@ -150,7 +150,7 @@ bool Logger::removeOldFiles()
     for(auto i = 0; i < excessFileCount; ++i) {
         const auto &fileInfo = files.at(i);
         if(!m_logDir.remove(fileInfo.fileName())) {
-            fallbackMessageOutput(QStringLiteral("Failed to remove file: %1").arg(fileInfo.fileName()));
+            fallbackMessageOutput(QStringLiteral("删除文件失败: %1").arg(fileInfo.fileName()));
             return false;
         }
     }

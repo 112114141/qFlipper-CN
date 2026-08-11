@@ -34,7 +34,7 @@ WirelessStackDownloadOperation::WirelessStackDownloadOperation(Recovery *recover
 
 const QString WirelessStackDownloadOperation::description() const
 {
-    return QStringLiteral("Co-Processor Firmware Download @%1").arg(deviceState()->name());
+    return QStringLiteral("协处理器固件下载 @%1").arg(deviceState()->name());
 }
 
 void WirelessStackDownloadOperation::nextStateLogic()
@@ -77,19 +77,19 @@ void WirelessStackDownloadOperation::onOperationTimeout()
     QString msg;
 
     if(operationState() == StartingFUS) {
-        msg = QStringLiteral("Failed to start Firmware Upgrade Service: Operation timeout.");
+        msg = QStringLiteral("启动固件升级服务失败: 操作超时。");
     } else if(operationState() == DeletingWirelessStack) {
-        msg = QStringLiteral("Failed to delete existing Wireless Stack: Operation timeout.");
+        msg = QStringLiteral("删除现有无线协议栈失败: 操作超时。");
     } else if(operationState() == UpgradingWirelessStack) {
-        msg = QStringLiteral("Failed to upgrade Wireless Stack: Operation timeout.");
+        msg = QStringLiteral("升级无线协议栈失败: 操作超时。");
     } else {
-        msg = QStringLiteral("Should not have timed out here, probably a bug.");
+        msg = QStringLiteral("此处不应超时，可能是 bug。");
     }
 
     if(!deviceState()->isOnline()) {
         finishWithError(BackendError::RecoveryError, msg);
     } else {
-        qCDebug(LOG_RECOVERY) << "Timeout with an online device, assuming it is still functional";
+        qCDebug(LOG_RECOVERY) << "设备在线时超时，假设其仍然可用";
         advanceOperationState();
     }
 }
@@ -127,7 +127,7 @@ bool WirelessStackDownloadOperation::isWirelessStackDeleted()
     const auto errorOccured = (status == Recovery::WirelessStatus::WSRunning) ||
                               (status == Recovery::WirelessStatus::ErrorOccured);
     if(errorOccured) {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to finish removal of the Wireless Stack."));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("完成无线协议栈移除失败。"));
     }
 
     return !errorOccured;
@@ -141,7 +141,7 @@ void WirelessStackDownloadOperation::downloadWirelessStack()
         if(watcher->result()) {
             advanceOperationState();
         } else {
-            finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to download the Wireless Stack."));
+            finishWithError(BackendError::RecoveryError, QStringLiteral("下载无线协议栈失败。"));
         }
 
         watcher->deleteLater();
@@ -176,7 +176,7 @@ bool WirelessStackDownloadOperation::isWirelessStackUpgraded()
 
     const auto errorOccured = (status == Recovery::WirelessStatus::ErrorOccured);
     if(errorOccured) {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Failed to finish installation of the Wireless Stack."));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("完成无线协议栈安装失败。"));
     }
 
     return !errorOccured;
@@ -198,10 +198,10 @@ bool WirelessStackDownloadOperation::isWirelessStackOK()
 void WirelessStackDownloadOperation::tryAgain()
 {
     if(--m_checkTryCount > 0) {
-        qCDebug(LOG_RECOVERY) << "Wireless stack check seems to have failed, retrying...";
+        qCDebug(LOG_RECOVERY) << "无线协议栈检查似乎失败，正在重试...";
 
     } else if(--m_installTryCount > 0) {
-        qCDebug(LOG_RECOVERY) << "Wireless stack installation seems to have failed, retrying...";
+        qCDebug(LOG_RECOVERY) << "无线协议栈安装似乎失败，正在重试...";
 
         m_loopTimer->stop();
 
@@ -209,6 +209,6 @@ void WirelessStackDownloadOperation::tryAgain()
         advanceOperationState();
 
     } else {
-        finishWithError(BackendError::RecoveryError, QStringLiteral("Could not install wireless stack after several tries, giving up"));
+        finishWithError(BackendError::RecoveryError, QStringLiteral("多次尝试后仍无法安装无线协议栈，放弃"));
     }
 }

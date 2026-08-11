@@ -16,7 +16,7 @@ AbstractUtilityOperation::AbstractUtilityOperation(ProtobufSession *rpc, DeviceS
 void AbstractUtilityOperation::start()
 {
     if(operationState() != AbstractOperation::Ready) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Trying to start an operation that is either already running or has finished."));
+        finishWithError(BackendError::UnknownError, QStringLiteral("试图启动一个已经在运行或已完成的操作。"));
     } else {
         emit started();
         advanceOperationState();

@@ -25,13 +25,13 @@ RegionProvisioningOperation::RegionProvisioningOperation(ProtobufSession *rpc, D
     m_regionDataFile(globalTempDirs->createTempFile(this))
 {
     connect(this, &AbstractOperation::started, this, [=]() {
-        deviceState()->setStatusString(QStringLiteral("Setting up region data..."));
+        deviceState()->setStatusString(QStringLiteral("正在设置区域数据..."));
     });
 }
 
 const QString RegionProvisioningOperation::description() const
 {
-    return QStringLiteral("Region Provisioning @%1").arg(deviceState()->deviceInfo().name);
+    return QStringLiteral("区域配置 @%1").arg(deviceState()->deviceInfo().name);
 }
 
 const QByteArray RegionProvisioningOperation::localeCountry()
@@ -68,7 +68,7 @@ void RegionProvisioningOperation::checkHardwareRegion()
     const auto &hardwareInfo = deviceState()->deviceInfo().hardware;
 
     if(hardwareInfo.region == Region::Dev) {
-        qCDebug(CATEGORY_DEBUG) << "Development hardware region detected, skipping region provisioning...";
+        qCDebug(CATEGORY_DEBUG) << "检测到开发硬件区域，跳过区域配置...";
         setOperationState(UploadingRegionData);
     }
 
@@ -81,13 +81,13 @@ void RegionProvisioningOperation::fetchRegionInfo()
     auto *fetcher = new RemoteFileFetcher(apiUrl, m_regionInfoFile, this);
 
     if(fetcher->isError()) {
-        finishWithError(fetcher->error(), QStringLiteral("Failed to fetch region info file: %1").arg(fetcher->errorString()));
+        finishWithError(fetcher->error(), QStringLiteral("获取区域信息文件失败: %1").arg(fetcher->errorString()));
         return;
     }
 
     connect(fetcher, &RemoteFileFetcher::finished, this, [=]() {
         if(fetcher->isError()) {
-            finishWithError(fetcher->error(), QStringLiteral("Failed to fetch region info file: %1").arg(fetcher->errorString()));
+            finishWithError(fetcher->error(), QStringLiteral("获取区域信息文件失败: %1").arg(fetcher->errorString()));
         } else {
             advanceOperationState();
         }
@@ -105,7 +105,7 @@ void RegionProvisioningOperation::generateRegionData()
     m_regionInfoFile->close();
 
     if(!regionInfo.isValid()) {
-        finishWithError(BackendError::DataError, QStringLiteral("Server returned invalid data"));
+        finishWithError(BackendError::DataError, QStringLiteral("服务器返回了无效数据"));
         return;
 
     } else if(regionInfo.isError()) {
@@ -116,8 +116,8 @@ void RegionProvisioningOperation::generateRegionData()
     const auto countryCode = regionInfo.hasCountryCode() ? regionInfo.detectedCountry() : localeCountry();
     const auto bandKeys = regionInfo.countryBandKeys(countryCode);
 
-    qCDebug(CATEGORY_DEBUG) << "Detected region:" << (countryCode.isEmpty() ? QByteArrayLiteral("Unknown") : countryCode);
-    qCDebug(CATEGORY_DEBUG) << "Allowed bands:" << bandKeys;
+    qCDebug(CATEGORY_DEBUG) << "检测到的区域:" << (countryCode.isEmpty() ? QByteArrayLiteral("未知") : countryCode);
+    qCDebug(CATEGORY_DEBUG) << "允许的频段:" << bandKeys;
 
     BandInfoList bands;
 
@@ -140,7 +140,7 @@ void RegionProvisioningOperation::generateRegionData()
     const auto regionData = rpc()->pluginInstance()->regionBands(countryCode, bands);
 
     if(regionData.isEmpty()) {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Failed to encode region data"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("编码区域数据失败"));
         return;
     }
 
@@ -148,7 +148,7 @@ void RegionProvisioningOperation::generateRegionData()
     m_regionDataFile->close();
 
     if((bytesWritten <= 0) || (bytesWritten != regionData.size())) {
-        finishWithError(BackendError::DiskError, QStringLiteral("Failed to save region data to temporary file"));
+        finishWithError(BackendError::DiskError, QStringLiteral("将区域数据保存到临时文件失败"));
     } else {
         advanceOperationState();
     }

@@ -45,19 +45,19 @@ Application::Application(int &argc, char **argv):
     initFonts();
     initGUI();
 
-    qCInfo(LOG_APP).noquote() << APP_NAME << "version" << APP_VERSION << "commit"
+    qCInfo(LOG_APP).noquote() << APP_NAME << "版本" << APP_VERSION << "提交"
                               << APP_COMMIT << QDateTime::fromSecsSinceEpoch(APP_TIMESTAMP).toString(Qt::ISODate);
 
-    qCInfo(LOG_APP).noquote() << "OS info:" << QSysInfo::prettyProductName() << QSysInfo::productVersion() << QSysInfo::kernelVersion() << "Qt" << qVersion();
+    qCInfo(LOG_APP).noquote() << "操作系统信息:" << QSysInfo::prettyProductName() << QSysInfo::productVersion() << QSysInfo::kernelVersion() << "Qt" << qVersion();
 
     if(m_isDeveloperMode) {
-        qCCritical(LOG_APP) << "Developer mode is enabled! Please be careful.";
+        qCCritical(LOG_APP) << "开发者模式已启用！请谨慎操作。";
     }
 }
 
 Application::~Application()
 {
-    qCInfo(LOG_APP).noquote() << APP_NAME << "exited";
+    qCInfo(LOG_APP).noquote() << APP_NAME << "已退出";
 }
 
 ApplicationUpdater *Application::updater()
@@ -98,7 +98,7 @@ void Application::checkForUpdates()
 
 void Application::onMessageReceived()
 {
-    qCDebug(LOG_APP) << "Another instance was prevented from running";
+    qCDebug(LOG_APP) << "已阻止另一个实例运行";
 }
 
 void Application::onLatestVersionChanged()
@@ -128,8 +128,8 @@ void Application::initCommandOptions()
 {
     QCommandLineParser parser;
 
-    const auto developerModeOption = QCommandLineOption({QStringLiteral("x"), QStringLiteral("developer-mode")}, QStringLiteral("Enable developer mode."));
-    const auto usbLogLevelOption = QCommandLineOption({QStringLiteral("u"), QStringLiteral("usb-log-level")}, QStringLiteral("Set USB backend log level, 0 - none"), QStringLiteral("0"));
+    const auto developerModeOption = QCommandLineOption({QStringLiteral("x"), QStringLiteral("developer-mode")}, QStringLiteral("启用开发者模式。"));
+    const auto usbLogLevelOption = QCommandLineOption({QStringLiteral("u"), QStringLiteral("usb-log-level")}, QStringLiteral("设置 USB 后端日志级别, 0 - 无"), QStringLiteral("0"));
 
     parser.addOption(developerModeOption);
     parser.addOption(usbLogLevelOption);
@@ -144,7 +144,7 @@ void Application::initCommandOptions()
         bool canConvert;
         const auto value = parser.value(usbLogLevelOption).toInt(&canConvert);
         if(!canConvert) {
-            qCDebug(LOG_APP) << "USB log level has to be a non-negative number";
+            qCDebug(LOG_APP) << "USB 日志级别必须是非负数";
         } else {
             m_backend.deviceRegistry()->setBackendLogLevel(value);
         }
@@ -189,10 +189,10 @@ void Application::initQmlTypes()
 {
     qmlRegisterType<ScreenCanvas>("QFlipper", 1, 0, "ScreenCanvas");
 
-    qmlRegisterUncreatableType<BackendError>("QFlipper", 1, 0, "BackendError", QStringLiteral("This class is only a enum container"));
-    qmlRegisterUncreatableType<InputEvent>("QFlipper", 1, 0, "InputEvent", QStringLiteral("This class is only a enum container"));
-    qmlRegisterUncreatableType<ApplicationBackend>("QFlipper", 1, 0, "ApplicationBackend", QStringLiteral("This class is meant to be created from c++"));
-    qmlRegisterUncreatableType<ApplicationUpdater>("QFlipper", 1, 0, "ApplicationUpdater", QStringLiteral("This class is meant to be created from c++"));
+    qmlRegisterUncreatableType<BackendError>("QFlipper", 1, 0, "BackendError", QStringLiteral("此类仅为枚举容器"));
+    qmlRegisterUncreatableType<InputEvent>("QFlipper", 1, 0, "InputEvent", QStringLiteral("此类仅为枚举容器"));
+    qmlRegisterUncreatableType<ApplicationBackend>("QFlipper", 1, 0, "ApplicationBackend", QStringLiteral("此类旨在从 C++ 创建"));
+    qmlRegisterUncreatableType<ApplicationUpdater>("QFlipper", 1, 0, "ApplicationUpdater", QStringLiteral("此类旨在从 C++ 创建"));
 
     qmlRegisterSingletonInstance("QFlipper", 1, 0, "Logger", globalLogger);
     qmlRegisterSingletonInstance("QFlipper", 1, 0, "Preferences", globalPrefs);

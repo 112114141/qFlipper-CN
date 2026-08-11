@@ -22,21 +22,21 @@ AbstractOverlay {
         text: {
             switch(Backend.backendState) {
             case Backend.UpdatingDevice:
-                return qsTr("Updating your Flipper");
+                return qsTr("正在更新您的 Flipper");
             case Backend.RepairingDevice:
-                return qsTr("Repairing your Flipper");
+                return qsTr("正在修复您的 Flipper");
             case Backend.CreatingBackup:
-                return qsTr("Creating Backup");
+                return qsTr("正在备份");
             case Backend.RestoringBackup:
-                return qsTr("Restoring Backup");
+                return qsTr("正在恢复备份");
             case Backend.FactoryResetting:
-                return qsTr("Performing Factory Reset");
+                return qsTr("正在恢复出厂设置");
             case Backend.InstallingFirmware:
-                return qsTr("Installing Firmware");
+                return qsTr("正在安装固件");
             case Backend.InstallingWirelessStack:
-                return qsTr("Installing Wireless Firmware");
+                return qsTr("正在安装无线协议栈");
             case Backend.InstallingFUS:
-                return qsTr("Installing FUS Firmware");
+                return qsTr("正在安装 FUS");
             default:
                 return text;
             }
@@ -92,14 +92,14 @@ AbstractOverlay {
             }
 
             TextLabel {
-                text: qsTr("No SD")
+                text: qsTr("无 SD 卡")
                 Layout.alignment: Qt.AlignHCenter
             }
         }
 
         ToolTip {
             implicitWidth: 250
-            text: qsTr("SD Card is not installed. Some functionality will not be available.")
+            text: qsTr("SD 卡未安装。部分功能将不可用。")
             visible: parent.containsMouse
         }
 

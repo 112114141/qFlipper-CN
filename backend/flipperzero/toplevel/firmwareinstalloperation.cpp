@@ -30,7 +30,7 @@ FirmwareInstallOperation::FirmwareInstallOperation(RecoveryInterface *recovery, 
 
 const QString FirmwareInstallOperation::description() const
 {
-    return QStringLiteral("Firmware install from file @%1").arg(deviceState()->name());
+    return QStringLiteral("从文件安装固件 @%1").arg(deviceState()->name());
 }
 
 void FirmwareInstallOperation::nextStateLogic()

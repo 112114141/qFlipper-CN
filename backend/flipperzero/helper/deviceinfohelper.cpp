@@ -45,7 +45,7 @@ AbstractDeviceInfoHelper *AbstractDeviceInfoHelper::create(const USBDeviceInfo &
     } else if(pid == 0xdf11) {
         return new DFUDeviceInfoHelper(info, parent);
     } else {
-        qCDebug(CATEGORY_DEBUG) << "Not a Flipper Zero device";
+        qCDebug(CATEGORY_DEBUG) << "不是 Flipper Zero 设备";
         return nullptr;
     }
 }
@@ -107,10 +107,10 @@ void VCPDeviceInfoHelper::findSerialPort()
 
     connect(finder, &SerialFinder::finished, this, [=](const QSerialPortInfo &portInfo) {
         if(portInfo.isNull()) {
-            finishWithError(BackendError::SerialAccessError, QStringLiteral("Failed to find a suitable serial port"));
+            finishWithError(BackendError::SerialAccessError, QStringLiteral("无法找到合适的串口"));
 
         } else {
-            qCDebug(CATEGORY_DEBUG).noquote() << "Using  serial port" << portInfo.serialNumber() << "at" << portInfo.systemLocation();
+            qCDebug(CATEGORY_DEBUG).noquote() << "使用串口" << portInfo.serialNumber() << "位于" << portInfo.systemLocation();
             m_deviceInfo.portInfo = portInfo;
             m_deviceInfo.systemLocation = portInfo.systemLocation();
 
@@ -132,7 +132,7 @@ void VCPDeviceInfoHelper::fetchProtobufVersion()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to get protobuf version: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法获取 protobuf 版本：%1").arg(operation->errorString()));
             return;
         }
 
@@ -141,7 +141,7 @@ void VCPDeviceInfoHelper::fetchProtobufVersion()
             operation->versionMinor()
         };
 
-        qCDebug(CATEGORY_DEBUG).noquote() << QStringLiteral("Detected protobuf version: %1.%2").arg(operation->versionMajor()).arg(operation->versionMinor());
+        qCDebug(CATEGORY_DEBUG).noquote() << QStringLiteral("检测到 protobuf 版本: %1.%2").arg(operation->versionMajor()).arg(operation->versionMinor());
 
         advanceState();
     });
@@ -164,7 +164,7 @@ void VCPDeviceInfoHelper::fetchDeviceInfoLegacy()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to get device information: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法获取设备信息：%1").arg(operation->errorString()));
             return;
         }
 
@@ -202,7 +202,7 @@ void VCPDeviceInfoHelper::fetchDeviceInfoLegacy()
         }
 
         if(m_deviceInfo.name.isEmpty()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to read device information: required fields are not present"));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法读取设备信息：缺少必要字段"));
         } else {
             advanceState();
         }
@@ -215,7 +215,7 @@ void VCPDeviceInfoHelper::fetchDeviceInfoProperty()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to get device information: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法获取设备信息：%1").arg(operation->errorString()));
             return;
         }
 
@@ -253,7 +253,7 @@ void VCPDeviceInfoHelper::fetchDeviceInfoProperty()
         }
 
         if(m_deviceInfo.name.isEmpty()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to read device information: required fields are not present"));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法读取设备信息：缺少必要字段"));
         } else {
             advanceState();
         }
@@ -266,7 +266,7 @@ void VCPDeviceInfoHelper::checkSDCard()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to check SD card: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法检查 SD 卡：%1").arg(operation->errorString()));
 
         } else if(!operation->isPresent()) {
             m_deviceInfo.storage.isExternalPresent = false;
@@ -290,7 +290,7 @@ void VCPDeviceInfoHelper::checkManifest()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to check resource manifest: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法检查资源清单：%1").arg(operation->errorString()));
 
         } else {
             m_deviceInfo.storage.isAssetsInstalled = operation->hasFile() && (operation->type() == StorageStatOperation::RegularFile);
@@ -305,11 +305,11 @@ void VCPDeviceInfoHelper::getTimeSkew()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to check device time: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法检查设备时间：%1").arg(operation->errorString()));
 
         } else {
             const auto timeSkew = QDateTime::currentDateTime().msecsTo(operation->dateTime());
-            qCDebug(CATEGORY_DEBUG) << "Flipper time skew is" << timeSkew << "milliseconds";
+            qCDebug(CATEGORY_DEBUG) << "Flipper 时间偏差为" << timeSkew << "毫秒";
 
             advanceState();
         }
@@ -322,7 +322,7 @@ void VCPDeviceInfoHelper::syncTime()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to set device time: %1").arg(operation->errorString()));
+            finishWithError(BackendError::InvalidDevice, QStringLiteral("无法设置设备时间：%1").arg(operation->errorString()));
         } else {
             advanceState();
         }
@@ -337,7 +337,7 @@ void VCPDeviceInfoHelper::stopRPCSession()
 void VCPDeviceInfoHelper::onSessionStatusChanged()
 {
     if(m_rpc->isError()) {
-        finishWithError(m_rpc->error(), QStringLiteral("Protobuf session error: %1").arg(m_rpc->errorString()));
+        finishWithError(m_rpc->error(), QStringLiteral("Protobuf 会话错误：%1").arg(m_rpc->errorString()));
     } else if(state() == VCPDeviceInfoHelper::StartingRPCSession && m_rpc->isSessionUp()) {
         advanceState();
     } else if(state() == VCPDeviceInfoHelper::StoppingRPCSession && !m_rpc->isSessionUp()) {
@@ -384,19 +384,19 @@ void DFUDeviceInfoHelper::nextStateLogic()
     STM32WB55 device(m_deviceInfo.usbInfo);
 
     if(!device.beginTransaction()) {
-        finishWithError(BackendError::RecoveryAccessError, QStringLiteral("Failed to initiate transaction"));
+        finishWithError(BackendError::RecoveryAccessError, QStringLiteral("无法启动事务"));
         return;
     }
 
     const FactoryInfo factoryInfo(device.OTPData(FactoryInfo::size()));
 
     if(!device.endTransaction()) {
-        finishWithError(BackendError::RecoveryAccessError, QStringLiteral("Failed to end transaction"));
+        finishWithError(BackendError::RecoveryAccessError, QStringLiteral("无法结束事务"));
         return;
     }
 
     if(!factoryInfo.isValid()) {
-        finishWithError(BackendError::InvalidDevice, QStringLiteral("Failed to read device factory information"));
+        finishWithError(BackendError::InvalidDevice, QStringLiteral("无法读取设备出厂信息"));
         return;
     }
 

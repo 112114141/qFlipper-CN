@@ -206,7 +206,7 @@ void ApplicationBackend::checkFirmwareUpdates()
 
 void ApplicationBackend::finalizeOperation()
 {
-    qCDebug(LOG_BACKEND) << "Finalized current operation";
+    qCDebug(LOG_BACKEND) << "当前操作已完成";
 
     globalLogger->setErrorCount(0);
 
@@ -240,10 +240,10 @@ void ApplicationBackend::onCurrentDeviceChanged()
     if(m_backendState > BackendState::ScreenStreaming && m_backendState < BackendState::Finished) {
         setBackendState(BackendState::ErrorOccured);
 
-        qCDebug(LOG_BACKEND) << "Current operation was interrupted";
+        qCDebug(LOG_BACKEND) << "当前操作被中断";
 
     } else if(device()) {
-        qCDebug(LOG_BACKEND) << "Current device changed to" << device()->deviceState()->deviceInfo().name;
+        qCDebug(LOG_BACKEND) << "当前设备已更改为" << device()->deviceState()->deviceInfo().name;
         // No need to disconnect the old device, as it has been destroyed at this point
         connect(device(), &FlipperZero::operationFinished, this, &ApplicationBackend::onDeviceOperationFinished);
         connect(device(), &FlipperZero::deviceStateChanged, this, &ApplicationBackend::firmwareUpdateStateChanged);
@@ -262,7 +262,7 @@ void ApplicationBackend::onCurrentDeviceChanged()
         }
 
     } else {
-        qCDebug(LOG_BACKEND) << "Last device was disconnected";
+        qCDebug(LOG_BACKEND) << "上一个设备已断开连接";
         setBackendState(BackendState::WaitingForDevices);
     }
 }
@@ -285,12 +285,12 @@ void ApplicationBackend::onDeviceInfoChanged()
 void ApplicationBackend::onDeviceOperationFinished()
 {
     if(!device()) {
-        qCDebug(LOG_BACKEND) << "Lost all connected devices";
+        qCDebug(LOG_BACKEND) << "失去所有已连接的设备";
         setErrorType(BackendError::UnknownError);
         setBackendState(BackendState::ErrorOccured);
 
     } else if(device()->deviceState()->isError()) {
-        qCDebug(LOG_BACKEND) << "Current operation finished with error:" << device()->deviceState()->errorString();
+        qCDebug(LOG_BACKEND) << "当前操作完成但出现错误:" << device()->deviceState()->errorString();
         setErrorType(device()->deviceState()->error());
         setBackendState(BackendState::ErrorOccured);
 

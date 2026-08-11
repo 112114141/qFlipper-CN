@@ -34,7 +34,7 @@ DeviceState *Recovery::deviceState() const
 
 bool Recovery::exitRecoveryMode()
 {
-    m_deviceState->setStatusString(QStringLiteral("Exiting recovery mode..."));
+    m_deviceState->setStatusString(QStringLiteral("正在退出恢复模式..."));
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
     const auto success = device.beginTransaction() && device.leave();
@@ -44,7 +44,7 @@ bool Recovery::exitRecoveryMode()
     end_ignore_block();
 
     if(!success) {
-        setErrorString("Failed to exit recovery mode");
+        setErrorString("退出恢复模式失败");
     }
 
     return success;
@@ -53,22 +53,22 @@ bool Recovery::exitRecoveryMode()
 bool Recovery::setBootMode(BootMode mode)
 {
     const auto msg = (mode == BootMode::Normal) ?
-               QStringLiteral("Setting OS boot mode...") :
-               QStringLiteral("Setting Recovery boot mode...");
+               QStringLiteral("正在设置 OS 启动模式...") :
+               QStringLiteral("正在设置恢复启动模式...");
 
     m_deviceState->setStatusString(msg);
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     if(!device.beginTransaction()) {
-        setErrorString("Can't set boot mode: Failed to initiate transaction.");
+        setErrorString("无法设置启动模式: 启动事务失败。");
         return false;
     }
 
     auto ob = device.optionBytes();
 
     if(!ob.isValid()) {
-        setErrorString("Can't set boot mode: Failed to read option bytes.");
+        setErrorString("无法设置启动模式: 读取选项字节失败。");
         return false;
     }
 
@@ -78,7 +78,7 @@ bool Recovery::setBootMode(BootMode mode)
     const auto success = device.setOptionBytes(ob);
 
     if(!success) {
-        setErrorString("Can't set boot mode: Failed to set option bytes");
+        setErrorString("无法设置启动模式: 设置选项字节失败");
     }
 
     begin_ignore_block();
@@ -90,35 +90,35 @@ bool Recovery::setBootMode(BootMode mode)
 
 Recovery::WirelessStatus Recovery::wirelessStatus()
 {
-    debug_msg("Getting Co-Processor (Wireless) status...");
+    debug_msg("正在获取协处理器(无线)状态...");
 
     if(!m_deviceState->isOnline()) {
-        debug_msg("Failed to get FUS status. The device is offline at the moment.");
+        debug_msg("获取 FUS 状态失败。设备当前处于离线状态。");
         return WirelessStatus::Invalid;
     }
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     if(!device.beginTransaction()) {
-        debug_msg("Failed to get FUS status. This is normal if the device has just rebooted.");
+        debug_msg("获取 FUS 状态失败。如果设备刚刚重启，这是正常的。");
         return WirelessStatus::Invalid;
     }
 
     const auto state = device.FUSGetState();
     if(!state.isValid()) {
-        debug_msg("Failed to get FUS status. This is normal if the device has just rebooted.");
+        debug_msg("获取 FUS 状态失败。如果设备刚刚重启，这是正常的。");
         return WirelessStatus::Invalid;
     }
 
     if(!device.endTransaction()) {
-        debug_msg("Failed to get FUS status. This is normal if the device has just rebooted.");
+        debug_msg("获取 FUS 状态失败。如果设备刚刚重启，这是正常的。");
         return WirelessStatus::Invalid;
     }
 
     const auto status = state.status();
     const auto error = state.error();
 
-    debug_msg(QStringLiteral("Current FUS state: %1, %2.").arg(state.statusString(), state.errorString()));
+    debug_msg(QStringLiteral("当前 FUS 状态: %1, %2。").arg(state.statusString(), state.errorString()));
 
     if((status == FUSState::Idle) && (error == FUSState::NoError)) {
         return WirelessStatus::FUSRunning;
@@ -135,12 +135,12 @@ Recovery::WirelessStatus Recovery::wirelessStatus()
 
 bool Recovery::startFUS()
 {
-    m_deviceState->setStatusString("Starting firmware upgrade service (FUS)...");
+    m_deviceState->setStatusString("正在启动固件升级服务(FUS)...");
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     if(!device.beginTransaction()) {
-        setErrorString("Can't start FUS: Failed to initiate transaction.");
+        setErrorString("无法启动 FUS: 启动事务失败。");
         return false;
     }
 
@@ -148,14 +148,14 @@ bool Recovery::startFUS()
     auto success = state.isValid();
 
     if(!success) {
-        setErrorString("Can't start FUS: Failed to get FUS state.");
+        setErrorString("无法启动 FUS: 获取 FUS 状态失败。");
 
     } else if((state.status() == FUSState::Idle) && (state.error() == FUSState::NoError)) {
-        debug_msg("FUS is already RUNNING, rebooting for consistency...");
+        debug_msg("FUS 已在运行，为保持一致性正在重启...");
         success = device.leave();
 
     } else if((state.status() == FUSState::ErrorOccured) && (state.error() == FUSState::NotRunning)) {
-        debug_msg(QString("FUS appears NOT to be running: %1, %2.").arg(state.statusString(), state.errorString()));
+        debug_msg(QString("FUS 似乎未在运行: %1, %2。").arg(state.statusString(), state.errorString()));
 
         // Send a second GET_STATE to actually start FUS
         begin_ignore_block();
@@ -163,7 +163,7 @@ bool Recovery::startFUS()
         end_ignore_block();
 
     } else {
-        setErrorString("Can't start FUS: Unexpected FUS state.");
+        setErrorString("无法启动 FUS: 意外的 FUS 状态。");
         success = false;
     }
 
@@ -178,15 +178,15 @@ bool Recovery::startFUS()
 // TODO: check status to see if the wireless stack is present at all
 bool Recovery::startWirelessStack()
 {
-    m_deviceState->setStatusString("Attempting to start the Wireless Stack...");
+    m_deviceState->setStatusString("正在尝试启动无线协议栈...");
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     auto success = device.beginTransaction() && device.FUSStartWirelessStack();
-    check_continue(device.endTransaction(), "^^^ It's probably nothing at this point... ^^^");
+    check_continue(device.endTransaction(), "^^^ 此时可能无影响... ^^^");
 
     if(!success) {
-        setErrorString("Failed to start wireless stack.");
+        setErrorString("启动无线协议栈失败。");
     }
 
     return success;
@@ -194,14 +194,14 @@ bool Recovery::startWirelessStack()
 
 bool Recovery::deleteWirelessStack()
 {
-    m_deviceState->setStatusString("Deleting old co-processor firmware...");
+    m_deviceState->setStatusString("正在删除旧的协处理器固件...");
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     const auto success = device.beginTransaction() && device.FUSFwDelete() && device.endTransaction();
 
     if(!success) {
-        setErrorString("Can't delete old co-processor firmware: Failed to initiate wireless stack firmware removal.");
+        setErrorString("无法删除旧的协处理器固件: 启动无线协议栈固件移除失败。");
     }
 
     return success;
@@ -210,15 +210,15 @@ bool Recovery::deleteWirelessStack()
 bool Recovery::downloadFirmware(QIODevice *file)
 {
     if(!file->open(QIODevice::ReadOnly)) {
-        setErrorString("Can't flash firmware: Failed to open the file.");
+        setErrorString("无法刷写固件: 打开文件失败。");
         return false;
 
     } else if(file->bytesAvailable() <= 0) {
-        setErrorString("Can't flash firmware: The file is empty.");
+        setErrorString("无法刷写固件: 文件为空。");
         return false;
 
     } else {
-        m_deviceState->setStatusString("Flashing firmware...");
+        m_deviceState->setStatusString("正在刷写固件...");
     }
 
     DfuseFile fw(file);
@@ -233,7 +233,7 @@ bool Recovery::downloadFirmware(QIODevice *file)
     const auto success = dev.beginTransaction() && dev.download(&fw) && dev.endTransaction();
 
     if(!success) {
-        setErrorString("Can't flash firmware: An error has occurred during the operation.");
+        setErrorString("无法刷写固件: 操作过程中发生错误。");
     }
 
     return success;
@@ -241,24 +241,24 @@ bool Recovery::downloadFirmware(QIODevice *file)
 
 bool Recovery::downloadWirelessStack(QIODevice *file, uint32_t addr)
 {
-    debug_msg("Attempting to flash CO-PROCESSOR firmware image...");
+    debug_msg("正在尝试刷写协处理器固件镜像...");
 
     if(!file->open(QIODevice::ReadOnly)) {
-        setErrorString("Can't flash co-processor firmware image: Failed to open file.");
+        setErrorString("无法刷写协处理器固件镜像: 打开文件失败。");
         return false;
 
     } else if(!file->bytesAvailable()) {
-        setErrorString("Can't flash co-processor firmware image: File is empty.");
+        setErrorString("无法刷写协处理器固件镜像: 文件为空。");
         return false;
 
     } else {
-        m_deviceState->setStatusString("Flashing co-processor firmware image...");
+        m_deviceState->setStatusString("正在刷写协处理器固件镜像...");
     }
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     if(!device.beginTransaction()) {
-        setErrorString("Can't flash co-processor firmware image: Failed to initiate transaction.");
+        setErrorString("无法刷写协处理器固件镜像: 启动事务失败。");
         return false;
     }
 
@@ -266,7 +266,7 @@ bool Recovery::downloadWirelessStack(QIODevice *file, uint32_t addr)
         const auto ob = device.optionBytes();
 
         if(!ob.isValid()) {
-            setErrorString("Can't flash co-processor firmware image: Failed to read Option Bytes.");
+            setErrorString("无法刷写协处理器固件镜像: 读取选项字节失败。");
             return false;
         }
 
@@ -275,11 +275,11 @@ bool Recovery::downloadWirelessStack(QIODevice *file, uint32_t addr)
 
         addr = (origin + (pageSize * ob.value("SFSA")) - file->bytesAvailable()) & (~(pageSize - 1));
 
-        debug_msg(QString("SFSA value is 0x%1").arg(QString::number(ob.value("SFSA"), 16)));
-        debug_msg(QString("Target address for co-processor firmware image is 0x%1").arg(QString::number(addr, 16)));
+        debug_msg(QString("SFSA 值为 0x%1").arg(QString::number(ob.value("SFSA"), 16)));
+        debug_msg(QString("协处理器固件镜像的目标地址为 0x%1").arg(QString::number(addr, 16)));
 
     } else {
-        debug_msg(QString("Target address for co-processor firmware image has been OVERRIDDEN to 0x%1").arg(QString::number(addr, 16)));
+        debug_msg(QString("协处理器固件镜像的目标地址已被覆盖为 0x%1").arg(QString::number(addr, 16)));
     }
 
     connect(&device, &DfuseDevice::progressChanged, this, [=](int operation, double progress) {
@@ -289,11 +289,11 @@ bool Recovery::downloadWirelessStack(QIODevice *file, uint32_t addr)
     bool success;
 
     if(!(success = device.erase(addr, file->bytesAvailable()))) {
-        setErrorString("Can't flash co-processor firmware image: Failed to erase the internal memory.");
+        setErrorString("无法刷写协处理器固件镜像: 擦除内部存储失败。");
     } else if(!(success = device.download(file, addr, 0))) {
-        setErrorString("Can't flash co-processor firmware image: Failed to write the internal memory.");
+        setErrorString("无法刷写协处理器固件镜像: 写入内部存储失败。");
     } else if(!(success = device.endTransaction())) {
-        setErrorString("Can't flash co-processor firmware image: Failed to end transaction.");
+        setErrorString("无法刷写协处理器固件镜像: 结束事务失败。");
     } else {}
 
     file->close();
@@ -303,17 +303,17 @@ bool Recovery::downloadWirelessStack(QIODevice *file, uint32_t addr)
 
 bool Recovery::upgradeWirelessStack()
 {
-    debug_msg("Sending FW_UPGRADE command...");
+    debug_msg("正在发送 FW_UPGRADE 命令...");
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     const auto success = device.beginTransaction() && device.FUSFwUpgrade();
-    check_continue(device.endTransaction(), "^^^ It's probably nothing at this point... ^^^");
+    check_continue(device.endTransaction(), "^^^ 此时可能无影响... ^^^");
 
     if(!success) {
-        setErrorString("Can't upgrade Co-Processor firmware: Failed to initiate installation.");
+        setErrorString("无法升级协处理器固件: 启动安装失败。");
     } else {
-        m_deviceState->setStatusString("Upgrading Co-Processor firmware, please wait...");
+        m_deviceState->setStatusString("正在升级协处理器固件，请稍候...");
     }
 
     return success;
@@ -324,36 +324,36 @@ bool Recovery::checkWirelessStack()
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
     if(!device.beginTransaction()) {
-        setErrorString(QStringLiteral("Failed to read co-processor firmware version info"));
+        setErrorString(QStringLiteral("读取协处理器固件版本信息失败"));
         return false;
     }
 
     const auto versionInfo = device.versionInfo();
 
     if(!device.endTransaction()) {
-        setErrorString(QStringLiteral("Failed to read co-processor firmware version info"));
+        setErrorString(QStringLiteral("读取协处理器固件版本信息失败"));
         return false;
     }
 
-    qCDebug(CATEGORY_DEBUG).noquote() << "FUS version:" << versionInfo.FUSVersion;
-    qCDebug(CATEGORY_DEBUG).noquote() << "Wireless Stack version:" << versionInfo.WirelessVersion;
+    qCDebug(CATEGORY_DEBUG).noquote() << "FUS 版本:" << versionInfo.FUSVersion;
+    qCDebug(CATEGORY_DEBUG).noquote() << "无线协议栈版本:" << versionInfo.WirelessVersion;
 
     return versionInfo.WirelessVersion != QStringLiteral("0.0.0");
 }
 
 bool Recovery::downloadOptionBytes(QIODevice *file)
 {
-    m_deviceState->setStatusString("Downloading Option Bytes...");
+    m_deviceState->setStatusString("正在下载选项字节...");
 
-    check_return_bool(file->open(QIODevice::ReadOnly), "Failed to open file for reading");
+    check_return_bool(file->open(QIODevice::ReadOnly), "打开文件读取失败");
     const OptionBytes loaded(file);
     file->close();
 
-    check_return_bool(loaded.isValid(), "Failed to load option bytes from file");
+    check_return_bool(loaded.isValid(), "从文件加载选项字节失败");
 
     STM32WB55 device(m_deviceState->deviceInfo().usbInfo);
 
-    check_return_bool(device.beginTransaction(), "Failed to initiate transaction");
+    check_return_bool(device.beginTransaction(), "启动事务失败");
     const OptionBytes actual = device.optionBytes();
 
     const auto diff = actual.compare(loaded);
@@ -361,26 +361,26 @@ bool Recovery::downloadOptionBytes(QIODevice *file)
     bool success = false;
 
     if(diff.isEmpty()) {
-        debug_msg("Option Bytes OK");
+        debug_msg("选项字节正常");
 
         success = device.leave();
 
         if(!success) {
-            setErrorString("Can't set boot mode: Failed to leave the Recovery mode.");
+            setErrorString("无法设置启动模式: 退出恢复模式失败。");
         }
 
     } else {
         for(auto it = diff.constKeyValueBegin(); it != diff.constKeyValueEnd(); ++it) {
-            debug_msg(QString("Option Bytes mismatch @%1: this: 0x%2, other: 0x%3")
+            debug_msg(QString("选项字节不匹配 @%1: 当前: 0x%2, 其他: 0x%3")
                      .arg((*it).first, to_hex_str(actual.value((*it).first)), to_hex_str((*it).second)));
         }
 
-        debug_msg("Writing corrected Option Bytes...");
+        debug_msg("正在写入修正后的选项字节...");
 
         success = device.setOptionBytes(actual.corrected(diff));
 
         if(!success) {
-            setErrorString("Can't set boot mode: Failed to set option bytes");
+            setErrorString("无法设置启动模式: 设置选项字节失败");
         }
     }
 
@@ -389,7 +389,7 @@ bool Recovery::downloadOptionBytes(QIODevice *file)
     end_ignore_block();
 
     if(success) {
-        m_deviceState->setStatusString(QStringLiteral("Exiting recovery mode..."));
+        m_deviceState->setStatusString(QStringLiteral("正在退出恢复模式..."));
     }
 
     return success;

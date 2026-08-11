@@ -1,29 +1,29 @@
 # qFlipper-cli
-### A non-interactive text mode interface for qFlipper
-This program is mostly meant for testing purposes, although it can also provide all of the qFlipper's features from the comfort of the terminal emulator.
+### qFlipper 的非交互式文本模式界面
+该程序主要用于测试目的，尽管它也可以在终端模拟器中提供 qFlipper 的所有功能。
 
-## Running:
-### Windows:
+## 运行：
+### Windows：
 `<Program_files_directory>\qFlipper\qFlipper-cli.exe [args] [parameters]`
-### MacOS:
+### MacOS：
 `<Applications_directory>/qFlipper.app/Contents/MacOS/qFlipper-cli [args] [parameters]`
-### Linux:
+### Linux：
 `<AppImage_directory>/qFlipper-x86_64-x.y.z.AppImage cli [args] [parameters]`
 
-## Command syntax:
-Run without any arguments to perform a quick update/repair.
-### Commands:
-* `backup <target_dir>` - Backup Internal Memory contents.
-* `restore <source_dir>` - Restore Internal Memory contents.
-* `erase` - Erase Internal Memory contents (Factory reset).
-* `wipe` - Wipe entire MCU Flash Memory (Not implemented yet).
-* `firmware <firmware_file.dfu>` - Flash Core1 Firmware.
-* `core2radio <firmware_file.bin>` - Flash Core2 Radio stack.
-* `core2fus <firmware_file.bin> <0xaddress>` - Flash Core2 Firmware Update Service **(WARNING! It WILL invalidate your secure enclave!)**
+## 命令语法：
+不带任何参数运行可执行快速更新/修复。
+### 命令：
+* `backup <target_dir>` - 备份内部存储内容。
+* `restore <source_dir>` - 恢复内部存储内容。
+* `erase` - 擦除内部存储内容（恢复出厂设置）。
+* `wipe` - 擦除整个 MCU 闪存（尚未实现）。
+* `firmware <firmware_file.dfu>` - 刷写 Core1 固件。
+* `core2radio <firmware_file.bin>` - 刷写 Core2 无线电堆栈。
+* `core2fus <firmware_file.bin> <0xaddress>` - 刷写 Core2 固件更新服务 **（警告！这会使您的安全区失效！）**
 
-### Options:
-* `-d <n>, --debug-level <n>` - Set debug output level, 0 - errors only, 1 - terse, 2 - everything. Default is 1.
-* `-n <n>, --repeat-number <n>` - Repeat an operation *n* times, 0 - indefinitely, default - once.
-* `-c <channel>, --update-channel <channel>` - Set the update channel (may be one of: `release`, `release-candidate`, `development`). The choice is saved in the configuration file, default is `release`.
-* `-v, --version` - Show program version.
-* `-h, --help` - Show help.
+### 选项：
+* `-d <n>, --debug-level <n>` - 设置调试输出级别，0 - 仅错误，1 - 简洁，2 - 全部。默认为 1。
+* `-n <n>, --repeat-number <n>` - 重复操作 *n* 次，0 - 无限次，默认 - 一次。
+* `-c <channel>, --update-channel <channel>` - 设置更新通道（可以是以下之一：`release`、`release-candidate`、`development`）。该选择会保存在配置文件中，默认为 `release`。
+* `-v, --version` - 显示程序版本。
+* `-h, --help` - 显示帮助。

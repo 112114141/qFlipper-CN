@@ -11,7 +11,7 @@ GuiScreenFrameOperation::GuiScreenFrameOperation(uint32_t id, const QByteArray &
 
 const QString GuiScreenFrameOperation::description() const
 {
-    return QStringLiteral("Gui ScreenFrame");
+    return QStringLiteral("界面屏幕帧");
 }
 
 const QByteArray GuiScreenFrameOperation::encodeRequest(ProtobufPluginInterface *encoder)

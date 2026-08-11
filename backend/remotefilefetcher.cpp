@@ -28,14 +28,14 @@ RemoteFileFetcher::RemoteFileFetcher(const Flipper::Updates::FileInfo &fileInfo,
 bool RemoteFileFetcher::fetch(const QString &remoteUrl, QIODevice *outputFile)
 {
     if(!outputFile->open(QIODevice::WriteOnly)) {
-        setError(BackendError::DiskError, QStringLiteral("Failed to open file for writing: %1.").arg(outputFile->errorString()));
+        setError(BackendError::DiskError, QStringLiteral("无法打开文件进行写入：%1。").arg(outputFile->errorString()));
         return false;
     }
 
     auto *reply = m_manager->get(QNetworkRequest(remoteUrl));
 
     if(reply->error() != QNetworkReply::NoError) {
-        setError(BackendError::InternetError, QStringLiteral("Network error: %1").arg(reply->errorString()));
+        setError(BackendError::InternetError, QStringLiteral("网络错误：%1").arg(reply->errorString()));
 
         reply->deleteLater();
         return false;
@@ -53,11 +53,11 @@ bool RemoteFileFetcher::fetch(const QString &remoteUrl, QIODevice *outputFile)
         reply->deleteLater();
 
         if(reply->error() != QNetworkReply::NoError) {
-            setError(BackendError::InternetError, QStringLiteral("Network error: %1").arg(reply->errorString()));
+            setError(BackendError::InternetError, QStringLiteral("网络错误：%1").arg(reply->errorString()));
 
         } else if(!m_expectedChecksum.isEmpty()) {
             if(!outputFile->open(QIODevice::ReadOnly)) {
-                setError(BackendError::DiskError, QStringLiteral("Failed to open file for reading: %1.").arg(outputFile->errorString()));
+                setError(BackendError::DiskError, QStringLiteral("无法打开文件进行读取：%1。").arg(outputFile->errorString()));
                 return;
             }
 
@@ -65,7 +65,7 @@ bool RemoteFileFetcher::fetch(const QString &remoteUrl, QIODevice *outputFile)
             hash.addData(outputFile);
 
             if(hash.result().toHex() != m_expectedChecksum) {
-                setError(BackendError::UnknownError, QStringLiteral("File integrity check failed"));
+                setError(BackendError::UnknownError, QStringLiteral("文件完整性检查失败"));
             }
 
             outputFile->close();

@@ -30,20 +30,20 @@ Rectangle {
             id: message
 
             text: Backend.backendState === ApplicationBackend.ErrorOccured ?
-                  Backend.errorType === BackendError.InvalidDevice ? qsTr("Unsupported device found") :
-                  Backend.errorType === BackendError.InternetError ? qsTr("Cannot connect to update server") :
-                  Backend.errorType === BackendError.SerialAccessError ? qsTr("Cannot access serial port"):
-                  Backend.errorType === BackendError.RecoveryAccessError ? qsTr("Cannot access device in recovery mode"):
-                  Backend.errorType === BackendError.DiskError ? qsTr("Disk access error"):
-                  Backend.errorType === BackendError.BackupError ? qsTr("Cannot save Flipper data"):
-                  Backend.errorType === BackendError.OperationError ? qsTr("Operation interrupted"):
-                  Backend.errorType === BackendError.DataError ? qsTr("Data corrupted"): qsTr("Something went wrong. Check logs for details.") :
+                  Backend.errorType === BackendError.InvalidDevice ? qsTr("发现不支持的设备") :
+                  Backend.errorType === BackendError.InternetError ? qsTr("无法连接到更新服务器") :
+                  Backend.errorType === BackendError.SerialAccessError ? qsTr("无法访问串口"):
+                  Backend.errorType === BackendError.RecoveryAccessError ? qsTr("无法访问恢复模式下的设备"):
+                  Backend.errorType === BackendError.DiskError ? qsTr("磁盘访问错误"):
+                  Backend.errorType === BackendError.BackupError ? qsTr("无法保存 Flipper 数据"):
+                  Backend.errorType === BackendError.OperationError ? qsTr("操作已中断"):
+                  Backend.errorType === BackendError.DataError ? qsTr("数据已损坏"): qsTr("出现错误。请查看日志以获取详细信息。") :
 
-                  Backend.backendState === ApplicationBackend.WaitingForDevices ? qsTr("Waiting for devices ...") :
-                  Backend.backendState > ApplicationBackend.ScreenStreaming && Backend.backendState < ApplicationBackend.Finished ? qsTr("Do not unplug the device ...") :
-                  Backend.backendState === ApplicationBackend.Finished ? qsTr("Operation has finished successfully.") :
-                  Backend.firmwareUpdateState === ApplicationBackend.ErrorOccured ? qsTr("Cannot connect to update server") :
-                  Backend.firmwareUpdateState === ApplicationBackend.Checking ? qsTr("Checking for firmware updates...") : qsTr("Ready.")
+                  Backend.backendState === ApplicationBackend.WaitingForDevices ? qsTr("等待设备...") :
+                  Backend.backendState > ApplicationBackend.ScreenStreaming && Backend.backendState < ApplicationBackend.Finished ? qsTr("请勿拔出设备...") :
+                  Backend.backendState === ApplicationBackend.Finished ? qsTr("操作已成功完成。") :
+                  Backend.firmwareUpdateState === ApplicationBackend.ErrorOccured ? qsTr("无法连接到更新服务器") :
+                  Backend.firmwareUpdateState === ApplicationBackend.Checking ? qsTr("正在检查固件更新...") : qsTr("就绪。")
 
             color: control.errorOccured ? Theme.color.lightred4 : Theme.color.lightorange2
 

@@ -18,7 +18,7 @@ StartRecoveryOperation::StartRecoveryOperation(ProtobufSession *rpc, DeviceState
 
 const QString StartRecoveryOperation::description() const
 {
-    return QStringLiteral("Start Recovery Mode @%1").arg(deviceState()->name());
+    return QStringLiteral("启动恢复模式 @%1").arg(deviceState()->name());
 }
 
 void StartRecoveryOperation::nextStateLogic()
@@ -36,7 +36,7 @@ void StartRecoveryOperation::nextStateLogic()
 
 void StartRecoveryOperation::onOperationTimeout()
 {
-    finishWithError(BackendError::RecoveryAccessError, QStringLiteral("Failed to start recovery mode: operation timeout"));
+    finishWithError(BackendError::RecoveryAccessError, QStringLiteral("启动恢复模式失败: 操作超时"));
 }
 
 void StartRecoveryOperation::onDeviceOnlineChanged()
@@ -55,7 +55,7 @@ void StartRecoveryOperation::startRecoveryMode()
         return;
     }
 
-    deviceState()->setStatusString(QStringLiteral("Starting Recovery mode..."));
+    deviceState()->setStatusString(QStringLiteral("正在启动恢复模式..."));
 
     connect(deviceState(), &DeviceState::isOnlineChanged, this, &StartRecoveryOperation::onDeviceOnlineChanged);
 

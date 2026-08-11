@@ -275,7 +275,7 @@ bool FileManager::checkDevice()
     bool ret = !m_device.isNull();
 
     if(!ret) {
-        setError(BackendError::OperationError, QStringLiteral("Current device has been destroyed"));
+        setError(BackendError::OperationError, QStringLiteral("当前设备已被销毁"));
         emit errorOccured();
     }
 

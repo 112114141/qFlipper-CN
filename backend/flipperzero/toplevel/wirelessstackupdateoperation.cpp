@@ -71,7 +71,7 @@ WirelessStackUpdateOperation::WirelessStackUpdateOperation(RecoveryInterface *re
 
 const QString WirelessStackUpdateOperation::description() const
 {
-    return QStringLiteral("Wireless Stack Update @%1").arg(deviceState()->name());
+    return QStringLiteral("无线协议栈更新 @%1").arg(deviceState()->name());
 }
 
 void WirelessStackUpdateOperation::updateCore2Firmware()
@@ -86,7 +86,7 @@ FUSUpdateOperation::FUSUpdateOperation(RecoveryInterface *recovery, UtilityInter
 
 const QString FUSUpdateOperation::description() const
 {
-    return QStringLiteral("FUS Update @%1").arg(deviceState()->name());
+    return QStringLiteral("FUS 更新 @%1").arg(deviceState()->name());
 }
 
 void FUSUpdateOperation::updateCore2Firmware()

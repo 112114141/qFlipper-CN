@@ -11,7 +11,7 @@ SkipMOTDOperation::SkipMOTDOperation(QSerialPort *serialPort, QObject *parent):
 
 const QString SkipMOTDOperation::description() const
 {
-    return QStringLiteral("Skip MOTD @%1").arg(QString(serialPort()->portName()));
+    return QStringLiteral("跳过 MOTD @%1").arg(QString(serialPort()->portName()));
 }
 
 QByteArray SkipMOTDOperation::endOfMessageToken() const

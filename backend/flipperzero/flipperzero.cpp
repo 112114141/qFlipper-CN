@@ -225,8 +225,8 @@ void FlipperZero::onDeviceInfoChanged()
     // Perform Protobuf session initialisation
     const auto &deviceInfo = m_state->deviceInfo();
 
-    qCDebug(CAT_DEVICE).noquote() << "Version:" << deviceInfo.firmware.version << "commit:"
-                                  << deviceInfo.firmware.commit << "radio:" << deviceInfo.radioVersion;
+    qCDebug(CAT_DEVICE).noquote() << "版本:" << deviceInfo.firmware.version << "提交:"
+                                  << deviceInfo.firmware.commit << "无线电:" << deviceInfo.radioVersion;
 
     const auto &pb = deviceInfo.protobuf;
     const auto &pi = deviceInfo.portInfo;
@@ -254,17 +254,17 @@ void FlipperZero::registerOperation(AbstractOperation *operation)
 {
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCCritical(CAT_DEVICE).noquote() << operation->description() << "ERROR:" << operation->errorString();
+            qCCritical(CAT_DEVICE).noquote() << operation->description() << "错误:" << operation->errorString();
             m_state->setError(operation->error(), operation->errorString());
 
         } else {
-            qCInfo(CAT_DEVICE).noquote() << operation->description() << "SUCCESS";
+            qCInfo(CAT_DEVICE).noquote() << operation->description() << "成功";
         }
 
         operation->deleteLater();
         emit operationFinished();
     });
 
-    qCInfo(CAT_DEVICE).noquote() << operation->description() << "START";
+    qCInfo(CAT_DEVICE).noquote() << operation->description() << "开始";
     operation->start();
 }

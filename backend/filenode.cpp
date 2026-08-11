@@ -62,7 +62,7 @@ bool FileNode::addDirectory(const QString &path)
     QSharedPointer<FileNode> node(new FileNode(fragments.takeLast(), Type::Directory));
 
     auto *parent = traverse(fragments);
-    check_return_bool(parent, QStringLiteral("No parent node found for %1.").arg(path));
+    check_return_bool(parent, QStringLiteral("未找到 %1 的父节点。").arg(path));
 
     parent->addChild(node);
     return true;
@@ -74,7 +74,7 @@ bool FileNode::addFile(const QString &path, const QVariant &data)
     QSharedPointer<FileNode> node(new FileNode(fragments.takeLast(), Type::RegularFile, data));
 
     auto *parent = traverse(fragments);
-    check_return_bool(parent, QStringLiteral("No parent node found for %1.").arg(path));
+    check_return_bool(parent, QStringLiteral("未找到 %1 的父节点。").arg(path));
 
     parent->addChild(node);
     return true;

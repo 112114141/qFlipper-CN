@@ -32,7 +32,7 @@ Item {
         y: 264
 
         color: Theme.color.lightorange2
-        text: qsTr("Connect your Flipper")
+        text: qsTr("请连接您的 Flipper")
 
         font.family: "Born2bSportyV2"
         font.pixelSize: 48

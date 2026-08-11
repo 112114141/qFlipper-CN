@@ -78,7 +78,7 @@ void ScreenStreamer::sendInputEvent(InputEvent::Key key, InputEvent::Type type)
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
             setStreamState(Stopped);
-            qCDebug(CATEGORY_SCREEN).noquote() << "Failed to send input event: " << operation->errorString();
+            qCDebug(CATEGORY_SCREEN).noquote() << "发送输入事件失败: " << operation->errorString();
         }
     });
 }
@@ -121,7 +121,7 @@ void ScreenStreamer::start()
     if(!m_device) {
         return;
     } else if(m_streamState != StreamState::Stopped) {
-        qCDebug(CATEGORY_SCREEN) << "Screen streaming is already running";
+        qCDebug(CATEGORY_SCREEN) << "屏幕流已在运行";
         return;
     }
 
@@ -132,7 +132,7 @@ void ScreenStreamer::start()
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
             setStreamState(Stopped);
-            qCDebug(CATEGORY_SCREEN).noquote() << "Failed to initiate screen streaming: " << operation->errorString();
+            qCDebug(CATEGORY_SCREEN).noquote() << "启动屏幕流失败: " << operation->errorString();
 
         } else {
             setStreamState(Running);
@@ -143,7 +143,7 @@ void ScreenStreamer::start()
 void ScreenStreamer::stop()
 {
     if(!isEnabled()) {
-        qCDebug(CATEGORY_SCREEN) << "Screen streaming is already stopped";
+        qCDebug(CATEGORY_SCREEN) << "屏幕流已停止";
         return;
     }
 
@@ -153,7 +153,7 @@ void ScreenStreamer::stop()
 
     connect(operation, &AbstractOperation::finished, this, [=]() {
         if(operation->isError()) {
-            qCDebug(CATEGORY_SCREEN).noquote() << "Failed to stop screen streaming: " << operation->errorString();
+            qCDebug(CATEGORY_SCREEN).noquote() << "停止屏幕流失败: " << operation->errorString();
         }
 
         setStreamState(Stopped);

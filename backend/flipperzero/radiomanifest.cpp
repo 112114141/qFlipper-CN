@@ -22,19 +22,19 @@ RadioManifest::Header::Header(const QJsonValue &json)
 
     const auto obj = json.toObject();
     if(obj.isEmpty()) {
-        throw std::runtime_error("Manifest header is empty");
+        throw std::runtime_error("清单头为空");
     }
 
     if(obj.contains(QStringLiteral("version"))) {
         m_version = obj.value(QStringLiteral("version")).toInt();
     } else {
-        throw std::runtime_error("Failed to read manifest version");
+        throw std::runtime_error("读取清单版本失败");
     }
 
     if(obj.contains(QStringLiteral("timestamp"))) {
         m_timestamp = obj.value(QStringLiteral("timestamp")).toInt();
     } else {
-        throw std::runtime_error("Failed to read manifest timestamp");
+        throw std::runtime_error("读取清单时间戳失败");
     }
 }
 
@@ -132,7 +132,7 @@ RadioManifest::Section::Section(const QJsonValue &json)
 
     const auto obj = json.toObject();
     if(obj.isEmpty()) {
-        throw std::runtime_error("Section is empty");
+        throw std::runtime_error("段为空");
     }
 
     const auto canConstruct = obj.contains(QStringLiteral("version")) &&
@@ -163,14 +163,14 @@ void RadioManifest::Section::readVersion(const QJsonValue &json)
 
     const auto obj = json.toObject();
     if(obj.isEmpty()) {
-        throw std::runtime_error("Section version is empty");
+        throw std::runtime_error("段版本为空");
     }
 
     const auto canConstruct = obj.contains(QStringLiteral("major")) &&
                               obj.contains(QStringLiteral("minor")) &&
                               obj.contains(QStringLiteral("sub"));
     if(!canConstruct) {
-        throw std::runtime_error("Malformed section version");
+        throw std::runtime_error("段版本格式错误");
     }
 
     const auto major = obj.value(QStringLiteral("major")).toInt();
@@ -188,7 +188,7 @@ void RadioManifest::Section::readFiles(const QJsonValue &json)
 
     const auto arr = json.toArray();
     if(arr.isEmpty()) {
-        throw std::runtime_error("File list is empty");
+        throw std::runtime_error("文件列表为空");
     }
 
     for(const auto &value : arr) {
@@ -302,7 +302,7 @@ void RadioManifest::RadioSection::readVersion(const QJsonValue &json)
     const auto canConstruct = obj.contains(typeKey) && obj.contains(branchKey) &&
                               obj.contains(releaseKey);
     if(!canConstruct) {
-        throw std::runtime_error("Malformed section version (RadioSection)");
+        throw std::runtime_error("段版本格式错误 (RadioSection)");
     }
 
     m_type = obj.value(typeKey).toInt();

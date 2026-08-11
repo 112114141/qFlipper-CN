@@ -26,12 +26,16 @@ Item {
 
         TransparentLabel {
             color: Theme.color.lightorange2
-            text: qsTr("Developer Mode")
+            text: qsTr("开发者模式")
         }
 
         SmallButtonRed {
             action: installRadioAction
             Layout.fillWidth: true
+
+            font.family: "Microsoft YaHei UI"
+            font.pixelSize: 22
+            font.capitalization: Font.MixedCase
 
             icon.source: "qrc:/assets/gfx/symbolic/restore-symbolic.svg"
             icon.width: 18
@@ -39,7 +43,7 @@ Item {
 
             ToolTip {
                 visible: parent.hovered
-                text: qsTr("Install a custom wireless stack. WARNING! This may result in a non-functional Flipper!")
+                text: qsTr("安装自定义无线协议栈。警告！这可能导致 Flipper 无法使用！")
                 implicitWidth: 250
             }
         }
@@ -48,25 +52,29 @@ Item {
             action: installFusAction
             Layout.fillWidth: true
 
+            font.family: "Microsoft YaHei UI"
+            font.pixelSize: 22
+            font.capitalization: Font.MixedCase
+
             icon.source: "qrc:/assets/gfx/symbolic/restore-symbolic.svg"
             icon.width: 18
             icon.height: 20
 
             ToolTip {
                 visible: parent.hovered
-                text: qsTr("Install a custom FUS firmware. !!MEGA WARNING!! It WILL result in encryption keys loss!")
+                text: qsTr("安装自定义 FUS 固件。！！严重警告！！这将导致加密密钥丢失！")
                 implicitWidth: 250
             }
         }
 
         Action {
             id: installRadioAction
-            text: qsTr("Install wireless fw")
+            text: qsTr("安装无线固件")
         }
 
         Action {
             id: installFusAction
-            text: qsTr("Install FUS firmware")
+            text: qsTr("安装 FUS 固件")
             enabled: Backend.deviceState && Backend.deviceState.isRecoveryMode
         }
     }

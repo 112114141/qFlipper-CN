@@ -30,7 +30,7 @@ Item {
 
         TransparentLabel {
             color: Theme.color.lightorange2
-            text: qsTr("Firmware update channel")
+            text: qsTr("固件更新通道")
         }
 
         ComboBox {
@@ -52,14 +52,14 @@ Item {
 
             ToolTip {
                 visible: parent.hovered
-                text: qsTr("Change the firmware update channel")
+                text: qsTr("更改固件更新通道")
                 implicitWidth: 250
             }
         }
 
         TransparentLabel {
             color: Theme.color.lightorange2
-            text: qsTr("Backup & Restore")
+            text: qsTr("备份与恢复")
         }
 
         GridLayout {
@@ -73,13 +73,17 @@ Item {
                 action: backupAction
                 Layout.fillWidth: true
 
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 22
+                font.capitalization: Font.MixedCase
+
                 icon.source: "qrc:/assets/gfx/symbolic/backup-symbolic.svg"
                 icon.width: 18
                 icon.height: 20
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Save the contents of Flipper's internal storage to this computer's disk.")
+                    text: qsTr("将 Flipper 内部存储的内容保存到本机磁盘。")
                     implicitWidth: 250
                 }
             }
@@ -88,13 +92,17 @@ Item {
                 action: restoreAction
                 Layout.fillWidth: true
 
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 22
+                font.capitalization: Font.MixedCase
+
                 icon.source: "qrc:/assets/gfx/symbolic/restore-symbolic.svg"
                 icon.width: 18
                 icon.height: 20
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Download the contents of a backup directory to Flipper's internal storage.")
+                    text: qsTr("将备份目录的内容下载到 Flipper 的内部存储。")
                     implicitWidth: 250
                 }
             }
@@ -103,13 +111,17 @@ Item {
                 action: eraseAction
                 Layout.fillWidth: true
 
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 22
+                font.capitalization: Font.MixedCase
+
                 icon.source: "qrc:/assets/gfx/symbolic/trashcan.svg"
                 icon.width: 18
                 icon.height: 20
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Revert Flipper to its default settings. WARNING! All progress will be lost!")
+                    text: qsTr("擦除 Flipper 所有数据并恢复出厂状态。警告！此操作不可撤销！")
                     implicitWidth: 250
                 }
             }
@@ -118,13 +130,17 @@ Item {
                 action: reinstallAction
                 Layout.fillWidth: true
 
+                font.family: "Microsoft YaHei UI"
+                font.pixelSize: 22
+                font.capitalization: Font.MixedCase
+
                 icon.source: "qrc:/assets/gfx/symbolic/update-symbolic.svg"
                 icon.width: 16
                 icon.height: 16
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Install the current firmware version again. Not for everyday use.")
+                    text: qsTr("重新安装当前固件版本。不建议日常使用。")
                     implicitWidth: 250
                 }
             }
@@ -132,7 +148,7 @@ Item {
 
         TransparentLabel {
             color: Theme.color.lightorange2
-            text: qsTr("Application update")
+            text: qsTr("应用程序更新")
             visible: Preferences.checkAppUpdates
         }
 
@@ -141,6 +157,10 @@ Item {
             Layout.fillWidth: true
             visible: Preferences.checkAppUpdates
 
+            font.family: "Microsoft YaHei UI"
+            font.pixelSize: 22
+            font.capitalization: Font.MixedCase
+
             icon.source: "qrc:/assets/gfx/symbolic/update-symbolic.svg"
             icon.width: 16
             icon.height: 16
@@ -148,32 +168,32 @@ Item {
 
         Action {
             id: backupAction
-            text: qsTr("Backup")
+            text: qsTr("备份")
             enabled: Backend.deviceState && !Backend.deviceState.isRecoveryMode
         }
 
         Action {
             id: restoreAction
-            text: qsTr("Restore")
+            text: qsTr("恢复")
             enabled: Backend.deviceState && !Backend.deviceState.isRecoveryMode
         }
 
         Action {
             id: eraseAction
-            text: qsTr("Erase")
+            text: qsTr("格式化")
             enabled: Backend.deviceState && !Backend.deviceState.isRecoveryMode
         }
 
         Action {
             id: reinstallAction
-            text: qsTr("Reinstall")
+            text: qsTr("重新安装")
             enabled: Backend.firmwareUpdateState === Backend.NoUpdates
         }
 
         Action {
             id: selfUpdateAction
-            text: App.updateStatus === App.Checking ? qsTr("Checking...") :
-                  App.updateStatus === App.NoUpdates && checkTimer.running ? qsTr("No updates") : qsTr("Check app updates")
+            text: App.updateStatus === App.Checking ? qsTr("检查中...") :
+                  App.updateStatus === App.NoUpdates && checkTimer.running ? qsTr("暂无更新") : qsTr("检查应用更新")
 
             enabled: Preferences.checkAppUpdates && App.updateStatus !== App.Checking && !checkTimer.running
             onTriggered: App.checkForUpdates()

@@ -32,12 +32,12 @@ FlipperZero *AbstractTopLevelHelper::device()
 void AbstractTopLevelHelper::onUpdateRegistryStateChanged()
 {
     if(m_updateRegistry->state() == UpdateRegistry::State::ErrorOccured) {
-        finishEarly(BackendError::InternetError, QStringLiteral("Failed to retrieve update information"));
+        finishEarly(BackendError::InternetError, QStringLiteral("获取更新信息失败"));
     } else if(m_updateRegistry->state() == UpdateRegistry::State::Ready) {
         disconnect(m_updateRegistry, &UpdateRegistry::stateChanged, this, &AbstractTopLevelHelper::onUpdateRegistryStateChanged);
 
         if(!m_device->deviceState()->isOnline()) {
-            finishEarly(BackendError::OperationError, QStringLiteral("Connection to device was lost"));
+            finishEarly(BackendError::OperationError, QStringLiteral("与设备的连接已断开"));
         } else {
             advanceState();
         }
@@ -58,7 +58,7 @@ void AbstractTopLevelHelper::nextStateLogic()
 
 void AbstractTopLevelHelper::checkForUpdates()
 {
-    m_device->deviceState()->setStatusString(tr("Checking for updates..."));
+    m_device->deviceState()->setStatusString(tr("正在检查更新..."));
 
     connect(m_updateRegistry, &UpdateRegistry::stateChanged, this, &AbstractTopLevelHelper::onUpdateRegistryStateChanged);
     m_updateRegistry->check();

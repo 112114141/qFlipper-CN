@@ -27,7 +27,7 @@ ChecksumVerifyOperation::ChecksumVerifyOperation(ProtobufSession *rpc, DeviceSta
 const QString ChecksumVerifyOperation::description() const
 {
     const auto numFiles = m_urlsToCheck.size();
-    return QStringLiteral("Verify checksum of %1 %2 @%3").arg(QString::number(numFiles), (numFiles == 1) ? "item" : "items", deviceState()->deviceInfo().name);
+    return QStringLiteral("验证 %1 个%2的校验和 @%3").arg(QString::number(numFiles), (numFiles == 1) ? "项" : "项", deviceState()->deviceInfo().name);
 }
 
 const QList<QUrl> &ChecksumVerifyOperation::changedUrls() const
@@ -49,7 +49,7 @@ void ChecksumVerifyOperation::nextStateLogic()
         finish();
 
     } else {
-        finishWithError(BackendError::UnknownError, QStringLiteral("Unexpected state"));
+        finishWithError(BackendError::UnknownError, QStringLiteral("意外的状态"));
     }
 }
 
@@ -113,16 +113,16 @@ void ChecksumVerifyOperation::verifyMd5Sums()
 
             if(checksumRemote.isEmpty()) {
                 m_changedUrls.append(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
-                qCDebug(CATEGORY_DEBUG) << "File does not exist:" << absoluteRemoteFilePath;
+                qCDebug(CATEGORY_DEBUG) << "文件不存在:" << absoluteRemoteFilePath;
 
             } else {
                 const auto checksumLocal = calculateMd5Sum(fileInfo);
                 if(checksumRemote != checksumLocal) {
                     m_changedUrls.append(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
-                    qCDebug(CATEGORY_DEBUG) << "File changed:" << absoluteRemoteFilePath
-                                            << "old:" << checksumRemote << "new:" << checksumLocal;
+                    qCDebug(CATEGORY_DEBUG) << "文件已更改:" << absoluteRemoteFilePath
+                                            << "旧:" << checksumRemote << "新:" << checksumLocal;
                 } else {
-                    qCDebug(CATEGORY_DEBUG) << "File is identical:" << absoluteRemoteFilePath;
+                    qCDebug(CATEGORY_DEBUG) << "文件相同:" << absoluteRemoteFilePath;
                 }
             }
 

@@ -30,7 +30,7 @@ GZipCompressor::GZipCompressor(QIODevice *in, QIODevice *out, QObject *parent):
     auto *watcher = new QFutureWatcher<void>(this);
 
     connect(watcher, &QFutureWatcherBase::finished, this, [=]() {
-        qCDebug(LOG_UNZIP).noquote() << "Compression finished:" << errorString();
+        qCDebug(LOG_UNZIP).noquote() << "压缩完成:" << errorString();
         watcher->deleteLater();
         emit finished();
     });
@@ -61,11 +61,11 @@ void GZipCompressor::doCompress()
     const auto totalSize = m_in->bytesAvailable();
 
     if(!totalSize) {
-        setError(BackendError::DataError, QStringLiteral("The input file is empty"));
+        setError(BackendError::DataError, QStringLiteral("输入文件为空"));
         return;
     }
 
-    qCDebug(LOG_UNZIP) << "Compressing file with size of" << totalSize << "bytes...";
+    qCDebug(LOG_UNZIP) << "正在压缩文件，大小为" << totalSize << "字节...";
 
     z_stream stream;
     stream.zalloc = Z_NULL;
@@ -74,7 +74,7 @@ void GZipCompressor::doCompress()
 
     const auto err = deflateInit2(&stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, 15 | 16, 8, Z_DEFAULT_STRATEGY);
     if(err != Z_OK) {
-        setError(BackendError::UnknownError, QStringLiteral("Failed to initialise deflate method"));
+        setError(BackendError::UnknownError, QStringLiteral("初始化 deflate 方法失败"));
         return;
     }
 
@@ -96,7 +96,7 @@ void GZipCompressor::doCompress()
 
             if(err == Z_STREAM_ERROR) {
                 deflateEnd(&stream);
-                setError(BackendError::DataError, QStringLiteral("Error during compression"));
+                setError(BackendError::DataError, QStringLiteral("压缩过程中出错"));
                 return;
             }
 

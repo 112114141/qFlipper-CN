@@ -1,4 +1,4 @@
-; qFlipper Windows Installer Build Script 
+﻿; qFlipper Windows Installer Build Script 
 ; requires NullSoft Installer 3.08 or later
 ; Reference http://kkmalar.org/WebApplication/qz-print-2.0.0-RC1/ant/windows/windows-packager.nsi.in
 
@@ -14,7 +14,7 @@
   Unicode true
   
   ;Compression algorithm used to compress files/data in the installer
-  SetCompressor /solid /final lzma
+  SetCompressor /final lzma
 
   !define /ifndef NAME "qFlipper"
   !define /ifndef COMPANY "Flipper Devices Inc."
@@ -64,7 +64,7 @@
   ; Version Information displayer in Properties -> Details tab
   ; Required for antivirus databases
   VIProductVersion "${VERSION}.0" ; Only exact 4 numbers allowed x.x.x.x
-  VIAddVersionKey "FileDescription" "qFlipper Windows Installer"
+  VIAddVersionKey "FileDescription" "qFlipper Windows 安装程序"
   VIAddVersionKey "FileVersion" "${VERSION}.0"
   VIAddVersionKey "ProductName" "qFlipper"  
   VIAddVersionKey "ProductVersion" "${VERSION}.0"
@@ -75,15 +75,16 @@
 ;Installer wizard pages
 
   ; Global window title 
-  Caption "qFlipper ${VERSION} Setup"
+  Caption "qFlipper ${VERSION} 中文版安装程序"
+  UninstallCaption "qFlipper ${VERSION} 中文版卸载程序"
 
   !define MUI_HEADERIMAGE
-  !define MUI_HEADERIMAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
-  !define MUI_HEADERIMAGE_UNBITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
+  !define MUI_HEADERIMAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header96.bmp"
+  !define MUI_HEADERIMAGE_UNBITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header96.bmp"
 
   ; Welcome and Finish page settings
-  !define MUI_WELCOMEPAGE_TITLE  "Welcome to qFlipper ${VERSION} Setup"
-  !define MUI_WELCOMEPAGE_TEXT "qFlipper is a desktop application for updating Flipper Zero firmware and databases, manage files on SD card, and repair corrupted device.$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\nCredits$\r$\nCode:   Georgii Surkov$\r$\nDesign: Valerie Aquamine, Dmitry Pavlov$\n$\r$\nOpen Source and Distributed under GPL v3 License$\r$\nCopyright (C) 2022 Flipper Devices Inc."
+  !define MUI_WELCOMEPAGE_TITLE  "欢迎使用 qFlipper ${VERSION} 中文版安装程序"
+  !define MUI_WELCOMEPAGE_TEXT "qFlipper 是一款用于更新 Flipper Zero 固件和数据库、管理 SD 卡文件以及修复损坏设备的桌面应用程序。$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n致谢$\r$\n代码:   Georgii Surkov$\r$\n设计: Valerie Aquamine, Dmitry Pavlov$\r$\n汉化: 112114141（左晟宇）$\r$\n$\r$\n开源并基于 GPL v3 许可证分发$\r$\nCopyright (C) 2022 Flipper Devices Inc."
   !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_welcome216.bmp"
   !define MUI_UNWELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_uninstaller\windows_uninstaller_welcome216.bmp"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for welcome page
@@ -94,14 +95,16 @@
   ;!define MUI_FINISHPAGE_NOAUTOCLOSE ; Debug
   !insertmacro MUI_PAGE_INSTFILES
 
-  !define MUI_FINISHPAGE_TITLE "qFlipper ${VERSION} Setup Complete"
+  !define MUI_FINISHPAGE_TITLE "qFlipper ${VERSION} 安装完成"
 ;  !define MUI_FINISHPAGE_RUN "$INSTDIR\${NAME}.exe"
-;  !define MUI_FINISHPAGE_RUN_TEXT "Run qFlipper now"
-  !define MUI_FINISHPAGE_LINK "More Info --> Flipper Zero Documentation"
+;  !define MUI_FINISHPAGE_RUN_TEXT "立即运行 qFlipper"
+  !define MUI_FINISHPAGE_LINK "更多信息 --> Flipper Zero 文档"
   !define MUI_FINISHPAGE_LINK_LOCATION "https://docs.flipperzero.one"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for finish page
   !insertmacro MUI_PAGE_FINISH
 
+  ; 卸载程序欢迎页面标题
+  !define MUI_UNWELCOMEPAGE_TITLE "欢迎使用 qFlipper ${VERSION} 中文版卸载程序"
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_COMPONENTS
@@ -112,7 +115,9 @@
 ;--------------------------------
 ; Languages
 
+  !insertmacro MUI_LANGUAGE "SimpChinese"
   !insertmacro MUI_LANGUAGE "English"
+
 
 ;--------------------------------
 ;Installer Sections
@@ -127,7 +132,7 @@ Section "-Main Application"
     ; Sets the context of shell folders to "All Users"
     SetShellVarContext all    
     ; Kills running qFlipper.exe processes
-    DetailPrint "Looking for running qFlipper.exe..."
+    DetailPrint "正在查找运行中的 qFlipper.exe..."
     nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate"
     nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate" ;Twice to avoid long time exiting
     SetShellVarContext current
@@ -142,19 +147,19 @@ Section "-Main Application"
     ; Check if VC2010 installed and install it if not
     ReadRegStr $0 HKLM "SOFTWARE\WOW6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64" "Version"
     ${If} $0 == ""
-      DetailPrint "Microsoft Visual C++ 2010 libs not found. Installing..."
+      DetailPrint "未找到 Microsoft Visual C++ 2010 运行库。正在安装..."
       ExecWait "${VCREDIST2010_EXE} /q /norestart"
     ${Else}
-      DetailPrint "Found Microsoft Visual C++ 2010 Version: $0"
+      DetailPrint "已找到 Microsoft Visual C++ 2010 版本: $0"
     ${EndIf}
     
     ; Check if VC2019 installed and install it if not
     ReadRegStr $0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
     ${If} $0 == ""
-      DetailPrint "Microsoft Visual C++ 2019 libs not found. Installing..."
+      DetailPrint "未找到 Microsoft Visual C++ 2019 运行库。正在安装..."
       ExecWait "${VCREDIST2019_EXE} /install /quiet /norestart"
     ${Else}
-      DetailPrint "Found Microsoft Visual C++ 2015-2019 Version: $0"
+      DetailPrint "已找到 Microsoft Visual C++ 2015-2019 版本: $0"
     ${EndIf}
     
     WriteUninstaller "${UNINSTALL_EXE}"
@@ -171,7 +176,7 @@ Section "-Main Application"
 SectionEnd
 
 Section "USB DFU Driver" UsbDriverSection
-  DetailPrint "Installing STM32 DFU Driver..."
+  DetailPrint "正在安装 STM32 DFU 驱动..."
   ${DisableX64FSRedirection}
 	nsExec::ExecToLog '"$SYSDIR\pnputil.exe" /add-driver "${STM32_DRIVER_PATH}\STM32Bootloader.inf" /install'
 SectionEnd
@@ -201,7 +206,7 @@ SectionEnd
 
 ; Section to remove all Flipper Drivers, unchecked by default
 Section /o "un.Remove Drivers" RemoveDriversSection
-  DetailPrint "Removing drivers. This may take a while..."
+  DetailPrint "正在删除驱动。这可能需要一些时间..."
   nsExec::ExecToLog '$SYSDIR\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -File "${STM32_DRIVER_PATH}\delete_all_dfu_drivers.ps1"'
 SectionEnd
 
@@ -214,7 +219,7 @@ Section "un.Uninstall qFlipper" UninstallqFlipperSection
   SetRegView 64 
 
   ; Kills running qFlipper.exe processes
-  DetailPrint "Looking for running qFlipper.exe..."
+  DetailPrint "正在查找运行中的 qFlipper.exe..."
   nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate"
   nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate" ;Twice to avoid long time exiting
 
@@ -237,6 +242,11 @@ SectionEnd
   LangString DESC_DesktopShortcutSection ${LANG_ENGLISH} "Create qFlipper shortcut on Desktop"
   LangString DESC_RemoveDriversSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
   LangString DESC_UninstallqFlipperSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
+  LangString DESC_UsbDriverSection ${LANG_SIMPCHINESE} "Flipper DFU 模式的 STM32 引导驱动程序"
+  LangString DESC_StartMenuSection ${LANG_SIMPCHINESE} "将 qFlipper 添加到 Windows 开始菜单"
+  LangString DESC_DesktopShortcutSection ${LANG_SIMPCHINESE} "在桌面创建 qFlipper 快捷方式"
+  LangString DESC_RemoveDriversSection ${LANG_SIMPCHINESE} "从系统中删除所有 STM32 USB 驱动程序"
+  LangString DESC_UninstallqFlipperSection ${LANG_SIMPCHINESE} "从系统中删除所有 STM32 USB 驱动程序"
   ;Assign language strings to install sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${UsbDriverSection} $(DESC_UsbDriverSection)
@@ -254,9 +264,12 @@ SectionEnd
 
   Function .onInit
 
+    ; 强制使用简体中文
+    StrCpy $LANGUAGE ${LANG_SIMPCHINESE}
+
     ; Abort if not Windows 10 and newer
     ${IfNot} ${AtLeastWin10}
-      MessageBox MB_OK|MB_ICONSTOP "Can not install qFlipper. Windows 10 and newer required"
+      MessageBox MB_OK|MB_ICONSTOP "无法安装 qFlipper。需要 Windows 10 或更高版本"
       Abort
     ${EndIf}
 
@@ -264,7 +277,7 @@ SectionEnd
       ${DisableX64FSRedirection} ; Disable using SysWOW64 for 32-bit files
       SetRegView 64 ; Use 64bit registry keys, not WOW6432Node
     ${Else}
-      MessageBox MB_OK|MB_ICONSTOP "Error: Can't install qFlipper on 32-bit Windows. Use 64-bit version of Windows"
+      MessageBox MB_OK|MB_ICONSTOP "错误: 无法在 32 位 Windows 上安装 qFlipper。请使用 64 位 Windows 版本"
       Abort ; Exit installer if 32 bit windows
      ${EndIf}  
 
@@ -313,6 +326,8 @@ SectionEnd
 ;-------------------------------
 ; Function runs on every UNinstaller exe start
 Function un.onInit
+    ; 强制使用简体中文
+    StrCpy $LANGUAGE ${LANG_SIMPCHINESE}
     ${If} ${RunningX64}
       ${DisableX64FSRedirection} ; Disable using SysWOW64 for 32-bit files
       SetRegView 64 ; Use 64bit registry keys, not WOW6432Node
@@ -333,7 +348,7 @@ FunctionEnd
     ${If} $0 <= 216
       ${NSD_SetImage} $mui.WelcomePage.Image $PLUGINSDIR\windows_installer_welcome$0.bmp $mui.WelcomePage.Image.Bitmap
       ${NSD_SetImage} $mui.FinishPage.Image $PLUGINSDIR\windows_installer_finish$0.bmp $mui.FinishPage.Image.Bitmap
-      SetBrandingImage /IMGID=1046 "$PLUGINSDIR\windows_installer_header$0.bmp"
+      ; SetBrandingImage /IMGID=1046 "$PLUGINSDIR\windows_installer_header$0.bmp"
     ${EndIf}
   FunctionEnd 
 

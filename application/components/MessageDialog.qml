@@ -58,7 +58,7 @@ CustomDialog {
             SmallButton {
                 radius: 7
                 highlighted: true
-                text: customText ? customText : qsTr("Ok")
+                text: customText ? customText : qsTr("确定")
 
                 Layout.margins: 24
                 Layout.alignment: Qt.AlignHCenter

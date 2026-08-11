@@ -14,7 +14,7 @@ SystemProtobufVersionOperation::SystemProtobufVersionOperation(uint32_t id, QObj
 
 const QString SystemProtobufVersionOperation::description() const
 {
-    return QStringLiteral("System Protobuf Version");
+    return QStringLiteral("系统 Protobuf 版本");
 }
 
 uint32_t SystemProtobufVersionOperation::versionMajor() const

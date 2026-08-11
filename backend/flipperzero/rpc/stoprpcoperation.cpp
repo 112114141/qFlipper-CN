@@ -11,7 +11,7 @@ StopRPCOperation::StopRPCOperation(QSerialPort *serialPort, QObject *parent):
 
 const QString StopRPCOperation::description() const
 {
-    return QStringLiteral("Stop RPC session @%1").arg(QString(serialPort()->portName()));
+    return QStringLiteral("停止 RPC 会话 @%1").arg(QString(serialPort()->portName()));
 }
 
 void StopRPCOperation::onSerialPortReadyRead()

@@ -75,8 +75,8 @@ FactoryInfo::FactoryInfo(const QByteArray &data):
     m_color(Color::Unknown),
     m_region(Region::Dev)
 {
-    check_return_void(data.size() == FACTORYINFO_SIZE, "Bad data size");
-    check_return_void(data != QByteArray(FACTORYINFO_SIZE, '\xff'), "Data seems to be unprogrammed");
+    check_return_void(data.size() == FACTORYINFO_SIZE, "数据大小错误");
+    check_return_void(data != QByteArray(FACTORYINFO_SIZE, '\xff'), "数据似乎未编程");
 
     auto *header = (OTPHeader*)(data.data());
 
@@ -96,7 +96,7 @@ FactoryInfo::FactoryInfo(const QByteArray &data):
     }
 
     QRegExp ascii("[^A-Za-z0-9.]");
-    check_return_void(ascii.indexIn(m_name) < 0, "Illegal character in the device name");
+    check_return_void(ascii.indexIn(m_name) < 0, "设备名称中包含非法字符");
 
     m_isValid = true;
 }

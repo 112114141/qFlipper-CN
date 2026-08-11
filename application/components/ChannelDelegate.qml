@@ -31,8 +31,16 @@ ItemDelegate {
         }
 
         TextLabel {
-            text: control.text
+            text: {
+                if (control.text === "development") return qsTr("开发版");
+                if (control.text === "release-candidate") return qsTr("候选版");
+                if (control.text === "release") return qsTr("正式版");
+                return control.text;
+            }
             color: control.down ? Theme.color.darkorange1 : control.hovered ? Theme.color.lightorange1 : Theme.color.lightorange2
+            font.family: "Microsoft YaHei UI"
+            font.pixelSize: 16
+            font.capitalization: Font.MixedCase
             Layout.fillWidth: true
         }
     }
@@ -54,7 +62,12 @@ ItemDelegate {
     ToolTip {
         delay: 300
         visible: parent.hovered
-        text: description
+        text: {
+            if (control.text === "development") return qsTr("最新但最不稳定的开发版本，包含最新功能但可能有较多错误");
+            if (control.text === "release-candidate") return qsTr("候选版本，即将发布的稳定版本，已修复大部分已知问题");
+            if (control.text === "release") return qsTr("正式稳定版本，经过充分测试，推荐大多数用户使用");
+            return description;
+        }
         implicitWidth: 250
     }
 }

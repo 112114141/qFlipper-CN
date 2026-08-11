@@ -21,7 +21,7 @@ SettingsBackupOperation::SettingsBackupOperation(UtilityInterface *utility, Devi
 
 const QString SettingsBackupOperation::description() const
 {
-    return QStringLiteral("Backup Internal storage @%1").arg(deviceState()->name());
+    return QStringLiteral("备份内部存储 @%1").arg(deviceState()->name());
 }
 
 void SettingsBackupOperation::nextStateLogic()

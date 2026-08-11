@@ -17,10 +17,10 @@ RegionInfo::RegionInfo(const QByteArray &text)
     const auto doc = QJsonDocument::fromJson(text);
 
     if(doc.isNull()) {
-        qCCritical(CATEGORY_DEBUG) << "Failed to parse the document";
+        qCCritical(CATEGORY_DEBUG) << "解析文档失败";
         return;
     } else if(!doc.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Json document is not an object";
+        qCCritical(CATEGORY_DEBUG) << "JSON 文档不是对象";
         return;
     }
 
@@ -33,7 +33,7 @@ RegionInfo::RegionInfo(const QByteArray &text)
     } else if(obj.contains(successKey)) {
         parseSuccess(obj.value(successKey));
     } else {
-        qCCritical(CATEGORY_DEBUG) << "Got valid JSON object, but neither success nor error info";
+        qCCritical(CATEGORY_DEBUG) << "收到有效的 JSON 对象，但既不是成功也不是错误信息";
     }
 }
 
@@ -94,7 +94,7 @@ const RegionInfo::BandList RegionInfo::bandsByCountry(const CountryKey &key) con
 void RegionInfo::parseError(const QJsonValue &val)
 {
     if(!val.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Error info is not an object";
+        qCCritical(CATEGORY_DEBUG) << "错误信息不是对象";
         return;
     }
 
@@ -105,7 +105,7 @@ void RegionInfo::parseError(const QJsonValue &val)
 
     const auto isComplete = obj.contains(codeKey) && obj.contains(textKey);
     if(!isComplete) {
-        qCCritical(CATEGORY_DEBUG) << "Error object is missing one or more fields";
+        qCCritical(CATEGORY_DEBUG) << "错误对象缺少一个或多个字段";
         return;
     }
 
@@ -119,7 +119,7 @@ void RegionInfo::parseError(const QJsonValue &val)
 void RegionInfo::parseSuccess(const QJsonValue &val)
 {
     if(!val.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Success info is not an object";
+        qCCritical(CATEGORY_DEBUG) << "成功信息不是对象";
         return;
     }
 
@@ -133,7 +133,7 @@ void RegionInfo::parseSuccess(const QJsonValue &val)
     const auto isComplete = obj.contains(bandsKey) && obj.contains(countriesKey) &&
                             obj.contains(countryKey) && obj.contains(defaultKey);
     if(!isComplete) {
-        qCCritical(CATEGORY_DEBUG) << "Success object is missing one or more fields";
+        qCCritical(CATEGORY_DEBUG) << "成功对象缺少一个或多个字段";
         return;
     }
 
@@ -145,14 +145,14 @@ void RegionInfo::parseSuccess(const QJsonValue &val)
 bool RegionInfo::parseBands(const QJsonValue &val)
 {
     if(!val.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Bands info is not an object";
+        qCCritical(CATEGORY_DEBUG) << "频段信息不是对象";
         return false;
     }
 
     const auto obj = val.toObject();
 
     if(obj.isEmpty()) {
-        qCCritical(CATEGORY_DEBUG) << "Bands info is an empty object";
+        qCCritical(CATEGORY_DEBUG) << "频段信息为空对象";
         return false;
     }
 
@@ -169,14 +169,14 @@ bool RegionInfo::parseBands(const QJsonValue &val)
 bool RegionInfo::parseCountries(const QJsonValue &val)
 {
     if(!val.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Countries info is not an object";
+        qCCritical(CATEGORY_DEBUG) << "国家信息不是对象";
         return false;
     }
 
     const auto obj = val.toObject();
 
     if(obj.isEmpty()) {
-        qCCritical(CATEGORY_DEBUG) << "Countries info is an empty object";
+        qCCritical(CATEGORY_DEBUG) << "国家信息为空对象";
         return false;
     }
 
@@ -193,7 +193,7 @@ bool RegionInfo::parseCountries(const QJsonValue &val)
 bool RegionInfo::parseCountry(const QJsonValue &val)
 {
     if(!val.isString() && !val.isNull()) {
-        qCCritical(CATEGORY_DEBUG) << "Country is not a string";
+        qCCritical(CATEGORY_DEBUG) << "国家不是字符串";
         return false;
 
     } else {
@@ -205,14 +205,14 @@ bool RegionInfo::parseCountry(const QJsonValue &val)
 bool RegionInfo::parseDefault(const QJsonValue &val)
 {
     if(!val.isArray()) {
-        qCCritical(CATEGORY_DEBUG) << "Default bands list is not an array";
+        qCCritical(CATEGORY_DEBUG) << "默认频段列表不是数组";
         return false;
     }
 
     const QJsonArray arr = val.toArray();
 
     if(arr.isEmpty()) {
-        qCCritical(CATEGORY_DEBUG) << "Default bands is an empty array";
+        qCCritical(CATEGORY_DEBUG) << "默认频段为空数组";
         return false;
     }
 
@@ -226,7 +226,7 @@ bool RegionInfo::parseDefault(const QJsonValue &val)
 bool RegionInfo::insertBand(const BandKey &key, const QJsonValue &val)
 {
     if(!val.isObject()) {
-        qCCritical(CATEGORY_DEBUG) << "Band info is not an object";
+        qCCritical(CATEGORY_DEBUG) << "频段信息不是对象";
         return false;
     }
 
@@ -241,7 +241,7 @@ bool RegionInfo::insertBand(const BandKey &key, const QJsonValue &val)
                             obj.contains(dutyCycleKey) && obj.contains(maxPowerKey);
 
     if(!isComplete) {
-        qCCritical(CATEGORY_DEBUG) << "Band object is missing one or more fields";
+        qCCritical(CATEGORY_DEBUG) << "频段对象缺少一个或多个字段";
         return false;
     }
 
@@ -260,14 +260,14 @@ bool RegionInfo::insertBand(const BandKey &key, const QJsonValue &val)
 bool RegionInfo::insertCountry(const CountryKey &key, const QJsonValue &val)
 {
     if(!val.isArray()) {
-        qCCritical(CATEGORY_DEBUG) << "Country bands list is not an array";
+        qCCritical(CATEGORY_DEBUG) << "国家频段列表不是数组";
         return false;
     }
 
     const QJsonArray arr = val.toArray();
 
     if(arr.isEmpty()) {
-        qCCritical(CATEGORY_DEBUG) << "Country bands is an empty array";
+        qCCritical(CATEGORY_DEBUG) << "国家频段为空数组";
         return false;
     }
 
