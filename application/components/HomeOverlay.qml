@@ -321,11 +321,11 @@ AbstractOverlay {
             if(!enabled) {
                 return qsTr("暂无数据");
             } else if(Preferences.updateChannel === "development") {
-                str = QStringLiteral("Dev");
+                str = "Dev";
             } else if(Preferences.updateChannel === "release-candidate") {
-                str = QStringLiteral("RC");
+                str = "RC";
             } else if(Preferences.updateChannel === "release") {
-                str = QStringLiteral("Release");
+                str = "Release";
             } else {
                 str = qsTr("未知");
             }
