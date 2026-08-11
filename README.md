@@ -10,7 +10,7 @@ qFlipper 是用于通过 PC 更新 [Flipper Zero](https://flipperzero.one/) 固�
 
 本仓库为 qFlipper 的**简体中文汉化版**，对所有用户可见的界面文本、错误提示、命令行输出、安装程序等进行了完整的中文本地化，同时保持了原版的全部功能。
 
-<img alt="qFlipper" width="450" src="https://cdn.flipperzero.one/qflipper_logo_with_connected_flipper.png" />
+<img alt="qFlipper 中文版" width="450" src="screenshot.png" />
 
 ## 汉化说明
 
