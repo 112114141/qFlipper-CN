@@ -172,6 +172,28 @@ Item {
             // TODO: Implement copy version to clipboard
         }
 
+        Text {
+            id: repoLink
+
+            anchors.top: versionLabel.bottom
+            anchors.right: versionLabel.right
+            anchors.topMargin: 1
+
+            color: Theme.color.lightorange2
+            opacity: 0.5
+
+            font.family: "Microsoft YaHei UI"
+            font.pixelSize: 10
+
+            text: "仓库地址"
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Qt.openUrlExternally("https://github.com/112114141/qFlipper-CN")
+            }
+        }
+
         DeviceWidget {
             id: deviceWidget
             opacity: Backend.backendState !== ApplicationBackend.ScreenStreaming &&
