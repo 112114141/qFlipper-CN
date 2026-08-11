@@ -32,6 +32,11 @@ GIT_VERSION = $$system("git describe --tags --abbrev=0","lines", HAS_VERSION)
     GIT_VERSION = unknown
 }
 
+# Remove leading 'v' and suffix after '-' (e.g., -CN, -rc) for clean version
+GIT_VERSION = $$replace(GIT_VERSION, "v", "")
+GIT_VERSION_TOKENS = $$split(GIT_VERSION, -)
+GIT_VERSION = $$first(GIT_VERSION_TOKENS)
+
 GIT_COMMIT = $$system("git rev-parse --short=8 HEAD","lines", HAS_COMMIT)
 !equals(HAS_COMMIT, 0) {
     GIT_COMMIT = unknown
