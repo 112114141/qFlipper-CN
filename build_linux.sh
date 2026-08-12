@@ -6,7 +6,7 @@ TARGET="qFlipper"
 BUILDDIR="build"
 APPDIR_PREFIX="$PWD/$BUILDDIR/AppDir/usr"
 
-LIBSSL1_OVERRIDE="$(ldconfig -p | grep x86-64 | grep -oP '/[^\s]+/libssl.so.1.1' | head -n1)"
+LIBSSL1_OVERRIDE="$(ldconfig -p | grep x86-64 | grep -oP '/[^\s]+/libssl\.so\.[0-9]+' | head -n1)"
 
 LIBWAYLAND_EXCLUDE="libwayland*"
 LIBXCB_EXCLUDE="libxcb*"
