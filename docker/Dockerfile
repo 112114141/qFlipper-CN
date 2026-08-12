@@ -38,7 +38,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN pip3 install aqtinstall
-RUN aqt install-qt linux desktop 6.4.2 gcc_64 -m qt5compat qtserialport qtshadertools qtsvg qttools
+RUN aqt install-qt linux desktop 6.4.2 gcc_64 -m qt5compat qtserialport qtshadertools
 
 ENV QT_BASE_DIR=/opt/Qt/6.4.2/gcc_64
 ENV PATH="${QT_BASE_DIR}/bin:${PATH}"
