@@ -1,9 +1,9 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 WORKDIR /project
 
-RUN DEBIAN_FRONTEND=noninteractive apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    DEBIAN_FRONTEND=noninteractive apt install -y \
     software-properties-common \
     wget \
     file \
@@ -33,24 +33,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y \
     libdrm-dev \
     libx11-xcb-dev \
     libopengl-dev \
+    python3 \
+    python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo 'deb http://download.opensuse.org/repositories/home:drunkbatya/xUbuntu_20.04/ /' \
-    | tee /etc/apt/sources.list.d/home:drunkbatya.list
-RUN curl -fsSL https://download.opensuse.org/repositories/home:drunkbatya/xUbuntu_20.04/Release.key \
-    | gpg --dearmor | tee /etc/apt/trusted.gpg.d/home_drunkbatya.gpg > /dev/null
+RUN pip3 install aqtinstall
+RUN aqt install-qt linux desktop 6.4.2 gcc_64 -m qt5compat qtserialport qtshadertools qtsvg qttools
 
-RUN DEBIAN_FRONTEND=noninteractive apt update
-RUN DEBIAN_FRONTEND=noninteractive apt -y install \
-    qtbase6-static \
-    qtwayland6-static \
-    qt3d6-static \
-    qtdeclarative6-static \
-    qtserialport6-static \
-    qtshadertools6-static \
-    qtsvg6-static \
-    qttools6-static \
-    qt5compat6-static
+ENV QT_BASE_DIR=/opt/Qt/6.4.2/gcc_64
+ENV PATH="${QT_BASE_DIR}/bin:${PATH}"
+ENV LD_LIBRARY_PATH="${QT_BASE_DIR}/lib:${LD_LIBRARY_PATH}"
 
 RUN wget https://update.flipperzero.one/builds/misc/linuxdeploy-x86_64-29092022.AppImage \
     -O /usr/bin/linuxdeploy && chmod +x /usr/bin/linuxdeploy
@@ -59,10 +51,6 @@ RUN wget https://update.flipperzero.one/builds/misc/linuxdeploy-plugin-qt-x86_64
     -O /usr/bin/linuxdeploy-plugin-qt && chmod +x /usr/bin/linuxdeploy-plugin-qt
 
 RUN git config --global --replace-all safe.directory '*'
-
-ENV QT_BASE_DIR=/opt/qt6.4-static
-
-ENV PATH="${QT_BASE_DIR}/bin:${PATH}"
 
 COPY init.sh /init.sh
 
